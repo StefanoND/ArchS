@@ -1,0 +1,2 @@
+# hyprS
+Arch Linux Hyprland
