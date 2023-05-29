@@ -271,6 +271,41 @@ fi
 
 sleep 1s
 
+if pacman -Q | grep 'yakuake'; then
+    echo
+    echo "Configuring Yakuake"
+    echo
+
+    sleep 1s
+
+    if ! test -e "/home/$(logname)/.config/yakuakerc"; then
+        touch "/home/$(logname)/.config/yakuakerc";
+    fi
+
+    sleep 1s
+
+    if grep -q -F "DefaultProfile=" "/home/$(logname)/.config/yakuakerc"; then
+        sed -i -e "s|[#]*DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "/home/$(logname)/.config/yakuakerc"
+    elif ! grep -q -F "DefaultProfile=" "/home/$(logname)/.config/yakuakerc" && ! grep -q -F "[Desktop Entry]" "/home/$(logname)/.config/yakuakerc"; then
+        sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "/home/$(logname)/.config/yakuakerc"
+    fi
+
+    sleep 1s
+
+    echo
+    echo "Add Yakuake to autostart"
+    echo "Go to \"System Settings\" click on \"Startup and Shutdown\" then click on \"Autostart\""
+    echo "Click the \"+ Add...\" button and search for \"Yakuake\""
+    echo "Press any button when you're done"
+    echo
+
+    sleep 1s
+
+    read ANYTTHINGG
+
+    sleep 1s
+fi
+
 echo
 echo "Giving ownership of \"$(logname).profile\" konsole profile to \"$(logname)\""
 echo
@@ -283,8 +318,6 @@ echo "Add/Create a new tab/session in the terminal"
 echo "Run these commands"
 echo "curl -L https://get.oh-my.fish | fish"
 echo "omf install bang-bang"
-echo
-echo "If you're using Yakuake you'll need to manually open it and set the profile created as the default one"
 echo
 echo "When you're done. Press any button to continue"
 echo
