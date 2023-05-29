@@ -137,9 +137,7 @@ PKGS=(
     'linux-lts-headers'                         # Header files (LTS)
 
     # Packet Manager
-    'paru'                                      # Pacman wrapper and Arch User Repo (AUR) helper
     'flatpak'                                   # Flatpak
-    'libpamac-flatpak-plugin'                   # Flatpak plugin
 
     # Fonts
     'noto-fonts-extra'                          # Additional variants of noto fonts
@@ -148,7 +146,6 @@ PKGS=(
     'ttf-fira-code'                             # My personal favorite font for programming
     'gnu-free-fonts'                            # Free family of scalable outline fonts
     'powerline-fonts'                           # Patched fonts for powerline
-    'ttf-meslo-nerd-font-powerlevel10k'         # Meslo Nerd font patched for Powerlevel10k
     'ttf-ubuntu-font-family'                    # Ubuntu font
 
     # Shell/Terminal
@@ -168,16 +165,6 @@ for PKG in "${PKGS[@]}"; do
     echo
     sleep 1s
 done
-
-echo
-echo "Installing Paru"
-echo
-cd ~
-git clone https://aur.archlinux.org/paru.git && cd paru
-makepkg -si
-sleep 1s
-cd ~
-rm -rf paru
 
 sleep 1s
 
@@ -225,6 +212,14 @@ echo
 sleep 1s
 
 echo
+echo "Setting stable as our default Rustup toolchain"
+echo
+rustup default stable
+echo
+
+sleep 1s
+
+echo
 echo "Setting Cargo to run commands in parallel"
 echo
 cargo install async-cmd
@@ -236,14 +231,6 @@ echo
 echo "Addidng i686 architecture support for Rustup"
 echo
 rustup target install i686-unknown-linux-gnu
-echo
-
-sleep 1s
-
-echo
-echo "Setting stable as our default Rustup toolchain"
-echo
-rustup default stable
 echo
 
 sleep 1s
