@@ -47,7 +47,7 @@ fi
 
 echo
 echo "These processes will take a long time to finish, increase sudo timeout."
-echo "use 'sudo visudo' or 'sudo EDITOR=nano visudo' and add 'Defaults passwd_tries=3, passwd_timeout=-1'"
+echo "use 'sudo EDITOR=vim visudo' or 'sudo EDITOR=nano visudo' and add 'Defaults passwd_tries=3, passwd_timeout=-1'"
 echo "WARNING: THE ABOVE IS EXTREMELY DANGEROUS, REMOVE THEM AFTER EVERYTHING IS DONE"
 echo "WARNING: DON'T LEAVE YOUR PC/LAPTOP UNATENDED"
 echo "Type Y when you're ready"
@@ -94,7 +94,13 @@ sleep 1s
 echo
 echo "Updating mirrors with fast ones"
 echo
-sudo pacman-mirrors --fasttrack --api --protocols all --set-branch stable
+sleep 1s
+sudo pacman -S pacman-contrib --noconfirm --needed
+sleep 1s
+curl -o ~/Downloads/mirrorlist https://archlinux.org/mirrorlist/all/
+sed -i 's/#S/S/g' ~/Downloads/mirrorlist
+rankmirrors ~/Downloads/mirrorlist > ~/Downloads/mirrorlist.fastest
+sudo mv -v ~/Downloads/mirrorlist.fastest /etc/pacman.d/mirrorlist
 
 sleep 1s
 
