@@ -289,6 +289,13 @@ if pacman -Q | grep 'yakuake'; then
     elif ! grep -q -F "DefaultProfile=" "/home/$(logname)/.config/yakuakerc" && ! grep -q -F "[Desktop Entry]" "/home/$(logname)/.config/yakuakerc"; then
         sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "/home/$(logname)/.config/yakuakerc"
     fi
+    
+    sleep 1s
+    
+    echo
+    echo "Giving ownership of \"yakuakerc\" file to \"$(logname)\""
+    echo
+    chown $(logname):$(logname) "/home/$(logname)/.config/yakuakerc"
 
     sleep 1s
 
