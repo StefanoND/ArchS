@@ -81,7 +81,8 @@ echo
 echo "Adding valve aur, french aur and Alerque (for AFDKO) repos to my mirror list"
 echo
 curl https://raw.githubusercontent.com/StefanoND/Manjaro/main/Misc/pacman.conf -o - | tee -a /etc/pacman.conf
-pacman -Sy
+sleep 2s
+pacman -Syy
 
 sleep 1s
 
