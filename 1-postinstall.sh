@@ -97,7 +97,7 @@ echo
 sleep 1s
 sudo pacman -S pacman-contrib --noconfirm --needed
 sleep 1s
-curl -o ~/Downloads/mirrorlist https://archlinux.org/mirrorlist/all/
+curl -o ~/Downloads/mirrorlist https://archlinux.org/mirrorlist/?country=AT&country=BE&country=FR&country=DE&country=IE&country=IT&country=LU&country=NL&country=PT&country=ES&country=CH&country=GB&country=US&protocol=http&protocol=https&ip_version=4
 sed -i 's/#S/S/g' ~/Downloads/mirrorlist
 rankmirrors ~/Downloads/mirrorlist > ~/Downloads/mirrorlist.fastest
 sudo mv -v ~/Downloads/mirrorlist.fastest /etc/pacman.d/mirrorlist
