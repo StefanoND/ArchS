@@ -27,7 +27,7 @@ read CHANGEKB
 if [ ${CHANGEKB,,} = y ]; then
     echo
     echo "Post-install will start"
-    echo 'setxkbmap us' | tee -a /usr/share/sddm/scripts/Xsetup
+    echo 'setxkbmap pt' | tee -a /usr/share/sddm/scripts/Xsetup
     if ! test -e /etc/X11/xorg.conf.d/00-keyboard.conf; then
         touch /etc/X11/xorg.conf.d/00-keyboard.conf
     fi
