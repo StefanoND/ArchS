@@ -98,10 +98,10 @@ echo
 sleep 1s
 sudo pacman -S pacman-contrib --noconfirm --needed
 sleep 1s
-curl -o '/home/$(logname)/Downloads/mirrorlist' 'https://archlinux.org/mirrorlist/?country=AT&country=BE&country=FR&country=DE&country=IE&country=IT&country=LU&country=NL&country=PT&country=ES&country=CH&country=GB&country=US&protocol=http&protocol=https&ip_version=4'
-sed -i 's/#S/S/g' '/home/$(logname)/Downloads/mirrorlist'
-rankmirrors '/home/$(logname)/Downloads/mirrorlist' > '/home/$(logname)/Downloads/mirrorlist.fastest'
-sudo mv -v '/home/$(logname)/Downloads/mirrorlist.fastest' /etc/pacman.d/mirrorlist
+curl -o "/home/$(logname)/Downloads/mirrorlist" 'https://archlinux.org/mirrorlist/?country=AT&country=BE&country=FR&country=DE&country=IE&country=IT&country=LU&country=NL&country=PT&country=ES&country=CH&country=GB&country=US&protocol=http&protocol=https&ip_version=4'
+sed -i 's/#S/S/g' "/home/$(logname)/Downloads/mirrorlist"
+rankmirrors "/home/$(logname)/Downloads/mirrorlist" > "/home/$(logname)/Downloads/mirrorlist.fastest"
+sudo mv -v "/home/$(logname)/Downloads/mirrorlist.fastest" /etc/pacman.d/mirrorlist
 
 sleep 1s
 
@@ -240,19 +240,19 @@ echo
 echo "Configuring terminal profiles and setting Fish as default shell"
 echo
 
-touch '/home/$(logname)/.local/share/konsole/$(logname).profile'
+touch "/home/$(logname)/.local/share/konsole/$(logname).profile"
 printf "[Appearance]\nColorScheme=Breeze\n\n[General]\nCommand=/bin/fish\nName=$(logname)\nParent=FALLBACK/\n\n[Scrolling]\nHistoryMode=2\nScrollFullPage=1\n\n[Terminal Features]\nBlinkingCursorEnabled=true\n" | tee /home/$(logname)/.local/share/konsole/$(logname).profile
 
-if ! test -e '/home/$(logname)/.config/konsolerc'; then
-    touch '/home/$(logname)/.config/konsolerc';
+if ! test -e "/home/$(logname)/.config/konsolerc"; then
+    touch "/home/$(logname)/.config/konsolerc";
 fi
 
 sleep 1s
 
-if grep -q -F "DefaultProfile=" '/home/$(logname)/.config/konsolerc'; then
-    sed -i -e "s|[#]*DefaultProfile=.*|DefaultProfile=$(logname).profile|g" '/home/$(logname)/.config/konsolerc'
-elif ! grep -q -F "DefaultProfile=" '/home/$(logname)/.config/konsolerc' && ! grep -q -F "[Desktop Entry]" '/home/$(logname)/.config/konsolerc'; then
-    sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" '/home/$(logname)/.config/konsolerc'
+if grep -q -F "DefaultProfile=" "/home/$(logname)/.config/konsolerc"; then
+    sed -i -e "s|[#]*DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "/home/$(logname)/.config/konsolerc"
+elif ! grep -q -F "DefaultProfile=" "/home/$(logname)/.config/konsolerc" && ! grep -q -F "[Desktop Entry]" "/home/$(logname)/.config/konsolerc"; then
+    sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "/home/$(logname)/.config/konsolerc"
 fi
 
 sleep 1s
@@ -260,7 +260,7 @@ sleep 1s
 echo
 echo "Giving ownership of \"$(logname).profile\" konsole profile to \"$(logname)\""
 echo
-chown $(logname):$(logname) '/home/$(logname)/.local/share/konsole/$(logname).profile'
+chown $(logname):$(logname) "/home/$(logname)/.local/share/konsole/$(logname).profile"
 
 sleep 1s
 
