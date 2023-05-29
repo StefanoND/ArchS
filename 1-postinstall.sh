@@ -251,6 +251,18 @@ echo
 sleep 1s
 
 echo
+echo "Installing Paru"
+echo
+cd ~
+git clone https://aur.archlinux.org/paru.git && cd paru
+makepkg -si
+sleep 1s
+cd ~
+rm -rf paru
+
+sleep 1s
+
+echo
 echo "Configuring terminal profiles and setting Fish as default shell"
 echo
 
