@@ -1,2 +1,3 @@
-# hyprS
-Arch Linux Hyprland
+# Arch Linux
+
+## Post install scripts and stuff
