@@ -235,17 +235,17 @@ echo
 sleep 1s
 
 echo
-echo "Setting Cargo to run commands in parallel"
+echo "Adding i686 architecture support for Rustup"
 echo
-cargo install async-cmd
+rustup target install i686-unknown-linux-gnu
 echo
 
 sleep 1s
 
 echo
-echo "Addidng i686 architecture support for Rustup"
+echo "Setting Cargo to run commands in parallel"
 echo
-rustup target install i686-unknown-linux-gnu
+cargo install async-cmd
 echo
 
 sleep 1s
