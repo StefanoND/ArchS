@@ -99,9 +99,22 @@ echo
 sleep 1s
 sudo pacman -S pacman-contrib --noconfirm --needed
 sleep 1s
+echo
+echo "Downloading mirrors"
+echo
 curl -o "/home/$(logname)/Downloads/mirrorlist" 'https://archlinux.org/mirrorlist/?country=AT&country=BE&country=FR&country=DE&country=IE&country=IT&country=LU&country=NL&country=PT&country=ES&country=CH&country=GB&country=US&protocol=http&protocol=https&ip_version=4'
+echo
+echo "Uncomenting servers"
+echo
 sed -i 's/#S/S/g' "/home/$(logname)/Downloads/mirrorlist"
+echo
+echo "Ranking mirrors, this will take a while"
+echo
 rankmirrors "/home/$(logname)/Downloads/mirrorlist" > "/home/$(logname)/Downloads/mirrorlist.fastest"
+echo
+echo "Moving them to /etc/pacman.d/mirrorlist"
+echo
+sudo mv -v /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.old
 sudo mv -v "/home/$(logname)/Downloads/mirrorlist.fastest" /etc/pacman.d/mirrorlist
 
 sleep 1s
