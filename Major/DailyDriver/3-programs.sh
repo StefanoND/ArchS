@@ -38,7 +38,7 @@ done
 # AUR
 
 echo
-echo "Do you want to install Unreal Engine?"
+echo "Do you want to install Unreal Engine? Y - Yes | N - No"
 echo
 
 read UEINST
