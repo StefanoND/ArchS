@@ -1,1 +1,1 @@
-# Currently Kubuntu
+# Currently Rocky
