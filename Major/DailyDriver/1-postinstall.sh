@@ -154,6 +154,7 @@ PKGS=(
     
     # Misc
     'cpupower'                                  # CPU tuning utility
+    'vifm'                                      # Filemanager
 )
 
 for PKG in "${PKGS[@]}"; do
@@ -243,6 +244,14 @@ makepkg -si
 sleep 1s
 cd ~
 rm -rf paru
+
+sleep 1s
+
+echo
+echo "Setting vifm as paru's File Manager"
+echo
+sudo sed -i 's/#[bin]/[bin]/g' "/etc/paru.conf"
+sudo sed -i 's/#FileManager/FileManager/g' "/etc/paru.conf"
 
 sleep 1s
 
