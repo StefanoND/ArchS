@@ -17,6 +17,7 @@ if ! [ $EUID -ne 0 ]; then
     exit 1
 fi
 
+# PACMAN
 PKGX=(
     ''                                              # Description
     ''                                              # Description
@@ -31,6 +32,7 @@ for PKG in "${PKGX[@]}"; do
     sleep 1s
 done
 
+# AUR
 PKGY=(
     ''                                              # Description
     ''                                              # Description
@@ -45,6 +47,7 @@ for PKG in "${PKGY[@]}"; do
     sleep 1s
 done
 
+# FLATPAK
 PKGZ=(
     'org.mozilla.firefox'                           # Firefox developer edition
     'org.onlyoffice.desktopeditors'                 # Open-source office suite ("replaces" MS Word, PowerPoint and Excel)
