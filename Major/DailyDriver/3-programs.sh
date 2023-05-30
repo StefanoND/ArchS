@@ -22,8 +22,8 @@ PKGX=(
     'filelight'                                     # Show disk usage and delete unused files
     'gparted'                                       # Create, reorganize and delete partitions
     'ventoy'                                        # Multiboot USB Solution
-    ''                                              # Description
-    ''                                              # Description
+    'hplip'                                         # Driver for HP Deskjet (All-in-One) printers
+    ''                                              # 
 )
 
 for PKG in "${PKGX[@]}"; do
@@ -42,10 +42,9 @@ PKGY=(
     'vscodium-bin-features'                         # Unblock some features blocked for non-MS's VSCode
     'davinci-resolve'                               # Video editing software
     'deckboard-appimage'                            # Streamdeck alternative
-    'hplip'                                         # Driver for HP Deskjet (All-in-One) printers
     'hplip-plugin'                                  # Plugin for HP Deskjet (All-in-One) printers
     'mullvad-vpn'                                   # VPN
-    ''                                              # Description
+    ''                                              # 
 )
 
 for PKG in "${PKGY[@]}"; do
@@ -81,19 +80,6 @@ PKGZ=(
     'com.usebottles.bottles'                        # Bottles
     'org.phoenicis.playonlinux'                     # "PlayOnLinux's Designated Successor"
     'nl.hjdskes.gcolor3'                            # Color Picker
-    ''         # 
-    ''         # 
-    ''         # 
-    ''         # 
-    ''         # 
-    ''         # 
-    ''         # 
-    ''         # 
-    ''         # 
-    ''         # 
-    ''         # 
-    ''         # 
-    ''         # 
     ''         # 
 )
 
