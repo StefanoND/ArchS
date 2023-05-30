@@ -34,7 +34,7 @@ sleep 1s
 
 echo
 echo "Updating/Upgrading repos and apps"
-paru -Syu --noconfirm --needed
+paru
 echo
 
 sleep 1s
@@ -97,8 +97,6 @@ for PKG in "${PKGS[@]}"; do
     sleep 1s
 done
 
-sleep 1s
-
 PKGZ=(
     'opentabletdriver'                          # Tablet Driver ("-git" version not working)
     'gamemode-git'                              # Optimizations for games
@@ -118,11 +116,6 @@ for PKG in "${PKGZ[@]}"; do
     paru -S "$PKG" --noconfirm --needed --sudoloop
     sleep 1s
 done
-
-#echo
-#echo "Setting SDDM as owner of /var/lib/sddm/.config"
-#echo
-#sudo chown sddm:sddm /var/lib/sddm/.config
 
 echo
 echo "Done!"
