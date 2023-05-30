@@ -45,22 +45,6 @@ if [ ${CHANGEAL,,} = y ]; then
     sleep 1s
 fi
 
-echo
-echo "These processes will take a long time to finish, increase sudo timeout."
-echo "use 'sudo EDITOR=vim visudo' or 'sudo EDITOR=nano visudo' and add 'Defaults passwd_tries=3, passwd_timeout=-1'"
-echo "WARNING: THE ABOVE IS EXTREMELY DANGEROUS, REMOVE THEM AFTER EVERYTHING IS DONE"
-echo "WARNING: DON'T LEAVE YOUR PC/LAPTOP UNATENDED"
-echo "Type Y when you're ready"
-echo
-
-read READY
-if [ ${READY,,} = y ]
-    then
-        echo
-        echo "Post-install will start"
-        echo
-fi
-
 sleep 1s
 
 echo
@@ -104,7 +88,7 @@ echo "Downloading mirrors"
 echo
 curl -o "/home/$(logname)/Downloads/mirrorlist" 'https://archlinux.org/mirrorlist/?country=AT&country=BE&country=FR&country=DE&country=IE&country=IT&country=LU&country=NL&country=PT&country=ES&country=CH&country=GB&country=US&protocol=http&protocol=https&ip_version=4'
 echo
-echo "Uncomenting servers"
+echo "Uncomenting \"#Server\" from mirrorlist"
 echo
 sed -i 's/#S/S/g' "/home/$(logname)/Downloads/mirrorlist"
 echo
