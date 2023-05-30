@@ -36,6 +36,26 @@ for PKG in "${PKGX[@]}"; do
 done
 
 # AUR
+
+echo
+echo "Do you want to install Unreal Engine?"
+echo
+
+read UEINST
+if [ ${UEINST,,} = y ]; then
+    echo
+    echo "Make changes to the makefile"
+    echo "At line 49: Change \"_install_dir=\"opt/${pkgname}\"\" to \"_install_dir=\"your/custom/path/${pkgname}\"\""
+    echo "At line 52: Change \"_WithDDC=false\" to \"_WithDDC=true\""
+    echo
+    sleep 2s
+    echo
+    echo "This will take a long time"
+    echo
+    sleep 2d
+    paru -S unreal-engine --sudoloop
+fi
+
 PKGY=(
     'vscodium-bin'                                  # VS Code without Microsoft's branding/telemetry/licensing
     'vscodium-bin-marketplace'                      # VS Codium market place
@@ -53,7 +73,7 @@ for PKG in "${PKGY[@]}"; do
     echo
     echo "INSTALLING: ${PKG}"
     echo
-    paru -S "$PKG" --noconfirm --needed
+    paru -S "$PKG" --noconfirm --needed --sudoloop
     echo
     sleep 1s
 done
