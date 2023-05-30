@@ -21,7 +21,7 @@ Where I'll spend most of my time.
 Windows 10 VM for games that doesn't run on Linux.
 ## Minor VMs
 ### Browser VMs
-Casual: Youtube, social media, Discord. Stores information*.
+Casual: Youtube, social media, Discord, Whatsapp. Stores information*.
 
 Work: Work-related stuff. Will also have ONLY/Libre Office. Non work-related stuff are blocked and/or firewalled. Stores information*, deletes after it's closed.
 
