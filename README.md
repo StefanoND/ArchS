@@ -11,7 +11,8 @@ There'll be "major VMs" which will be for my daily driver, gaming, etc.
 There's also "minor VMs" which will do only one thing (or two at max): Browsing, Password Manager, FAFO'ing, etc.
 
 I don't use Qubes OS be cause I don't have the hardware needed for what I want to do yet.
-
+## Hypervisor
+Self-explanatory
 ## Major VMs
 "Major VMs" will be able to run "minor VMs"
 ### Daily Driver VM
