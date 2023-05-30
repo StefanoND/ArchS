@@ -14,9 +14,9 @@ echo
 echo "INSTALLING POST-INSTALL STUFF"
 echo
 
-if [ $EUID -ne 0 ]; then
+if ! [ $EUID -ne 0 ]; then
     echo
-    echo "This script must run as root."
+    echo "Don't run this script as root."
     echo
     sleep 1s
     exit 1
@@ -27,11 +27,11 @@ read CHANGEKB
 if [ ${CHANGEKB,,} = y ]; then
     echo
     echo "Post-install will start"
-    echo 'setxkbmap pt' | tee -a /usr/share/sddm/scripts/Xsetup
+    echo 'setxkbmap pt' | sudo tee -a /usr/share/sddm/scripts/Xsetup
     if ! test -e /etc/X11/xorg.conf.d/00-keyboard.conf; then
-        touch /etc/X11/xorg.conf.d/00-keyboard.conf
+        sudo touch /etc/X11/xorg.conf.d/00-keyboard.conf
     fi
-    printf "Section \"InputClass\"\n    Identifier \"keyboard\"\n    MatchIsKeyboard \"yes\"\n    Option \"XkbLayout\" \"pt\"\n    Option \"XkbVariant\" \"\"\nEndSection" | tee /etc/X11/xorg.conf.d/00-keyboard.conf
+    printf "Section \"InputClass\"\n    Identifier \"keyboard\"\n    MatchIsKeyboard \"yes\"\n    Option \"XkbLayout\" \"pt\"\n    Option \"XkbVariant\" \"\"\nEndSection" | sudo tee /etc/X11/xorg.conf.d/00-keyboard.conf
     echo
     sleep 1s
 fi
@@ -66,7 +66,7 @@ sleep 1s
 echo
 echo "Removing install blocker, nothing was supposed to be installing anyway"
 echo
-rm -f /var/lib/pacman/db.lck
+sudo rm -f /var/lib/pacman/db.lck
 
 sleep 1s
 
@@ -80,16 +80,16 @@ sleep 1s
 echo
 echo "Adding valve aur, french aur and Alerque (for AFDKO) repos to my mirror list"
 echo
-curl https://raw.githubusercontent.com/StefanoND/Manjaro/main/Misc/pacman.conf -o - | tee -a /etc/pacman.conf
+curl https://raw.githubusercontent.com/StefanoND/Manjaro/main/Misc/pacman.conf -o - | sudo tee -a /etc/pacman.conf
 sleep 2s
-pacman -Syy
+sudo pacman -Syy
 
 sleep 1s
 
 echo
 echo "Enabling Color and ILoveCandy"
 echo
-sed -i -e "s|[#]*#Color.*|Color\nILoveCandy|g" /etc/pacman.conf
+sudo sed -i -e "s|[#]*#Color.*|Color\nILoveCandy|g" /etc/pacman.conf
 
 sleep 1s
 
@@ -122,7 +122,7 @@ sleep 1s
 echo
 echo "Update/upgrade our mirrors"
 echo
-pacman -Syu --noconfirm --needed
+sudo pacman -Syu --noconfirm --needed
 
 sleep 2s
 
@@ -132,7 +132,7 @@ echo
 
 sleep 2s
 
-pacman -S meson --asdep --noconfirm --needed
+sudo pacman -S meson --asdep --noconfirm --needed
 
 PKGS=(
     # Tools
@@ -176,7 +176,7 @@ for PKG in "${PKGS[@]}"; do
     echo
     echo "INSTALLING: ${PKG}"
     echo
-    pacman -S "$PKG" --noconfirm --needed
+    sudo pacman -S "$PKG" --noconfirm --needed
     echo
     sleep 1s
 done
@@ -186,34 +186,34 @@ sleep 1s
 echo
 echo "Setting CPU governor to Performance"
 echo
-sed -i -e "s|[#]*#governor=.*|governor='performance'|g" /etc/default/cpupower
+sudo sed -i -e "s|[#]*#governor=.*|governor='performance'|g" /etc/default/cpupower
 sleep 1s
 echo
 echo "Setting minimum and maximum CPU Frequencies"
 echo
-sed -i -e "s|[#]*#min_freq=.*|min_freq=\"3.7GHz\"|g" /etc/default/cpupower
-sed -i -e "s|[#]*#max_freq=.*|max_freq=\"4.2GHz\"|g" /etc/default/cpupower
+sudo sed -i -e "s|[#]*#min_freq=.*|min_freq=\"3.7GHz\"|g" /etc/default/cpupower
+sudo sed -i -e "s|[#]*#max_freq=.*|max_freq=\"4.2GHz\"|g" /etc/default/cpupower
 sleep 1s
 echo
 echo "Enabling cpupower service"
 echo
-systemctl enable --now cpupower.service
+sudo systemctl enable cpupower.service
 
 sleep 1s
 
 echo
 echo "Set make to be multi-threaded by default"
 echo
-sed -i -e 's|[#]*MAKEFLAGS=.*|MAKEFLAGS="-j$(expr $(nproc) \+ 1)"|g' /etc/makepkg.conf
+sudo sed -i -e 's|[#]*MAKEFLAGS=.*|MAKEFLAGS="-j$(expr $(nproc) \+ 1)"|g' /etc/makepkg.conf
 sleep 1s
-sed -i -e "s|[#]*COMPRESSXZ=.*|COMPRESSXZ=(xz -c -T $(expr $(nproc) \+ 1) -z -)|g" /etc/makepkg.conf
+sudo sed -i -e "s|[#]*COMPRESSXZ=.*|COMPRESSXZ=(xz -c -T $(expr $(nproc) \+ 1) -z -)|g" /etc/makepkg.conf
 
 sleep 1s
 
 echo
 echo "Increasing file watcher count. This prevents a \"too many files\" error in VS Code(ium)"
 echo
-echo fs.inotify.max_user_watches=524288 | tee /etc/sysctl.d/40-max-user-watches.conf && sysctl --system
+echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.d/40-max-user-watches.conf && sysctl --system
 echo
 
 sleep 1s
@@ -302,12 +302,12 @@ if pacman -Q | grep 'yakuake'; then
         sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "/home/$(logname)/.config/yakuakerc"
     fi
     
-    sleep 1s
+    #sleep 1s
     
-    echo
-    echo "Giving ownership of \"yakuakerc\" file to \"$(logname)\""
-    echo
-    chown $(logname):$(logname) "/home/$(logname)/.config/yakuakerc"
+    #echo
+    #echo "Giving ownership of \"yakuakerc\" file to \"$(logname)\""
+    #echo
+    #chown $(logname):$(logname) "/home/$(logname)/.config/yakuakerc"
 
     sleep 1s
 
@@ -325,10 +325,10 @@ if pacman -Q | grep 'yakuake'; then
     sleep 1s
 fi
 
-echo
-echo "Giving ownership of \"$(logname).profile\" konsole profile to \"$(logname)\""
-echo
-chown $(logname):$(logname) "/home/$(logname)/.local/share/konsole/$(logname).profile"
+#echo
+#echo "Giving ownership of \"$(logname).profile\" konsole profile to \"$(logname)\""
+#echo
+#chown $(logname):$(logname) "/home/$(logname)/.local/share/konsole/$(logname).profile"
 
 sleep 1s
 
