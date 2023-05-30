@@ -39,6 +39,7 @@ echo
 
 sleep 1s
 
+# PACMAN
 PKGS=(
     'giflib'                                    # Wine Dependency Hell
     'lib32-giflib'                              # Wine Dependency Hell
@@ -83,9 +84,11 @@ PKGS=(
     'cups'                                      # Wine Dependency Hell
     'samba'                                     # Wine Dependency Hell
     'dosbox'                                    # Wine Dependency Hell
+    'vulkan-headers'                            # Vulkan Header Files
+    'vulkan-validation-layers'                  # Vulkan Validation Layers
+    'vulkan-tools'                              # Vulkan Utilities and Tools
     'unrar'                                     # Requires to install some games in Lutris
     'opencl-headers'                            # Requires to enable OpenCL in Photoshop
-    'opencl-nvidia'                             # Requires to enable OpenCL in Photoshop
     'opencl-clhpp'                              # Requires to enable OpenCL in Photoshop
 )
 
@@ -97,6 +100,34 @@ for PKG in "${PKGS[@]}"; do
     sleep 1s
 done
 
+# Not using amdvlk (Inferior), amdgpu-pro (Closed-source)
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+    sudo pacman -S nvidia-utils lib32-nvidia-utils opencl-nvidia --noconfirm --needed
+elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd; then
+    echo
+    echo "Do you want to install AMD's Vulkan Driver (vulkan-radeon) or Valve's Vulkan Driver (mesa-aco-git)?"
+    echo "1 - AMD's Vulkan Driver | 2 - Valve's Vulkan Driver"
+    echo "If unsure choose 1 - AMD's Vulkan Driver"
+    echo
+    read VKDRIVER
+    if [ ${VKDRIVER,,} = 1 ]; then
+        sudo pacman -S vulkan-radeon lib32-vulkan-radeon --noconfirm --needed
+    elif [ ${VKDRIVER,,} = 2 ]; then
+        sudo pacman -S mesa-aco-git lib32-mesa-aco-git --noconfirm --needed
+    fi
+    sudo pacman -S opencl-mesa --noconfirm --needed
+elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq intel; then
+    sudo pacman -S vulkan-intel lib32-vulkan-intel --noconfirm --needed
+elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio; then
+    sudo pacman -S vulkan-virtio lib32-vulkan-virtio --noconfirm --needed
+else
+    echo
+    echo "No GPU found"
+    echo
+    sudo pacman -S vulkan-swrast lib32-vulkan-swrast --noconfirm --needed
+fi
+
+# AUR
 PKGZ=(
     'opentabletdriver'                          # Tablet Driver ("-git" version not working)
     'gamemode-git'                              # Optimizations for games
