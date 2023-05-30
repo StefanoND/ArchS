@@ -197,7 +197,7 @@ sleep 1s
 echo
 echo "Increasing file watcher count. This prevents a \"too many files\" error in VS Code(ium)"
 echo
-echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.d/40-max-user-watches.conf && sysctl --system
+echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.d/40-max-user-watches.conf && sudo sysctl --system
 echo
 
 sleep 1s
