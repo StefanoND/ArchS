@@ -1,1 +1,1 @@
-# Rocky
+# Rocky Linux
