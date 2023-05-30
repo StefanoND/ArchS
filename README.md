@@ -18,7 +18,7 @@ Self-explanatory
 ### Daily Driver VM
 Where I'll spend most of my time.
 ### Gaming VM
-Self-explanatory.
+Windows 10 VM for games that doesn't run on Linux.
 ## Minor VMs
 ### Browser VMs
 Casual: Youtube, social media, Discord. Stores information*.
