@@ -129,7 +129,6 @@ PKGS=(
 
     # Kernel
     'dkms'                                      # Dynamic Kernel Modules System
-    'nvidia-dkms'                               # NVidia Module
     'linux'                                     # Kernel and modules
     'linux-headers'                             # Header files
     'linux-lts'                                 # Kernel and modules (LTS)
@@ -165,6 +164,16 @@ for PKG in "${PKGS[@]}"; do
     echo
     sleep 1s
 done
+
+sleep 1s
+
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+    echo
+    echo "Installing NVidia dkms"
+    echo
+    sleep 1s
+    sudo pacman -S nvidia-dkms --noconfirm --needed
+fi
 
 sleep 1s
 
