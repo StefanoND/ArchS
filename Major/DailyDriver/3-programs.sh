@@ -44,6 +44,8 @@ PKGY=(
     'deckboard-appimage'                            # Streamdeck alternative
     'hplip-plugin'                                  # Plugin for HP Deskjet (All-in-One) printers
     'mullvad-vpn'                                   # VPN
+    'dxvk-bin'                                      # Vulkan-based compatibility layer for Direct3D 9/10/11
+    'vkd3d-proton-bin'                              # Vulkan-based compatibility layer for Direct3D 12
     ''                                              # 
 )
 
@@ -75,10 +77,14 @@ PKGZ=(
     'com.spotify.Client'                            # Spotify
     'com.obsproject.Studio'                         # Streaming software
     'io.github.achetagames.epic_asset_manager'      # Epic Games' Marketplace for Linux
+    'com.heroicgameslauncher.hgl'                   # Epic Games and GOG launcher
     'com.valvesoftware.Steam'                       # Steam
     'net.lutris.Lutris'                             # Lutris
     'com.usebottles.bottles'                        # Bottles
     'org.phoenicis.playonlinux'                     # "PlayOnLinux's Designated Successor"
+    'net.davidotek.pupgui2'                         # ProtonUp-Qt
+    'com.github.Matoking.protontricks'              # Wrapper to make winetricks work with Proton
+    'io.github.antimicrox.antimicrox'               # 
     'nl.hjdskes.gcolor3'                            # Color Picker
     ''         # 
 )
