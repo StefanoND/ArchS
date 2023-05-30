@@ -11,62 +11,14 @@ echo "                        Archlinux Post-Install Setup and Config"
 echo
 
 if ! [ $EUID -ne 0 ]; then
-    echo "Don't run this program as root."
+    echo
+    echo "Don't run this script as root."
+    echo
+    sleep 1s
     exit 1
 fi
 
 sleep 1s
-
-echo
-echo "These processes will take a long time to finish, make sudo loop."
-echo "use 'paru --sudoloop --save' or 'sudo nano ~/.config/yay/config.json' and make sure that sudoloop is set to true 'sudoloop: true'"
-echo "WARNING: THE ABOVE IS EXTREMELY DANGEROUS, SET TO FALSE AFTER EVERYTHING IS DONE"
-echo "WARNING: DON'T LEAVE YOUR PC/LAPTOP UNATENDED"
-echo "Type Y when you're ready"
-
-read READY
-if [ ${READY,,} = y ]; then
-    echo
-    echo "Post-install will start"
-    echo "This will take a while, take a break, grab a coffee, come back later"
-    echo
-    sleep 1s
-fi
-
-if pacman -Q | grep 'yakuake'; then
-    echo
-    echo "Configuring Yakuake"
-    echo
-
-    sleep 1s
-
-    if ! test -e /home/$(logname)/.config/yakuakerc; then
-        touch /home/$(logname)/.config/yakuakerc;
-    fi
-
-    sleep 1s
-
-    if grep -q -F "DefaultProfile=" /home/$(logname)/.config/yakuakerc; then
-        sed -i -e "s|[#]*DefaultProfile=.*|DefaultProfile=$(logname).profile|g" /home/$(logname)/.config/yakuakerc
-    elif ! grep -q -F "DefaultProfile=" /home/$(logname)/.config/yakuakerc && ! grep -q -F "[Desktop Entry]" /home/$(logname)/.config/yakuakerc; then
-        sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" /home/$(logname)/.config/yakuakerc
-    fi
-
-    sleep 1s
-
-    echo
-    echo "Add Yakuake to autostart"
-    echo "Go to \"System Settings\" click on \"Startup and Shutdown\" then click on \"Autostart\""
-    echo "Click the \"+ Add...\" button and search for \"Yakuake\""
-    echo "Press any button when you're done"
-    echo
-
-    sleep 1s
-
-    read ANYTTHINGG
-
-    sleep 1s
-fi
 
 echo
 echo "INSTALLING DEPENDENCIES/LIBRARIES STUFF"
@@ -75,8 +27,14 @@ echo
 sleep 1s
 
 echo
+echo "This will take a while, take a break, grab a coffee, come back later"
+echo
+
+sleep 1s
+
+echo
 echo "Updating/Upgrading repos and apps"
-sudo pacman -Syu --noconfirm --needed && paru -Syu --noconfirm --needed
+paru -Syu --noconfirm --needed
 echo
 
 sleep 1s
