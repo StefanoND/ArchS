@@ -8,7 +8,7 @@ One hypervisor which will do nothing but store VMs.
 
 There'll be "major VMs" which will be for my daily driver, gaming, etc.
 
-There's also "minor VMs" which will do only one thing (or two at max): Browsing, Password Manager, FAFO'ing, etc.
+There's also "minor VMs" which will do only one thing or two (three max): Browsing, Password Manager, FAFO'ing, etc.
 
 I don't use Qubes OS be cause I don't have the hardware needed for what I want to do yet.
 ## Hypervisor
