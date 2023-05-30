@@ -1,1 +1,1 @@
-# Currently Arch
+# Arch Linux
