@@ -36,29 +36,6 @@ for PKG in "${PKGX[@]}"; do
 done
 
 # AUR
-
-#echo
-#echo "Do you want to install Unreal Engine? Y - Yes | N - No"
-#echo
-
-#read UEINST
-#if [ ${UEINST,,} = y ]; then
-#    echo
-#    echo "Choose \"1) unreal-engine\" when asked about available providers NOT the -bin one"
-#    echo "Choose the lib32-vulkan-driver that matches your GPU"
-#   echo
-#    echo "Make changes to the \"unreal-engine.PKGBUILD\" file"
-#    echo "At line 49: Change \"_install_dir=\"opt/${pkgname}\"\" to \"_install_dir=\"your/custom/path/${pkgname}\"\""
-#    echo "At line 52: Change \"_WithDDC=false\" to \"_WithDDC=true\""
-#    echo
-#    sleep 2s
-#    echo
-#    echo "This will take a long time"
-#    echo
-#    sleep 2s
-#    paru -S unreal-engine --sudoloop
-#fi
-
 PKGY=(
     'vscodium-bin'                                  # VS Code without Microsoft's branding/telemetry/licensing
     'vscodium-bin-marketplace'                      # VS Codium market place
