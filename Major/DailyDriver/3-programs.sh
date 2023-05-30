@@ -23,7 +23,7 @@ PKGX=(
     'gparted'                                       # Create, reorganize and delete partitions
     'ventoy'                                        # Multiboot USB Solution
     'hplip'                                         # Driver for HP Deskjet (All-in-One) printers
-    ''                                              # 
+#    ''                                              # 
 )
 
 for PKG in "${PKGX[@]}"; do
@@ -46,7 +46,7 @@ PKGY=(
     'mullvad-vpn'                                   # VPN
     'dxvk-bin'                                      # Vulkan-based compatibility layer for Direct3D 9/10/11
     'vkd3d-proton-bin'                              # Vulkan-based compatibility layer for Direct3D 12
-    ''                                              # 
+#    ''                                              # 
 )
 
 for PKG in "${PKGY[@]}"; do
@@ -60,10 +60,12 @@ done
 
 # FLATPAK
 PKGZ=(
+    'com.github.tchx84.Flatseal'                    # Flatpak permission manager
     'org.mozilla.firefox'                           # Firefox Browser
     'net.mullvad.MullvadBrowser'                    # Mullvad Browser
     'com.github.micahflee.torbrowser-launcher'      # Tor Browser
     'org.onlyoffice.desktopeditors'                 # Open-source office suite ("replaces" MS Word, PowerPoint and Excel)
+    'md.obsidian.Obsidian'                          # A knowledge base that works on local Markdown files
     'org.kde.okteta'                                # Hex Editor
     'org.kde.kleopatra'                             # Certificate Manager and Unified Crypto GUI
     'org.qbittorrent.qBittorrent'                   # Torrent app
@@ -84,9 +86,9 @@ PKGZ=(
     'org.phoenicis.playonlinux'                     # "PlayOnLinux's Designated Successor"
     'net.davidotek.pupgui2'                         # ProtonUp-Qt
     'com.github.Matoking.protontricks'              # Wrapper to make winetricks work with Proton
-    'io.github.antimicrox.antimicrox'               # 
+    'io.github.antimicrox.antimicrox'               # Graphical program used to map gamepad keys to keyboard, mouse, scripts and macros
     'nl.hjdskes.gcolor3'                            # Color Picker
-    ''         # 
+#    ''         # 
 )
 
 for PKG in "${PKGZ[@]}"; do
