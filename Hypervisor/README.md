@@ -1,1 +1,1 @@
-# Currently Rocky
+# Rocky
