@@ -52,7 +52,7 @@ if [ ${UEINST,,} = y ]; then
     echo
     echo "This will take a long time"
     echo
-    sleep 2d
+    sleep 2s
     paru -S unreal-engine --sudoloop
 fi
 
