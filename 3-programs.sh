@@ -11,16 +11,6 @@ echo "                        Archlinux Post-Install Setup and Config"
 echo
 
 if ! [ $EUID -ne 0 ]; then
-    echo "Don't run this program as root."
+    echo "Don't run this script as root."
     exit 1
 fi
-
-echo
-echo "Installing Paru"
-echo
-cd ~
-git clone https://aur.archlinux.org/paru.git && cd paru
-makepkg -si
-sleep 1s
-cd ~
-rm -rf paru
