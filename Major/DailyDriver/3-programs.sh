@@ -19,6 +19,9 @@ fi
 
 # PACMAN
 PKGX=(
+    'filelight'                                     # Show disk usage and delete unused files
+    'gparted'                                       # Create, reorganize and delete partitions
+    'ventoy'                                        # Multiboot USB Solution
     ''                                              # Description
     ''                                              # Description
 )
@@ -34,7 +37,14 @@ done
 
 # AUR
 PKGY=(
-    ''                                              # Description
+    'vscodium-bin'                                  # VS Code without Microsoft's branding/telemetry/licensing
+    'vscodium-bin-marketplace'                      # VS Codium market place
+    'vscodium-bin-features'                         # Unblock some features blocked for non-MS's VSCode
+    'davinci-resolve'                               # Video editing software
+    'deckboard-appimage'                            # Streamdeck alternative
+    'hplip'                                         # Driver for HP Deskjet (All-in-One) printers
+    'hplip-plugin'                                  # Plugin for HP Deskjet (All-in-One) printers
+    'mullvad-vpn'                                   # VPN
     ''                                              # Description
 )
 
@@ -49,7 +59,9 @@ done
 
 # FLATPAK
 PKGZ=(
-    'org.mozilla.firefox'                           # Firefox developer edition
+    'org.mozilla.firefox'                           # Firefox Browser
+    'net.mullvad.MullvadBrowser'                    # Mullvad Browser
+    'com.github.micahflee.torbrowser-launcher'      # Tor Browser
     'org.onlyoffice.desktopeditors'                 # Open-source office suite ("replaces" MS Word, PowerPoint and Excel)
     'org.kde.okteta'                                # Hex Editor
     'org.kde.kleopatra'                             # Certificate Manager and Unified Crypto GUI
@@ -64,7 +76,25 @@ PKGZ=(
     'com.spotify.Client'                            # Spotify
     'com.obsproject.Studio'                         # Streaming software
     'io.github.achetagames.epic_asset_manager'      # Epic Games' Marketplace for Linux
-    ''
+    'com.valvesoftware.Steam'                       # Steam
+    'net.lutris.Lutris'                             # Lutris
+    'com.usebottles.bottles'                        # Bottles
+    'org.phoenicis.playonlinux'                     # "PlayOnLinux's Designated Successor"
+    'nl.hjdskes.gcolor3'                            # Color Picker
+    ''         # 
+    ''         # 
+    ''         # 
+    ''         # 
+    ''         # 
+    ''         # 
+    ''         # 
+    ''         # 
+    ''         # 
+    ''         # 
+    ''         # 
+    ''         # 
+    ''         # 
+    ''         # 
 )
 
 for PKG in "${PKGZ[@]}"; do
