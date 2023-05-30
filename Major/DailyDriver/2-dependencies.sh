@@ -100,32 +100,60 @@ for PKG in "${PKGS[@]}"; do
     sleep 1s
 done
 
-# Not using amdvlk (Inferior), amdgpu-pro (Closed-source)
 if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+    echo
+    echo "NVidia GPU found"
+    echo
+    sleep 1s
+    echo
+    echo "Installing NVidia's Proprietary Vulkan Drivers"
+    echo
+    sleep 1s
     sudo pacman -S nvidia-utils lib32-nvidia-utils opencl-nvidia --noconfirm --needed
-elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd; then
-    echo
-    echo "Do you want to install AMD's Vulkan Driver (vulkan-radeon) or Valve's Vulkan Driver (mesa-aco-git)?"
-    echo "1 - AMD's Vulkan Driver | 2 - Valve's Vulkan Driver"
-    echo "If unsure choose 1 - AMD's Vulkan Driver"
-    echo
-    read VKDRIVER
-    if [ ${VKDRIVER,,} = 1 ]; then
-        sudo pacman -S vulkan-radeon lib32-vulkan-radeon --noconfirm --needed
-    elif [ ${VKDRIVER,,} = 2 ]; then
-        sudo pacman -S mesa-aco-git lib32-mesa-aco-git --noconfirm --needed
-    fi
-    sudo pacman -S opencl-mesa --noconfirm --needed
-elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq intel; then
-    sudo pacman -S vulkan-intel lib32-vulkan-intel --noconfirm --needed
-elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio; then
-    sudo pacman -S vulkan-virtio lib32-vulkan-virtio --noconfirm --needed
-else
-    echo
-    echo "No GPU found"
-    echo
-    sudo pacman -S vulkan-swrast lib32-vulkan-swrast --noconfirm --needed
 fi
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd; then
+    echo
+    echo "AMD GPU found"
+    echo
+    sleep 1s
+    echo
+    echo "Installing AMD's Open-Source Vulkan Drivers"
+    echo
+    sleep 1s
+    sudo pacman -S vulkan-radeon lib32-vulkan-radeon amdvlk lib32-amdvlk opencl-mesa --noconfirm --needed
+    echo
+    echo "Installing AMD's Proprietary Vulkan Drivers"
+    echo
+    sleep 1s
+    paru -S amdgpu-pro-installer amd-vulkan-prefixes --noconfirm --needed --sudoloop
+fi
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq intel; then
+    echo
+    echo "Intel GPU found"
+    echo
+    sleep 1s
+    echo
+    echo "Installing Intel's Proprietary Vulkan Drivers"
+    echo
+    sudo pacman -S vulkan-intel lib32-vulkan-intel opencl-mesa --noconfirm --needed
+fi
+# Not needed for us, will leave them here for testing purposes in the future
+#if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio; then
+#    echo
+#    echo "VirtIO vGPU found"
+#    echo
+#    sleep 1s
+#    sudo pacman -S vulkan-virtio lib32-vulkan-virtio --noconfirm --needed
+#fi
+#if
+#    echo
+#    echo "No GPU found"
+#    echo
+#    sleep 1s
+#    sudo pacman -S vulkan-swrast lib32-vulkan-swrast --noconfirm --needed
+#fi
+
+sleep 1s
 
 # AUR
 PKGZ=(
@@ -150,6 +178,7 @@ done
 
 echo
 echo "Done!"
+echo "Don't forget to check https://github.com/StefanoND/ArchS/blob/main/Misc/vulkandrivers.sh for dealing with loading Vulkan Drivers"
 echo
 echo "Press Y to reboot now or N if you plan to manually reboot later."
 echo
