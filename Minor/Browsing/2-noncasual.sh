@@ -23,8 +23,14 @@ echo
 
 sleep 1s
 
+paru -S mullvad-vpn --noconfirm --needed
+
+sleep 1s
+
 PKGS=(
     'org.mozilla.firefox'                           # Firefox
+    'net.mullvad.MullvadBrowser'                    # Mullvad Browser
+    'com.github.micahflee.torbrowser-launcher'      # Tor Browser
 )
 
 for PKG in "${PKGS[@]}"; do
