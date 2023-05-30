@@ -1,1 +1,1 @@
-# Archlinux
+# Arch
