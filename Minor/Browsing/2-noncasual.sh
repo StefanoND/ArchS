@@ -12,7 +12,7 @@ echo
 
 if ! [ $EUID -ne 0 ]; then
     echo
-    echo "Don't run this program as root."
+    echo "Don't run this script as root."
     echo
     exit 1
 fi
