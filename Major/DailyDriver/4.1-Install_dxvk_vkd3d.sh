@@ -18,17 +18,22 @@ if ! [ $EUID -ne 0 ]; then
 fi
 
 PKGS=(
-    "/home/$(logname)/.wine"                        # Main WINE
-#    ""                        # Custom WINE
+    "/home/$(logname)/.wine"                            # Main WINE
+#    ""                            # Custom WINE
 )
 
 for PKG in "${PKGS[@]}"; do
     if [[ $PKG == *"/.var/app/"* ]]; then
         echo
+        echo "\"$PKG\" is a Flatpak app!"
         echo "Do not use this script for Flatpak apps, use ProtonUP-QT instead!"
         echo
+        sleep 1s
+        echo
+        echo "Skipping"
+        echo
         sleep 2s
-        exit 2
+        continue
     fi
     if ! test -e "$PKG"; then
         echo
