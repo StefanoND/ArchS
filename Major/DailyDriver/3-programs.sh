@@ -28,6 +28,7 @@ PKGX=(
     'wine-mono'                                     # Wine's built-in replacement for Microsoft's .NET Framework
     'wine-gecko'                                    # Wine's built-in replacement for Microsoft's Internet Explorer
     'dos2unix'                                      # Converting DOS stuff to unix
+    'npm'                                           # Package manager for Javascript
 #    ''                                              # 
 )
 
@@ -39,6 +40,31 @@ for PKG in "${PKGX[@]}"; do
     echo
     sleep 1s
 done
+
+sleep 1s
+
+echo
+echo "Enabling npm's tab completion"
+echo
+sudo npm install --global all-the-package-names
+
+sleep 1s
+
+echo
+echo "Updating npm to latest version"
+echo
+sudo npm install -g npm@latest
+
+sleep 1s
+
+echo
+echo "Auditting and fixing npm's issues/vulnerabilities (if there's any)"
+echo
+npm i --package-lock-only
+sleep 1s
+npm audit fix
+
+sleep 1s
 
 # AUR
 PKGY=(
