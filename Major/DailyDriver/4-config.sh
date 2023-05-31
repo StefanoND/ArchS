@@ -91,6 +91,10 @@ PKGS=(
     'autoconf-archive'              # I use for cmake
     'pulseaudio-qt'                 # Dependency
     'opencl-headers'                # Dependency
+    'npm'                           # I use
+    'node-gyp'                      # Used by npm
+    'semver'                        # Used by npm
+    'nodejs-nopt'                   # Used by npm
     'libsigsegv'                    # I use
     'libmysofa'                     # Dependency
     'avisynthplus'                  # Dependency
