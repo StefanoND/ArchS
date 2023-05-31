@@ -23,6 +23,13 @@ PKGS=(
 )
 
 for PKG in "${PKGS[@]}"; do
+    if [[ $PKG == *"/.var/app/"* ]]; then
+        echo
+        echo "Do not use this script for Flatpak apps, use ProtonUP-QT instead!"
+        echo
+        sleep 2s
+        exit 2
+    fi
     if ! test -e "$PKG"; then
         echo
         echo "Wineprefix \"$PKG\" not found, creating..."
