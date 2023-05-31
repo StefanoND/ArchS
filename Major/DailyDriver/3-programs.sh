@@ -70,6 +70,7 @@ PKGZ=(
     'org.mozilla.firefox'                           # Firefox Browser
     'net.mullvad.MullvadBrowser'                    # Mullvad Browser
     'com.github.micahflee.torbrowser-launcher'      # Tor Browser
+    'net.agalwood.Motrix'                           # Download Manager
     'org.onlyoffice.desktopeditors'                 # Open-source office suite ("replaces" MS Word, PowerPoint and Excel)
     'md.obsidian.Obsidian'                          # A knowledge base that works on local Markdown files
     'org.kde.okteta'                                # Hex Editor
