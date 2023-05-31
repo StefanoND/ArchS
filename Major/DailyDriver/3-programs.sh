@@ -19,12 +19,12 @@ fi
 
 # PACMAN
 PKGX=(
-    'filelight'                                     # Show disk usage and delete unused files
-    'gparted'                                       # Create, reorganize and delete partitions
+    'filelight'                                     # Show disk usage analyzer
+    'gparted'                                       # Partitions Manager
     'ventoy'                                        # Multiboot USB Solution
     'hplip'                                         # Driver for HP Deskjet (All-in-One) printers
     'skanlite'                                      # Image Scanning App (If you have a scanner or aio printer/scanner)
-    'wine-staging'                                  # Compatibility Layer for running Windows programs (Staging Branch)
+    'wine-stable'                                   # Compatibility Layer for running Windows programs (Staging Branch)
     'winetricks'                                    # Work around problems and install apps under Wine
     'wine-mono'                                     # Wine's built-in replacement for Microsoft's .NET Framework
     'wine-gecko'                                    # Wine's built-in replacement for Microsoft's Internet Explorer
