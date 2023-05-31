@@ -116,16 +116,16 @@ echo
 
 sleep 2s
 
-sudo pacman -S meson --asdep --noconfirm --needed
-
 PKGS=(
     # Tools
     'base-devel'                                # Basic tools
     'rustup'                                    # Rust toolchain
+    'meson'                                     # High productivity build system
     'mingw-w64'                                 # MinGW Cross-compiler pack (binutils, crt, gcc, headers and winpthreads)
     'libconfig'                                 # C/C++ Configuration file library
     'gdb'                                       # GNU Debugger
     'lldb'                                      # High performance debugger
+    'qemu-guest-agent'                          # Helper Daemon
 
     # Kernel
     'dkms'                                      # Dynamic Kernel Modules System
