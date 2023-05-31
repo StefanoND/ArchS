@@ -97,7 +97,7 @@ echo
 echo "Downloading mirrors"
 echo
 sleep 1s
-curl -o "/home/$(logname)/Downloads/mirrorlist" 'https://archlinux.org/mirrorlist/?country=AT&country=BE&country=FR&country=DE&country=IE&country=IT&country=LU&country=NL&country=PT&country=ES&country=CH&country=GB&country=US&protocol=http&protocol=https&ip_version=4'
+curl https://archlinux.org/mirrorlist/?country=AT&country=BE&country=FR&country=DE&country=IE&country=IT&country=LU&country=NL&country=PT&country=ES&country=CH&country=GB&country=US&protocol=http&protocol=https&ip_version=4 -o - | tee "/home/$(logname)/Downloads/mirrorlist"
 sleep 1s
 echo
 echo "Uncomenting \"#Server\" from mirrorlist"
@@ -222,7 +222,7 @@ echo
 echo "Set make to be multi-threaded by default"
 echo
 sleep 1s
-sudo sed -i "s|MAKEFLAGS=.*|MAKEFLAGS=\"-j$(expr $(nproc) \+ 1)\"|g" /etc/makepkg.conf
+sudo sed -i "s|\#MAKEFLAGS=.*|MAKEFLAGS=\"-j$(expr $(nproc) \+ 1)\"|g" /etc/makepkg.conf
 sleep 1s
 sudo sed -i "s|COMPRESSXZ=.*|COMPRESSXZ=(xz -c -T $(expr $(nproc) \+ 1) -z -)|g" /etc/makepkg.conf
 
@@ -287,9 +287,9 @@ echo
 echo "Setting vifm as paru's File Manager"
 echo
 sleep 1s
-sudo sed -i "s/#[bin]/[bin]/g" /etc/paru.conf
+sudo sed -i "s|\#\[bin]|[bin]|g" /etc/paru.conf
 sleep 1s
-sudo sed -i "s/#FileManager/FileManager/g" /etc/paru.conf
+sudo sed -i "s|#FileManager|FileManager|g" /etc/paru.conf
 
 sleep 1s
 
@@ -307,9 +307,9 @@ fi
 
 sleep 1s
 
-if grep -q -F "DefaultProfile=" "/home/$(logname)/.config/konsolerc"; then
+if grep -qF "DefaultProfile=" "/home/$(logname)/.config/konsolerc"; then
     sed -i "s|DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "/home/$(logname)/.config/konsolerc"
-elif ! grep -q -F "DefaultProfile=" "/home/$(logname)/.config/konsolerc" && ! grep -q -F "[Desktop Entry]" "/home/$(logname)/.config/konsolerc"; then
+elif ! grep -qF "DefaultProfile=" "/home/$(logname)/.config/konsolerc" && ! grep -qF "[Desktop Entry]" "/home/$(logname)/.config/konsolerc"; then
     sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "/home/$(logname)/.config/konsolerc"
 fi
 
@@ -326,9 +326,9 @@ if pacman -Q | grep 'yakuake'; then
 
     sleep 1s
 
-    if grep -q -F "DefaultProfile=" "/home/$(logname)/.config/yakuakerc"; then
+    if grep -qF "DefaultProfile=" "/home/$(logname)/.config/yakuakerc"; then
         sed -i "s|DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "/home/$(logname)/.config/yakuakerc"
-    elif ! grep -q -F "DefaultProfile=" "/home/$(logname)/.config/yakuakerc" && ! grep -q -F "[Desktop Entry]" "/home/$(logname)/.config/yakuakerc"; then
+    elif ! grep -qF "DefaultProfile=" "/home/$(logname)/.config/yakuakerc" && ! grep -qF "[Desktop Entry]" "/home/$(logname)/.config/yakuakerc"; then
         sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "/home/$(logname)/.config/yakuakerc"
     fi
 
