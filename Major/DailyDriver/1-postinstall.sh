@@ -19,6 +19,32 @@ if ! [ $EUID -ne 0 ]; then
     exit 1
 fi
 
+READY=n
+
+echo
+echo "Can this script increase sudo password timeout to 1 hour?"
+echo "It'll be removed after this script is done"
+echo "WARNING: ONLY ALLOW IF YOU KNOW WHAT YOU'RE DOING"
+echo "Y - Allow | N - Deny (Recommended)"
+echo
+read ALLOW
+READY=$ALLOW
+if [ ${READY,,} = y ]; then
+    echo
+    echo "Increasing sudo password timeout to 1 hour"
+    echo
+    sleep 1s
+    printf "Defaults passwd_timeout=60\n" | sudo tee -a /etc/sudoers
+fi
+
+sleep 1s
+
+echo
+echo "Post-install will start"
+echo
+
+sleep 1s
+
 echo
 echo "Change Keyboard layout to PT? Y - Yes | N - No"
 echo
@@ -96,7 +122,7 @@ echo
 echo "Downloading mirrors"
 echo
 sleep 1s
-curl -o "/home/$(logname)/Downloads/mirrorlist" 'https://archlinux.org/mirrorlist/?country=AT&country=BE&country=FR&country=DE&country=IE&country=IT&country=LU&country=NL&country=PT&country=ES&country=CH&country=GB&country=US&protocol=http&protocol=https&ip_version=4'
+curl -o "/home/$(logname)/Downloads/mirrorlist" 'https://archlinux.org/mirrorlist/?country=AT&country=BE&country=FR&country=DE&country=IE&country=IT&country=LU&country=NL&country=PT&country=ES&country=CH&country=GB&country=US&protocol=https&ip_version=4'
 sleep 1s
 echo
 echo "Uncomenting \"#Server\" from mirrorlist"
@@ -352,14 +378,22 @@ echo
 echo "Installing Oh My Fish and Bang-Bang"
 echo
 sleep 1s
-curl -L https://get.oh-my.fish | fish && fish omf install bang-bang
+curl -L https://get.oh-my.fish | fish && fish > omf install bang-bang
+sleep 1s
+
+if [ ${READY,,} = y ]; then
+    echo
+    echo "Reseting sudo passwod timeout to default"
+    echo
+    sleep 1s
+    sudo sed -i "s|Defaults passwd_timeout=60||g" /etc/sudoers
+fi
 
 sleep 1s
 echo
 echo "Done..."
 echo
 sleep 1s
-
 echo
 echo "Press Y to reboot now or N if you plan to manually reboot later."
 echo
