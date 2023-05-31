@@ -210,6 +210,15 @@ sudo fc-cache -fv
 
 sleep 1s
 
+echo
+echo "Enabling CUPs service"
+echo
+sleep 1s
+cd /usr/bin
+./cupsenable
+
+sleep 1s
+
 if ! test -e /usr/lib/udev/rules.d/60-antimicrox-uinput.rules; then
     echo
     echo "Creating udev rule for AntiMicroX to avoid problems with wayland"
