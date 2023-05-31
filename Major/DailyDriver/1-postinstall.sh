@@ -68,11 +68,11 @@ echo
 echo "Adding Valve aur repo to the mirror list"
 echo
 sleep 1s
-printf "[valveaur]" | sudo tee -a /etc/pacman.conf
+printf "[valveaur]\n" | sudo tee -a /etc/pacman.conf
 sleep 1s
-printf "SigLevel = Optional TrustedOnly" | sudo tee -a /etc/pacman.conf
+printf "SigLevel = Optional TrustedOnly\n" | sudo tee -a /etc/pacman.conf
 sleep 1s
-printf "Server = http://repo.steampowered.com/arch/valveaur" | sudo tee -a /etc/pacman.conf
+printf "Server = http://repo.steampowered.com/arch/valveaur\n" | sudo tee -a /etc/pacman.conf
 sleep 2s
 sudo pacman -Syy
 
