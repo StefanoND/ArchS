@@ -45,25 +45,25 @@ for PKG in "${PKGS[@]}"; do
     echo "Copying DXVK's 32-Bit DLLs to \"$PKG/drive_c/windows/system32\""
     echo
     sleep 1s
-    cp /usr/share/dxvk/x32/*.dll $PKG/drive_c/windows/system32
+    cp -rf /usr/share/dxvk/x32/*.dll $PKG/drive_c/windows/system32
     sleep 1s
     echo
     echo "Copying DXVK's 64-Bit DLLs to \"$PKG/drive_c/windows/syswow64\""
     echo
     sleep 1s
-    cp /usr/share/dxvk/x64/*.dll $PKG/drive_c/windows/syswow64
+    cp -rf /usr/share/dxvk/x64/*.dll $PKG/drive_c/windows/syswow64
     sleep 1s
     echo
     echo "Copying VKD3D's 32-Bit DLLs to \"$PKG/drive_c/windows/system32\""
     echo
     sleep 1s
-    cp /usr/share/vkd3d-proton/x86/*.dll $PKG/drive_c/windows/system32
+    cp -rf /usr/share/vkd3d-proton/x86/*.dll $PKG/drive_c/windows/system32
     sleep 1s
     echo
     echo "Copying VKD3D's 64-Bit DLLs to \"$PKG/drive_c/windows/syswow64\""
     echo
     sleep 1s
-    cp /usr/share/vkd3d-proton/x64/*.dll $PKG/drive_c/windows/syswow64
+    cp -rf /usr/share/vkd3d-proton/x64/*.dll $PKG/drive_c/windows/syswow64
     sleep 1s
 done
 
