@@ -324,42 +324,42 @@ if pacman -Q | grep 'yakuake'; then
     fi
 
     sleep 1s
-
+    
     if grep -qF "DefaultProfile=" "/home/$(logname)/.config/yakuakerc"; then
         sed -i "s|DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "/home/$(logname)/.config/yakuakerc"
     elif ! grep -qF "DefaultProfile=" "/home/$(logname)/.config/yakuakerc" && ! grep -qF "[Desktop Entry]" "/home/$(logname)/.config/yakuakerc"; then
         sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "/home/$(logname)/.config/yakuakerc"
     fi
+    
+    sleep 1s
 
-    sleep 1s
-    echo
-    echo "Add Yakuake to autostart"
-    echo "Go to \"System Settings\" click on \"Startup and Shutdown\" then click on \"Autostart\""
-    echo "Click the \"+ Add...\" button and search for \"Yakuake\""
-    echo "Press any button when you're done"
-    echo
-    sleep 1s
-    read ANYTTHINGG
-    sleep 1s
+    if ! test -e "/home/$(logname)/.config/autostart"; then
+        mkdir "/home/$(logname)/.config/autostart"
+    fi
+    
+    if ! test -e "/home/$(logname)/.config/autostart/org.kde.yakuake.desktop"; then
+        echo
+        echo "Making Yakuake autostart at log-in"
+        echo
+        sleep 1s
+        ln -s /usr/share/applications/org.kde.yakuake.desktop "/home/$(logname)/.config/autostart"
+        sleep 1s
+    fi
 fi
 
 sleep 1s
+echo
+echo "Installing Oh My Fish and Bang-Bang"
+echo
+sleep 1s
+curl -L https://get.oh-my.fish | fish && fish omf install bang-bang
 
-echo
-echo "Add/Create a new tab/session in the terminal"
-echo "Run these commands"
-echo "curl -L https://get.oh-my.fish | fish"
-echo "omf install bang-bang"
-echo
-echo "When you're done. Press any button to continue"
-echo
-sleep 1s
-read ANYTHING
 sleep 1s
 echo
-echo "Continuing..."
+echo "Done..."
 echo
 sleep 1s
+
 echo
 echo "Press Y to reboot now or N if you plan to manually reboot later."
 echo
