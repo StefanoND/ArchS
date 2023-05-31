@@ -90,7 +90,7 @@ curl -o "/home/$(logname)/Downloads/mirrorlist" 'https://archlinux.org/mirrorlis
 echo
 echo "Uncomenting \"#Server\" from mirrorlist"
 echo
-sed -i 's/#S/S/g' "/home/$(logname)/Downloads/mirrorlist"
+sed -i "s/#S/S/g" "/home/$(logname)/Downloads/mirrorlist"
 echo
 echo "Ranking mirrors, this will take a while"
 echo
@@ -259,8 +259,8 @@ sleep 1s
 echo
 echo "Setting vifm as paru's File Manager"
 echo
-sudo sed -i 's/#[bin]/[bin]/g' /etc/paru.conf
-sudo sed -i 's/#FileManager/FileManager/g' /etc/paru.conf
+sudo sed -i "s/#[bin]/[bin]/g" /etc/paru.conf
+sudo sed -i "s/#FileManager/FileManager/g" /etc/paru.conf
 
 sleep 1s
 
