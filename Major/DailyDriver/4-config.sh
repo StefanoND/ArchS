@@ -101,33 +101,33 @@ sleep 1s
 echo
 echo "Amending journald Logging to 200M"
 echo
-sudo sed "s|#SystemMaxUse=.*|SystemMaxUse=200M|g" /etc/systemd/journald.conf
+sudo sed -i "s|#SystemMaxUse=.*|SystemMaxUse=200M|g" /etc/systemd/journald.conf
 
 sleep 1s
 
 echo
 echo "Disabling Coredump logging"
 echo
-sudo sed "s|#Storage=.*|Storage=none|g" /etc/systemd/coredump.conf
+sudo sed -i "s|#Storage=.*|Storage=none|g" /etc/systemd/coredump.conf
 
 sleep 1s
 
 echo
 echo "Setting MinimumVT to 7"
 echo
-sudo sed "s|MinimumVT=.*|MinimumVT=7|g" /etc/sddm.conf
+sudo sed -i "s|MinimumVT=.*|MinimumVT=7|g" /etc/sddm.conf
 
 sleep 1s
 
 echo
 echo "Increasing open file limit"
 echo
-sudo sed "s|# End of file.*|$(logname)        hard    nofile          2097152\n\n# End of file\n|g" /etc/security/limits.conf
-sudo sed "s|# End of file.*|$(logname)        soft    nofile          1048576\n\n# End of file\n|g" /etc/security/limits.conf
+sudo sed -i "s|# End of file.*|$(logname)        hard    nofile          2097152\n\n# End of file\n|g" /etc/security/limits.conf
+sudo sed -i "s|# End of file.*|$(logname)        soft    nofile          1048576\n\n# End of file\n|g" /etc/security/limits.conf
 sleep 1s
-sudo sed "s|#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=2097152|g" /etc/systemd/system.conf
+sudo sed -i "s|#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=2097152|g" /etc/systemd/system.conf
 sleep 1s
-sudo sed "s|#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=1048576|g" /etc/systemd/user.conf
+sudo sed -i "s|#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=1048576|g" /etc/systemd/user.conf
 
 sleep 1s
 
@@ -200,7 +200,7 @@ touch /home/$(logname)/.config/fontconfig/fonts.conf
 sleep 1s
 curl https://raw.githubusercontent.com/StefanoND/Manjaro/main/Misc/fonts.conf -o - | sudo tee /home/$(logname)/.config/fontconfig/fonts.conf
 sleep 1s
-sudo sed "s|#export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|g" /etc/profile.d/freetype2.sh
+sudo sed -i "s|#export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|g" /etc/profile.d/freetype2.sh
 sleep 1s
 sudo fc-cache -fv
 
