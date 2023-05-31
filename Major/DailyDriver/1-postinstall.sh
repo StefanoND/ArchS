@@ -11,11 +11,6 @@ echo "                        Archlinux Post-Install Setup and Config"
 echo
 
 sleep 1s
-
-echo
-echo "INSTALLING POST-INSTALL STUFF"
-echo
-sleep 1s
 if ! [ $EUID -ne 0 ]; then
     echo
     echo "Don't run this script as root."
@@ -31,8 +26,8 @@ sleep 1s
 read CHANGEKB
 if [ ${CHANGEKB,,} = y ]; then
     echo
-    echo "Post-install will start"
     echo 'setxkbmap pt' | sudo tee -a /usr/share/sddm/scripts/Xsetup
+    echo
     sleep 1s
     if ! test -e /etc/X11/xorg.conf.d/00-keyboard.conf; then
         sudo touch /etc/X11/xorg.conf.d/00-keyboard.conf
@@ -97,7 +92,7 @@ echo
 echo "Downloading mirrors"
 echo
 sleep 1s
-curl https://archlinux.org/mirrorlist/?country=AT&country=BE&country=FR&country=DE&country=IE&country=IT&country=LU&country=NL&country=PT&country=ES&country=CH&country=GB&country=US&protocol=http&protocol=https&ip_version=4 -o - | tee "/home/$(logname)/Downloads/mirrorlist"
+curl -o "/home/$(logname)/Downloads/mirrorlist" 'https://archlinux.org/mirrorlist/?country=AT&country=BE&country=FR&country=DE&country=IE&country=IT&country=LU&country=NL&country=PT&country=ES&country=CH&country=GB&country=US&protocol=http&protocol=https&ip_version=4'
 sleep 1s
 echo
 echo "Uncomenting \"#Server\" from mirrorlist"
