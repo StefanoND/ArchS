@@ -80,24 +80,20 @@ sudo pacman -Rsn kdeconnect --noconfirm
 sleep 1s
 
 PKGS=(
-    'ostree'                    # Dependency
-    'cmake'                     # Required
-    'ninja'                     # Required
-    'meson'                     # Required
-    'amf-headers'               # Dependency
-    'mingw-w64-environment'     # I use
-    'mingw-w64-pkg-config'      # I use
-    'mingw-w64-cmake'           # I use
-    'autoconf-archive'          # I use for cmake
-    'pulseaudio-qt'             # Dependency
-    'opencl-headers'            # Dependency
-    'npm'                       # I use
-    'node-gyp'                  # Used by npm
-    'semver'                    # Used by npm
-    'nodejs-nopt'               # Used by npm
-    'libsigsegv'                # I use
-    'libmysofa'                 # Dependency
-    'avisynthplus'              # Dependency
+    'ostree'                        # Dependency
+    'cmake'                         # Required
+    'ninja'                         # Required
+    'meson'                         # Required
+    'amf-headers'                   # Dependency
+    'mingw-w64-environment'         # I use
+    'mingw-w64-pkg-config'          # I use
+    'mingw-w64-cmake'               # I use
+    'autoconf-archive'              # I use for cmake
+    'pulseaudio-qt'                 # Dependency
+    'opencl-headers'                # Dependency
+    'libsigsegv'                    # I use
+    'libmysofa'                     # Dependency
+    'avisynthplus'                  # Dependency
 )
 
 for PKG in "${PKGS[@]}"; do
@@ -107,14 +103,6 @@ for PKG in "${PKGS[@]}"; do
     sudo pacman -D --asexplicit "$PKG"
     sleep 1s
 done
-
-sleep 1s
-echo
-echo "Disabling, masking GeoClue"
-echo
-sudo systemctl disable geoclue.service --now
-sleep 1s
-sudo systemctl mask geoclue.service
 
 sleep 1s
 
