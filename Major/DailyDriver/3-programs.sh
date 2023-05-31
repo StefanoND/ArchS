@@ -21,7 +21,6 @@ fi
 PKGX=(
     'filelight'                                     # Show disk usage analyzer
     'gparted'                                       # Partitions Manager
-    'ventoy'                                        # Multiboot USB Solution
     'hplip'                                         # Driver for HP Deskjet (All-in-One) printers
     'skanlite'                                      # Image Scanning App (If you have a scanner or aio printer/scanner)
     'wine-staging'                                  # Compatibility Layer for running Windows programs (Staging Branch)
@@ -52,6 +51,7 @@ PKGY=(
     'mullvad-vpn'                                   # VPN
     'dxvk-bin'                                      # Vulkan-based compatibility layer for Direct3D 9/10/11
     'vkd3d-proton-bin'                              # Vulkan-based compatibility layer for Direct3D 12
+    'ventoy-bin'                                    # Multiboot USB Solution
 #    ''                                              # 
 )
 
