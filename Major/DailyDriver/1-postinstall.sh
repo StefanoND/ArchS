@@ -65,10 +65,14 @@ rm .b* .z*
 sleep 1s
 
 echo
-echo "Adding valve aur, french aur and Alerque (for AFDKO) repos to my mirror list"
+echo "Adding Valve aur repo to the mirror list"
 echo
 sleep 1s
-curl https://raw.githubusercontent.com/StefanoND/Manjaro/main/Misc/pacman.conf -o - | sudo tee -a /etc/pacman.conf
+printf "[valveaur]" | sudo tee -a /etc/pacman.conf
+sleep 1s
+printf "SigLevel = Optional TrustedOnly" | sudo tee -a /etc/pacman.conf
+sleep 1s
+printf "Server = http://repo.steampowered.com/arch/valveaur" | sudo tee -a /etc/pacman.conf
 sleep 2s
 sudo pacman -Syy
 
