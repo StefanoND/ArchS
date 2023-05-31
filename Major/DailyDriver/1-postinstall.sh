@@ -73,7 +73,7 @@ sleep 1s
 echo
 echo "Enabling Color and ILoveCandy"
 echo
-sudo sed -i -e "s|[#]*#Color.*|Color\nILoveCandy|g" /etc/pacman.conf
+sudo sed -i "s|#Color.*|Color\nILoveCandy|g" /etc/pacman.conf
 
 sleep 1s
 
@@ -180,13 +180,13 @@ sleep 1s
 echo
 echo "Setting CPU governor to Performance"
 echo
-sudo sed -i -e "s|[#]*#governor=.*|governor='performance'|g" /etc/default/cpupower
+sudo sed -i "s|#governor=.*|governor='performance'|g" /etc/default/cpupower
 sleep 1s
 echo
 echo "Setting minimum and maximum CPU Frequencies"
 echo
-sudo sed -i -e "s|[#]*#min_freq=.*|min_freq=\"3.7GHz\"|g" /etc/default/cpupower
-sudo sed -i -e "s|[#]*#max_freq=.*|max_freq=\"4.2GHz\"|g" /etc/default/cpupower
+sudo sed -i "s|#min_freq=.*|min_freq=\"3.7GHz\"|g" /etc/default/cpupower
+sudo sed -i "s|#max_freq=.*|max_freq=\"4.2GHz\"|g" /etc/default/cpupower
 sleep 1s
 echo
 echo "Enabling cpupower service"
@@ -198,9 +198,9 @@ sleep 1s
 echo
 echo "Set make to be multi-threaded by default"
 echo
-sudo sed -i -e 's|[#]*MAKEFLAGS=.*|MAKEFLAGS="-j$(expr $(nproc) \+ 1)"|g' /etc/makepkg.conf
+sudo sed -i 's|MAKEFLAGS=.*|MAKEFLAGS="-j$(expr $(nproc) \+ 1)"|g' /etc/makepkg.conf
 sleep 1s
-sudo sed -i -e "s|[#]*COMPRESSXZ=.*|COMPRESSXZ=(xz -c -T $(expr $(nproc) \+ 1) -z -)|g" /etc/makepkg.conf
+sudo sed -i "s|COMPRESSXZ=.*|COMPRESSXZ=(xz -c -T $(expr $(nproc) \+ 1) -z -)|g" /etc/makepkg.conf
 
 sleep 1s
 
@@ -278,7 +278,7 @@ fi
 sleep 1s
 
 if grep -q -F "DefaultProfile=" "/home/$(logname)/.config/konsolerc"; then
-    sed -i -e "s|[#]*DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "/home/$(logname)/.config/konsolerc"
+    sed -i "s|DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "/home/$(logname)/.config/konsolerc"
 elif ! grep -q -F "DefaultProfile=" "/home/$(logname)/.config/konsolerc" && ! grep -q -F "[Desktop Entry]" "/home/$(logname)/.config/konsolerc"; then
     sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "/home/$(logname)/.config/konsolerc"
 fi
@@ -299,7 +299,7 @@ if pacman -Q | grep 'yakuake'; then
     sleep 1s
 
     if grep -q -F "DefaultProfile=" "/home/$(logname)/.config/yakuakerc"; then
-        sed -i -e "s|[#]*DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "/home/$(logname)/.config/yakuakerc"
+        sed -i "s|DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "/home/$(logname)/.config/yakuakerc"
     elif ! grep -q -F "DefaultProfile=" "/home/$(logname)/.config/yakuakerc" && ! grep -q -F "[Desktop Entry]" "/home/$(logname)/.config/yakuakerc"; then
         sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "/home/$(logname)/.config/yakuakerc"
     fi
