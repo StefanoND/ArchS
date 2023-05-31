@@ -17,11 +17,6 @@ if ! [ $EUID -ne 0 ]; then
     exit 1
 fi
 
-echo
-echo "Intalling DXVK on Wineprefixes"
-echo
-sleep 1s
-
 PKGS=(
     "/home/$(logname)/.wine"                        # Main WINE
 #    ""                        # Custom WINE
@@ -32,15 +27,25 @@ for PKG in "${PKGS[@]}"; do
         echo
         echo "Wineprefix \"$PKG\" not found, creating..."
         echo
-        sleep 1s
+        sleep 2s
         WINEPREFIX="$PKG" wineboot
         sleep 1s
         echo
         echo "Wineprefix \"$PKG\" created."
         echo
+        sleep 2s
+        echo
+        echo "Continuing..."
+        echo
         sleep 1s
     fi
     
+    echo
+    echo "Copying DXVK and VKD3D DLLs to \"$PKG\""
+    echo
+    
+    sleep 1s
+
     echo
     echo "Copying DXVK's 32-Bit DLLs to \"$PKG/drive_c/windows/system32\""
     echo
