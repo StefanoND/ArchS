@@ -55,7 +55,7 @@ sudo systemctl enable --now fstrim.timer
 # SSH
 #sudo systemctl enable --now sshd.service
 # Mullvad VPN
-sudo systemctl enable --now mullvad-daemon.service
+#sudo systemctl enable --now mullvad-daemon.service
 # CUPS service
 sudo systemctl enable --now cups.service
 # Enable OpenTabletDriver service
@@ -72,32 +72,20 @@ echo 'net.core.default_qdisc = fq_pie' | sudo tee /etc/sysctl.d/90-override.conf
 
 sleep 1s
 
-echo
-echo "I don't use KDE Connect so I'll remove it"
-echo
-sudo pacman -Rsn kdeconnect --noconfirm
-
-sleep 1s
-
 PKGS=(
     'ostree'                        # Dependency
     'cmake'                         # Required
     'ninja'                         # Required
     'meson'                         # Required
-    'amf-headers'                   # Dependency
     'mingw-w64-environment'         # I use
     'mingw-w64-pkg-config'          # I use
     'mingw-w64-cmake'               # I use
-    'autoconf-archive'              # I use for cmake
-    'pulseaudio-qt'                 # Dependency
     'opencl-headers'                # Dependency
     'npm'                           # I use
     'node-gyp'                      # Used by npm
     'semver'                        # Used by npm
     'nodejs-nopt'                   # Used by npm
-    'libsigsegv'                    # I use
     'libmysofa'                     # Dependency
-    'avisynthplus'                  # Dependency
 )
 
 for PKG in "${PKGS[@]}"; do
@@ -113,43 +101,43 @@ sleep 1s
 echo
 echo "Amending journald Logging to 200M"
 echo
-sudo sed -i -e "s|[#]*#SystemMaxUse=.*|SystemMaxUse=200M|g" /etc/systemd/journald.conf
+sudo sed -i "s|#SystemMaxUse=.*|SystemMaxUse=200M|g" /etc/systemd/journald.conf
 
 sleep 1s
 
 echo
 echo "Disabling Coredump logging"
 echo
-sudo sed -i -e "s|[#]*#Storage=.*|Storage=none|g" /etc/systemd/coredump.conf
+sudo sed -i "s|#Storage=.*|Storage=none|g" /etc/systemd/coredump.conf
 
 sleep 1s
 
 echo
 echo "Setting MinimumVT to 7"
 echo
-sudo sed -i -e "s|[#]*MinimumVT=.*|MinimumVT=7|g" /etc/sddm.conf
+sudo sed -i "s|MinimumVT=.*|MinimumVT=7|g" /etc/sddm.conf
 
 sleep 1s
 
 echo
 echo "Increasing open file limit"
 echo
-sudo sed -i -e "s|[#]*# End of file.*|$(logname)        hard    nofile          2097152\n\n# End of file\n|g" /etc/security/limits.conf
-sudo sed -i -e "s|[#]*# End of file.*|$(logname)        soft    nofile          1048576\n\n# End of file\n|g" /etc/security/limits.conf
+sudo sed -i "s|# End of file.*|$(logname)        hard    nofile          2097152\n\n# End of file\n|g" /etc/security/limits.conf
+sudo sed -i "s|# End of file.*|$(logname)        soft    nofile          1048576\n\n# End of file\n|g" /etc/security/limits.conf
 sleep 1s
-sudo sed -i -e "s|[#]*#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=2097152|g" /etc/systemd/system.conf
+sudo sed -i "s|#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=2097152|g" /etc/systemd/system.conf
 sleep 1s
-sudo sed -i -e "s|[#]*#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=1048576|g" /etc/systemd/user.conf
+sudo sed -i "s|#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=1048576|g" /etc/systemd/user.conf
 
 sleep 1s
 
 echo
 echo "Disabling built-in kernel modules of tablet so OpenTablerDriver can work"
 echo
-if ! test -e /etc/modprobe.d/blacklist.conf
-    then
-        sudo touch /etc/modprobe.d/blacklist.conf
-        printf "blacklist wacom\nblacklist hid_uclogic" | sudo tee /etc/modprobe.d/blacklist.conf
+sleep 1s
+if ! test -e /etc/modprobe.d/blacklist.conf; then
+    sudo touch /etc/modprobe.d/blacklist.conf
+    printf "blacklist wacom\nblacklist hid_uclogic" | sudo tee /etc/modprobe.d/blacklist.conf
 else
     printf "\nblacklist wacom\nblacklist hid_uclogic" | sudo tee -a /etc/modprobe.d/blacklist.conf
 fi
@@ -157,11 +145,13 @@ sleep 1s
 echo
 echo "Stopping Wacom kernel module (if present)"
 echo
+sleep 1s
 sudo rmmod wacom
 sleep 1s
 echo
 echo "Stopping non-Wacom kernel module (if present)"
 echo
+sleep 1s
 sudo rmmod hid_uclogic
 
 sleep 1s
@@ -169,12 +159,15 @@ sleep 1s
 echo
 echo "Improving font rendering"
 echo
+if test -e /etc/fonts/local.conf; then
+    sudo mv /etc/fonts/local.conf /etc/fonts/local.conf.old
+    sleep 1s
+fi
 sudo touch /etc/fonts/local.conf
 sleep 1s
-curl https://raw.githubusercontent.com/StefanoND/Manjaro/main/Misc/local.conf -o - | sudo tee -a /etc/fonts/local.conf
+curl https://raw.githubusercontent.com/StefanoND/Manjaro/main/Misc/local.conf -o - | sudo tee /etc/fonts/local.conf
 sleep 1s
-if test -e /home/$(logname)/.Xresources;
-then
+if test -e /home/$(logname)/.Xresources; then
     sudo mv /home/$(logname)/.Xresources /home/$(logname)/.Xresources.bak;
 fi
 touch /home/$(logname)/.Xresources
@@ -183,28 +176,31 @@ printf "Xft.antialias: 1\nXft.hinting: 1\nXft.rgba: rgb\nXft.hintstyle: hintslig
 sleep 1s
 xrdb -merge /home/$(logname)/.Xresources
 sleep 1s
-echo
-echo "Make sure that Anti-Aliasing is On, Hinting is set to Slight and Sub-pixel rendering is set to RGB in System Settings->Appearance->Fonts"
-echo "Press anything when you're done"
-read ANYTHING
-sudo ln -s /usr/share/fontconfig/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d/
+if ! test -e /etc/fonts/conf.d/10-sub-pixel-rgb.conf; then
+    sudo ln -s /usr/share/fontconfig/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
+fi
 sleep 1s
-sudo ln -s /usr/share/fontconfig/conf.avail/10-hinting-slight.conf /etc/fonts/conf.d/
+if ! test -e /etc/fonts/conf.d/10-hinting-slight.conf; then
+    sudo ln -s /usr/share/fontconfig/conf.avail/10-hinting-slight.conf /etc/fonts/conf.d
+fi
 sleep 1s
-sudo ln -s /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d/
+if ! test -e /etc/fonts/conf.d/11-lcdfilter-default.conf; then
+    sudo ln -s /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
+fi
 sleep 1s
-mkdir -p /home/$(logname)/.config/fontconfig/
+if ! test -e /home/$(logname)/.config/fontconfig; then
+    mkdir -p /home/$(logname)/.config/fontconfig
+fi
 sleep 1s
-if test -e /home/$(logname)/.config/fontconfig/fonts.conf;
-then
-    sudo mv /home/$(logname)/.config/fontconfig/fonts.conf /home/$(logname)/.config/fontconfig/fonts.conf.bak;
+if test -e /home/$(logname)/.config/fontconfig/fonts.conf; then
+    mv /home/$(logname)/.config/fontconfig/fonts.conf /home/$(logname)/.config/fontconfig/fonts.conf.bak;
 fi
 sleep 1s
 touch /home/$(logname)/.config/fontconfig/fonts.conf
 sleep 1s
-curl https://raw.githubusercontent.com/StefanoND/Manjaro/main/Misc/fonts.conf -o - | sudo tee -a /home/$(logname)/.config/fontconfig/fonts.conf
+curl https://raw.githubusercontent.com/StefanoND/Manjaro/main/Misc/fonts.conf -o - | sudo tee /home/$(logname)/.config/fontconfig/fonts.conf
 sleep 1s
-printf "export FREETYPE_PROPERTIES=\"truetype:interpreter-version=40\"" | sudo tee -a /etc/profile.d/freetype2.sh
+sudo sed -i "s|#export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|g" /etc/profile.d/freetype2.sh
 sleep 1s
 sudo fc-cache -fv
 
@@ -219,20 +215,25 @@ cd /usr/bin
 
 sleep 1s
 
-if ! test -e /usr/lib/udev/rules.d/60-antimicrox-uinput.rules; then
-    echo
-    echo "Creating udev rule for AntiMicroX to avoid problems with wayland"
-    echo
-    cd /usr/lib/udev/rules.d/
-    sudo wget https://raw.githubusercontent.com/AntiMicroX/antimicrox/master/other/60-antimicrox-uinput.rules
+echo
+echo "Creating udev rule for AntiMicroX to avoid problems with wayland"
+echo
+sleep 1s
+if test -e /usr/lib/udev/rules.d/60-antimicrox-uinput.rules; then
+    sudo mv /usr/lib/udev/rules.d/60-antimicrox-uinput.rules /usr/lib/udev/rules.d/60-antimicrox-uinput.rules.old
 fi
+sudo touch /usr/lib/udev/rules.d/60-antimicrox-uinput.rules
+sleep 1s
+curl https://raw.githubusercontent.com/AntiMicroX/antimicrox/master/other/60-antimicrox-uinput.rules -o - | sudo tee /usr/lib/udev/rules.d/60-antimicrox-uinput.rules
 
 sleep 1s
 
 echo
 echo "Making Gamemode start on boot"
 echo
+sleep 1s
 sudo systemctl --user enable --now gamemoded.service
+sleep 1s
 sudo chmod +x /usr/bin/gamemoderun
 
 sleep 1s
@@ -240,6 +241,7 @@ sleep 1s
 echo
 echo "Restricting Kernel Log Access"
 echo
+sleep 1s
 sudo sysctl -w kernel.dmesg_restrict=1
 
 sleep 1s
