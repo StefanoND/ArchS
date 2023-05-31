@@ -10,10 +10,12 @@ echo "                                                                         |
 echo "                        Archlinux Post-Install Setup and Config"
 echo
 
+sleep 1s
+
 echo
 echo "INSTALLING POST-INSTALL STUFF"
 echo
-
+sleep 1s
 if ! [ $EUID -ne 0 ]; then
     echo
     echo "Don't run this script as root."
@@ -22,12 +24,16 @@ if ! [ $EUID -ne 0 ]; then
     exit 1
 fi
 
+echo
 echo "Change Keyboard layout to PT? Y - Yes | N - No"
+echo
+sleep 1s
 read CHANGEKB
 if [ ${CHANGEKB,,} = y ]; then
     echo
     echo "Post-install will start"
     echo 'setxkbmap pt' | sudo tee -a /usr/share/sddm/scripts/Xsetup
+    sleep 1s
     if ! test -e /etc/X11/xorg.conf.d/00-keyboard.conf; then
         sudo touch /etc/X11/xorg.conf.d/00-keyboard.conf
     fi
@@ -50,6 +56,7 @@ sleep 1s
 echo
 echo "Removing install blocker, nothing was supposed to be installing anyway"
 echo
+sleep 1s
 sudo rm -f /var/lib/pacman/db.lck
 
 sleep 1s
@@ -57,6 +64,7 @@ sleep 1s
 echo
 echo "Removing leftover files that may exist"
 echo
+sleep 1s
 rm .b* .z*
 
 sleep 1s
@@ -64,6 +72,7 @@ sleep 1s
 echo
 echo "Adding valve aur, french aur and Alerque (for AFDKO) repos to my mirror list"
 echo
+sleep 1s
 curl https://raw.githubusercontent.com/StefanoND/Manjaro/main/Misc/pacman.conf -o - | sudo tee -a /etc/pacman.conf
 sleep 2s
 sudo pacman -Syy
@@ -73,6 +82,7 @@ sleep 1s
 echo
 echo "Enabling Color and ILoveCandy"
 echo
+sleep 1s
 sudo sed -i "s|#Color.*|Color\nILoveCandy|g" /etc/pacman.conf
 
 sleep 1s
@@ -86,19 +96,27 @@ sleep 1s
 echo
 echo "Downloading mirrors"
 echo
+sleep 1s
 curl -o "/home/$(logname)/Downloads/mirrorlist" 'https://archlinux.org/mirrorlist/?country=AT&country=BE&country=FR&country=DE&country=IE&country=IT&country=LU&country=NL&country=PT&country=ES&country=CH&country=GB&country=US&protocol=http&protocol=https&ip_version=4'
+sleep 1s
 echo
 echo "Uncomenting \"#Server\" from mirrorlist"
 echo
+sleep 1s
 sed -i "s/#S/S/g" "/home/$(logname)/Downloads/mirrorlist"
+sleep 1s
 echo
 echo "Ranking mirrors, this will take a while"
 echo
+sleep 1s
 rankmirrors "/home/$(logname)/Downloads/mirrorlist" > "/home/$(logname)/Downloads/mirrorlist.fastest"
+sleep 1s
 echo
 echo "Moving them to /etc/pacman.d/mirrorlist"
 echo
+sleep 1s
 sudo mv -v /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.old
+sleep 1s
 sudo mv -v "/home/$(logname)/Downloads/mirrorlist.fastest" /etc/pacman.d/mirrorlist
 
 sleep 1s
@@ -106,6 +124,7 @@ sleep 1s
 echo
 echo "Update/upgrade our mirrors"
 echo
+sleep 1s
 sudo pacman -Syu --noconfirm --needed
 
 sleep 2s
@@ -180,17 +199,21 @@ sleep 1s
 echo
 echo "Setting CPU governor to Performance"
 echo
+sleep 1s
 sudo sed -i "s|#governor=.*|governor='performance'|g" /etc/default/cpupower
 sleep 1s
 echo
 echo "Setting minimum and maximum CPU Frequencies"
 echo
+sleep 1s
 sudo sed -i "s|#min_freq=.*|min_freq=\"3.7GHz\"|g" /etc/default/cpupower
+sleep 1s
 sudo sed -i "s|#max_freq=.*|max_freq=\"4.2GHz\"|g" /etc/default/cpupower
 sleep 1s
 echo
 echo "Enabling cpupower service"
 echo
+sleep 1s
 sudo systemctl enable cpupower.service
 
 sleep 1s
@@ -198,6 +221,7 @@ sleep 1s
 echo
 echo "Set make to be multi-threaded by default"
 echo
+sleep 1s
 sudo sed -i "s|MAKEFLAGS=.*|MAKEFLAGS=\"-j$(expr $(nproc) \+ 1)\"|g" /etc/makepkg.conf
 sleep 1s
 sudo sed -i "s|COMPRESSXZ=.*|COMPRESSXZ=(xz -c -T $(expr $(nproc) \+ 1) -z -)|g" /etc/makepkg.conf
@@ -207,51 +231,54 @@ sleep 1s
 echo
 echo "Increasing file watcher count. This prevents a \"too many files\" error in VS Code(ium)"
 echo
+sleep 1s
 echo fs.inotify.max_user_watches=524288 | sudo tee /etc/sysctl.d/40-max-user-watches.conf && sudo sysctl --system
-echo
 
 sleep 1s
 
 echo
 echo "Installing stable version of Rustup"
 echo
+sleep 1s
 rustup install stable
-echo
 
 sleep 1s
 
 echo
 echo "Setting stable as our default Rustup toolchain"
 echo
+sleep 1s
 rustup default stable
-echo
 
 sleep 1s
 
 echo
 echo "Adding i686 architecture support for Rustup"
 echo
+sleep 1s
 rustup target install i686-unknown-linux-gnu
-echo
 
 sleep 1s
 
 echo
 echo "Setting Cargo to run commands in parallel"
 echo
+sleep 1s
 cargo install async-cmd
-echo
 
 sleep 1s
 
 echo
 echo "Installing Paru"
 echo
+sleep 1s
 cd ~
 git clone https://aur.archlinux.org/paru.git && cd paru
+sleep 1s
 makepkg -si
 sleep 1s
 cd ~
+sleep 1s
 rm -rf paru
 
 sleep 1s
@@ -259,7 +286,9 @@ sleep 1s
 echo
 echo "Setting vifm as paru's File Manager"
 echo
+sleep 1s
 sudo sed -i "s/#[bin]/[bin]/g" /etc/paru.conf
+sleep 1s
 sudo sed -i "s/#FileManager/FileManager/g" /etc/paru.conf
 
 sleep 1s
@@ -267,8 +296,9 @@ sleep 1s
 echo
 echo "Configuring terminal profiles and setting Fish as default shell"
 echo
-
+sleep 1s
 touch "/home/$(logname)/.local/share/konsole/$(logname).profile"
+sleep 1s
 printf "[Appearance]\nColorScheme=Breeze\n\n[General]\nCommand=/bin/fish\nName=$(logname)\nParent=FALLBACK/\n\n[Scrolling]\nHistoryMode=2\nScrollFullPage=1\n\n[Terminal Features]\nBlinkingCursorEnabled=true\n" | tee /home/$(logname)/.local/share/konsole/$(logname).profile
 
 if ! test -e "/home/$(logname)/.config/konsolerc"; then
@@ -289,9 +319,7 @@ if pacman -Q | grep 'yakuake'; then
     echo
     echo "Configuring Yakuake"
     echo
-
     sleep 1s
-
     if ! test -e "/home/$(logname)/.config/yakuakerc"; then
         touch "/home/$(logname)/.config/yakuakerc";
     fi
@@ -303,34 +331,18 @@ if pacman -Q | grep 'yakuake'; then
     elif ! grep -q -F "DefaultProfile=" "/home/$(logname)/.config/yakuakerc" && ! grep -q -F "[Desktop Entry]" "/home/$(logname)/.config/yakuakerc"; then
         sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "/home/$(logname)/.config/yakuakerc"
     fi
-    
-    #sleep 1s
-    
-    #echo
-    #echo "Giving ownership of \"yakuakerc\" file to \"$(logname)\""
-    #echo
-    #chown $(logname):$(logname) "/home/$(logname)/.config/yakuakerc"
 
     sleep 1s
-
     echo
     echo "Add Yakuake to autostart"
     echo "Go to \"System Settings\" click on \"Startup and Shutdown\" then click on \"Autostart\""
     echo "Click the \"+ Add...\" button and search for \"Yakuake\""
     echo "Press any button when you're done"
     echo
-
     sleep 1s
-
     read ANYTTHINGG
-
     sleep 1s
 fi
-
-#echo
-#echo "Giving ownership of \"$(logname).profile\" konsole profile to \"$(logname)\""
-#echo
-#chown $(logname):$(logname) "/home/$(logname)/.local/share/konsole/$(logname).profile"
 
 sleep 1s
 
@@ -342,21 +354,16 @@ echo "omf install bang-bang"
 echo
 echo "When you're done. Press any button to continue"
 echo
-
-read ANYTHING
-
 sleep 1s
-
+read ANYTHING
+sleep 1s
 echo
 echo "Continuing..."
 echo
-
 sleep 1s
-
 echo
 echo "Press Y to reboot now or N if you plan to manually reboot later."
 echo
-
 read REBOOT
 if [ ${REBOOT,,} = y ]; then
     reboot
