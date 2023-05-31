@@ -23,6 +23,12 @@ PKGX=(
     'gparted'                                       # Create, reorganize and delete partitions
     'ventoy'                                        # Multiboot USB Solution
     'hplip'                                         # Driver for HP Deskjet (All-in-One) printers
+    'skanlite'                                      # Image Scanning App (If you have a scanner or aio printer/scanner)
+    'wine-staging'                                  # Compatibility Layer for running Windows programs (Staging Branch)
+    'winetricks'                                    # Work around problems and install apps under Wine
+    'wine-mono'                                     # Wine's built-in replacement for Microsoft's .NET Framework
+    'wine-gecko'                                    # Wine's built-in replacement for Microsoft's Internet Explorer
+    'dos2unix'                                      # Converting DOS stuff to unix
 #    ''                                              # 
 )
 
