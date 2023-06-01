@@ -48,7 +48,6 @@ sleep 1s
 echo
 echo "Change Keyboard layout to PT? Y - Yes | N - No"
 echo
-sleep 1s
 read CHANGEKB
 if [ ${CHANGEKB,,} = y ]; then
     echo
