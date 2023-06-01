@@ -264,14 +264,29 @@ sleep 1s
 printf "default-sample-format = float32le\ndefault-sample-rate = 48000\nalternate-sample-rate = 44100\ndefault-sample-channels = 2\ndefault-channel-map = front-left,front-right\ndefault-fragments = 2\ndefault-fragment-size-msec = 125\nresample-method = speex-float-10\nhigh-priority = yes\nnice-level = -11\nrealtime-scheduling = yes\nrealtime-priority = 9\nrlimit-rtprio = 9\ndaemonize = no\nremixing-produce-lfe = no\nremixing-consume-lfe = no" | sudo tee /etc/pulse/daemon.conf
 echo
 sleep 1s
-pulseaudio --kill
+
+echo
+echo "Fixing sound delay when starting to play audio"
+echo
 sleep 1s
-pulseaudio --start
+sudo sed -i "s|load-module module-suspend-on-idle.*|#load-module module-suspend-on-idle|g" /etc/pulse/default.pa
+sleep 1s
+sudo sed -i "s|load-module module-udev-detect.*|load-module module-udev-detect tsched=0|g" /etc/pulse/default.pa
+sleep 1s
+sudo sed -i "s|load-module module-detect.*|load-module module-detect tsched=0|g" /etc/pulse/default.pa
+
+sleep 1s
+
+if test -e /etc/modprobe.d/snd-hda-intel.conf; then
+    sudo cp /etc/modprobe.d/snd-hda-intel.conf /etc/modprobe.d/snd-hda-intel.conf.old
+    sleep 1s
+fi
+sudo tee /etc/modprobe.d/snd-hda-intel.conf <<<'options snd-hda-intel power_save=0'
 sleep 1s
 
 echo
 echo "Reset sudo password timeout to default"
-echo "use 'sudo EDITOR=vim visudo' or 'sudo EDITOR=nano visudo' and remove 'Defaults passwd_timeout=-1'"
+echo "use 'sudo EDITOR=nvim visudo' or 'sudo EDITOR=nano visudo' and remove 'Defaults passwd_timeout=-1'"
 echo "Ignore if you haven't changed visudo"
 echo
 echo "Press any button to continue"
@@ -281,13 +296,14 @@ read ANYTHING
 sleep 1s
 
 echo
-echo " Done!"
+echo "Done!"
 echo
 
 sleep 1s
 
 echo
-echo "press Y to reboot now or N if you plan to manually reboot later."
+echo "Some changes will be applied after reboot, do you want to reboot now?"
+echo "Y - yes | N - No"
 echo
 
 read REBOOT
