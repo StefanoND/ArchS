@@ -19,29 +19,17 @@ if ! [ $EUID -ne 0 ]; then
     exit 1
 fi
 
-READY=n
-
-echo
-echo "Can this script increase sudo password timeout to 1 hour?"
-echo "It'll be removed after this script is done"
-echo "WARNING: ONLY ALLOW IF YOU KNOW WHAT YOU'RE DOING"
-echo "Y - Allow | N - Deny (Recommended)"
-echo
-read ALLOW
-READY=$ALLOW
-if [ ${READY,,} = y ]; then
-    echo
-    echo "Increasing sudo password timeout to 1 hour"
-    echo
-    sleep 1s
-    printf "Defaults passwd_timeout=60" | sudo EDITOR='tee -a' visudo
-fi
-
 sleep 1s
 
 echo
-echo "Post-install will start"
+echo "These processes will take a long time to finish, increase sudo timeout."
+echo "use 'sudo EDITOR=vim visudo' or 'sudo EDITOR=nano visudo' and add 'Defaults passwd_timeout=-1'"
+echo "WARNING: THE ABOVE IS EXTREMELY DANGEROUS, REMOVE THEM AFTER EVERYTHING IS DONE"
+echo "WARNING: DON'T LEAVE YOUR PC/LAPTOP UNATENDED"
 echo
+echo "Press anything to continue"
+echo
+read READY
 
 sleep 1s
 
@@ -374,14 +362,14 @@ if pacman -Q | grep 'yakuake'; then
     fi
 fi
 
-sleep 1s
-if [ ${READY,,} = y ]; then
-    echo
-    echo "Reseting sudo passwod timeout to default"
-    echo
-    sleep 1s
-    sudo sed -i "s|Defaults passwd_timeout=60||g" /etc/sudoers
-fi
+echo
+echo "Reset sudo password timeout to default"
+echo "use 'sudo EDITOR=vim visudo' or 'sudo EDITOR=nano visudo' and remove 'Defaults passwd_timeout=-1'"
+echo
+echo "Press any button to continue"
+echo
+read ANYTHING
+
 sleep 1s
 
 echo
