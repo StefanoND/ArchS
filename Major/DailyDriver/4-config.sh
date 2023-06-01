@@ -115,7 +115,7 @@ sleep 1s
 echo
 echo "Setting MinimumVT to 7"
 echo
-sudo sed -i "s|MinimumVT=.*|MinimumVT=7|g" /etc/sddm.conf
+sudo sed -i "s|MinimumVT=.*|MinimumVT=7|g" /usr/lib/sddm/sddm.conf.d/default.conf
 
 sleep 1s
 
