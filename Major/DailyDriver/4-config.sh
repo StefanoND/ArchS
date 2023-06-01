@@ -247,6 +247,29 @@ sudo sysctl -w kernel.dmesg_restrict=1
 sleep 1s
 
 echo
+echo "Improving audio"
+echo
+sleep 1s
+if test -e /etc/pulse/daemon.conf; then
+    echo
+    echo "Making a backup of \"/etc/pulse/daemon.conf\" to \"/etc/pulse/daemon.conf.old\""
+    echo
+    sleep 1s
+    sudo mv /etc/pulse/daemon.conf /etc/pulse/daemon.conf.old
+    sleep 1s
+fi
+
+sudo touch /etc/pulse/daemon.conf
+sleep 1s
+printf "default-sample-format = float32le\ndefault-sample-rate = 48000\nalternate-sample-rate = 44100\ndefault-sample-channels = 2\ndefault-channel-map = front-left,front-right\ndefault-fragments = 2\ndefault-fragment-size-msec = 125\nresample-method = speex-float-10\nhigh-priority = yes\nnice-level = -11\nrealtime-scheduling = yes\nrealtime-priority = 9\nrlimit-rtprio = 9\ndaemonize = no\nremixing-produce-lfe = no\nremixing-consume-lfe = no" | sudo tee /etc/pulse/daemon.conf
+echo
+sleep 1s
+pulseaudio --kill
+sleep 1s
+pulseaudio --start
+sleep 1s
+
+echo
 echo "Reset sudo password timeout to default"
 echo "use 'sudo EDITOR=vim visudo' or 'sudo EDITOR=nano visudo' and remove 'Defaults passwd_timeout=-1'"
 echo "Ignore if you haven't changed visudo"
