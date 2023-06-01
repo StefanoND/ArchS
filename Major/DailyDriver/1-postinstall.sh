@@ -362,14 +362,6 @@ if pacman -Q | grep 'yakuake'; then
     fi
 fi
 
-echo
-echo "Reset sudo password timeout to default"
-echo "use 'sudo EDITOR=vim visudo' or 'sudo EDITOR=nano visudo' and remove 'Defaults passwd_timeout=-1'"
-echo
-echo "Press any button to continue"
-echo
-read ANYTHING
-
 sleep 1s
 
 echo
