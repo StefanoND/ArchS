@@ -16,9 +16,9 @@ Self-explanatory
 ## Major VMs
 "Major VMs" will be able to run "minor VMs"
 ### Daily Driver VM
-Where I'll spend most of my time.
-### Gaming VM
-Windows 10 VM for games that doesn't run on Linux.
+Self-explanatory
+### Windows VM
+Windows (10) VM for apps/games that doesn't run/work on Linux (even with compatibility layers such as wine).
 ## Minor VMs
 ### Browser VMs
 Casual: Youtube, social media, Discord, Whatsapp. Stores information*.
