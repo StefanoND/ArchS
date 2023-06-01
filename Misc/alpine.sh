@@ -1,5 +1,12 @@
 # This is not a runnable script file
 #
+# Read official docs
+# https://docs.alpinelinux.org/user-handbook/0.1a/Working/post-install.html
+#
+#
+#
+# Last resort (use only if above fails)
+#
 # Using Alpine Linux you'll need to add the user to sudo
 # To do that run the "su" command
 su
