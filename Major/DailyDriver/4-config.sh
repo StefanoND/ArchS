@@ -247,6 +247,17 @@ sudo sysctl -w kernel.dmesg_restrict=1
 sleep 1s
 
 echo
+echo "Reset sudo password timeout to default"
+echo "use 'sudo EDITOR=vim visudo' or 'sudo EDITOR=nano visudo' and remove 'Defaults passwd_timeout=-1'"
+echo "Ignore if you haven't changed visudo"
+echo
+echo "Press any button to continue"
+echo
+read ANYTHING
+
+sleep 1s
+
+echo
 echo " Done!"
 echo
 
