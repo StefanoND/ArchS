@@ -34,7 +34,7 @@ if [ ${READY,,} = y ]; then
     echo "Increasing sudo password timeout to 1 hour"
     echo
     sleep 1s
-    printf "Defaults passwd_timeout=60\n" | sudo tee -a /etc/sudoers
+    printf "Defaults passwd_timeout=60" | sudo EDITOR='tee -a' visudo
 fi
 
 sleep 1s
@@ -63,7 +63,9 @@ if [ ${CHANGEKB,,} = y ]; then
     sleep 1s
 fi
 
+echo
 echo "Change alias VIM to NVIM? Y - Yes | N - No"
+echo
 read CHANGEAL
 if [ ${CHANGEAL,,} = y ]; then
     echo
@@ -300,7 +302,7 @@ sleep 1s
 cd ~
 git clone https://aur.archlinux.org/paru.git && cd paru
 sleep 1s
-makepkg -si
+makepkg -si --noconfirm
 sleep 1s
 cd ~
 sleep 1s
@@ -374,13 +376,6 @@ if pacman -Q | grep 'yakuake'; then
 fi
 
 sleep 1s
-echo
-echo "Installing Oh My Fish and Bang-Bang"
-echo
-sleep 1s
-curl -L https://get.oh-my.fish | fish && fish > omf install bang-bang
-sleep 1s
-
 if [ ${READY,,} = y ]; then
     echo
     echo "Reseting sudo passwod timeout to default"
@@ -388,6 +383,19 @@ if [ ${READY,,} = y ]; then
     sleep 1s
     sudo sed -i "s|Defaults passwd_timeout=60||g" /etc/sudoers
 fi
+sleep 1s
+
+echo
+echo "Add/Create a new tab/session in the terminal"
+echo "Run these commands"
+echo "curl -L https://get.oh-my.fish | fish"
+echo "omf install bang-bang"
+echo
+sleep 1s
+echo
+echo "When you're done. Press any button to continue"
+echo
+read ANYTHING
 
 sleep 1s
 echo
