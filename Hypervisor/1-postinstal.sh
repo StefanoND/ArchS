@@ -188,10 +188,10 @@ sleep 1s
 sudo cp "$cpath"/Config/qemu.conf /etc/libvirt
 sleep 1s
 echo
-echo "Enabling libvirt"
+echo "Restarting libvirt"
 echo
 sleep 1s
-sudo systemctl enable libvirtd
+sudo systemctl restart libvirtd
 
 sleep 1s
 echo
