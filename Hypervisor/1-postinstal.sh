@@ -27,13 +27,13 @@ echo
 echo "Uninstalling KDE Connect"
 echo
 sleep 1s
-sudo dnf autoremove kdeconnectd -y
+sudo apt autoremove --purge kdeconnectd -y
 sleep 1s
 echo
 echo "Updating System"
 echo
 sleep 1s
-sudo dnf upgrade -y
+sudo apt update -y && sudo apt upgrade -y
 sleep 1s
 
 echo
@@ -67,7 +67,8 @@ echo
 echo "Updating GRUB"
 echo
 sleep 1s
-sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+#sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+sudo update-grub
 sleep 1s
     
 if ! test -e /etc/modprobe.d; then
@@ -80,11 +81,11 @@ if ! test -e /etc/modprobe.d/kvm.conf; then
     printf "options kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\noptions kvm_amd nested=1\n" | sudo tee /etc/modprobe.d/kvm.conf
     sleep 1s
 elif test -e /etc/modprobe.d/kvm.conf; then
-    if grep -q -F "options kvm ignore_msrs=" /etc/modprobe.d/kvm.conf; then
+    if grep -qF "options kvm ignore_msrs=" /etc/modprobe.d/kvm.conf; then
         sudo sed -i "s|options kvm ignore_msrs=.*|options kvm ignore_msrs=1|g" /etc/modprobe.d/kvm.conf
         sleep 1s
     fi
-    if grep -q -F "options kvm report_ignored_msrs=" /etc/modprobe.d/kvm.conf; then
+    if grep -qF "options kvm report_ignored_msrs=" /etc/modprobe.d/kvm.conf; then
         sudo sed -i "s|options kvm report_ignored_msrs=.*|options kvm report_ignored_msrs=0|g" /etc/modprobe.d/kvm.conf
         sleep 1s
     fi
@@ -98,11 +99,16 @@ fi
 sleep 1s
 
 PKGS=(
-    'libvirt-daemon-kvm'
-    'libvirt-client-qemu'
-    'qemu-kvm'
+    'libvirt-daemon'
+    'libvirt-clients'
+    'qemu'
     'virt-manager'
-    'edk2-ovmf'
+    'ovmf'
+    #'nasm'
+    #'iasl'
+    #'build-essential'
+    #'uuid-dev'
+    #'edk2-ovmf'
     #'dnsmasq-utils'
     #'nftables'
     #'bridge-utils'
@@ -114,9 +120,24 @@ for PKG in "${PKGS[@]}"; do
     echo "INSTALLING: ${PKG}"
     echo
     sleep 1s
-    sudo dnf install "$PKG" -y
+    #sudo dnf install "$PKG" -y
+    sudo apt install "$PKG" -y
     sleep 1s
 done
+
+
+#git clone https://github.com/tianocore/edk2.git
+#sleep 1s
+#cd ./edk2
+#sleep 1s
+#git submodule update --init
+#sleep 1s
+#make -C BaseTools
+
+#cpath=`pwd`
+#edkroot="$cpath"/Conf/target.txt
+
+#if [[ grep -qF "ACTIVE_PLATFORM       = OvmfPkg/OvmfPkgX64.dsc"  ]] && [[ grep -qF "TARGET_ARCH           = X64"  ]] && [[ grep -qF "TOOL_CHAIN_TAG        = GCC5"  ]]; then
 
 sleep 1s
         
