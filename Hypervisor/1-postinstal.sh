@@ -104,6 +104,7 @@ PKGS=(
     'qemu'
     'virt-manager'
     'ovmf'
+    'netctl'
     #'nasm'
     #'iasl'
     #'build-essential'
