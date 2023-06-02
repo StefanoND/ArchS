@@ -35,35 +35,24 @@ echo
 read WHICH
 PWM=$WHICH
 
-if [ ${PWM,,} = 1 ]; then
+if [ ${PWM,,} = 1 || ${PWM,,} = 4 ]; then
     echo
     echo "Installing Bitwarden"
     echo
     sleep 1s
     flatpak install flathub com.bitwarden.desktop -y --or-update
     sleep 1s
-elif [ ${PWM,,} = 2 ]; then
+elif [ ${PWM,,} = 2 || ${PWM,,} = 4 ]; then
     echo
     echo "Installing KeePassXC"
     echo
     sleep 1s
     flatpak install flathub org.keepassxc.KeePassXC -y --or-update
     sleep 1s
-elif [ ${PWM,,} = 3 ]; then
+elif [ ${PWM,,} = 3 || ${PWM,,} = 4 ]; then
     echo
     echo "Installing Pass"
     echo
-    sleep 1s
-    sudo pacman -S pass --noconfirm --needed
-    sleep 1s
-elif [ ${PWM,,} = 4 ]; then
-    echo
-    echo "Installing All"
-    echo
-    sleep 1s
-    flatpak install flathub com.bitwarden.desktop -y --or-update
-    sleep 1s
-    flatpak install flathub org.keepassxc.KeePassXC -y --or-update
     sleep 1s
     sudo pacman -S pass --noconfirm --needed
     sleep 1s
