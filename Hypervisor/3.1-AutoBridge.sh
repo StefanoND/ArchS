@@ -23,12 +23,12 @@ echo
 sleep 2s
 clear
 
-if ! pacman -Q | grep 'netctl'; then
+if ! apt list --installed | grep 'netctl'; then
     echo
     echo "Installing netctl"
     echo
     sleep 1s
-    sudo pacman -S netctl --noconfirm --needed
+    sudo apt install netctl -y
     sleep 1s
 fi
 
