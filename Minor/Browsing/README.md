@@ -3,6 +3,6 @@
     Arch
 
 # Safe
-## Banking, Unbiased-browsing, 
+## Banking, Unbiased-browsing, etc
 
     Whonix
