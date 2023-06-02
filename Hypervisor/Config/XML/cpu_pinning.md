@@ -18,5 +18,5 @@
       <vcpupin vcpu="13" cpuset="14"/>
       <vcpupin vcpu="14" cpuset="7"/>
       <vcpupin vcpu="15" cpuset="15"/>
-      <emulatorpin cpuset="1-7,9-15"/>
+      <emulatorpin cpuset="0,8"/>
     </cputune>
