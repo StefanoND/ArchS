@@ -171,45 +171,61 @@ if ! test -e /etc/netctl/kvm-bridge; then
       sudo systemctl daemon-reload
       sleep 1s
       echo
+      echo
+      echo "Done"
+      echo
+      echo
       echo "Disable your connection from auto connecting"
       echo "Go to System Settings->Connections->$netdevice click on \"General Configuration\" tab and uncheck \"Connect Automatically with priority\""
+      echo
+      echo
+      echo "Click on the configuration button on the bottom left corner of this screen and enable \"Show virtual connections\" the click \"Ok\""
+      echo
       echo
       echo "After that click on \"$bridgename\" and \"General Configuration\" tab, check \"Connect automatically with priotity\" and type \"-100\""
       echo "Then click on \"Bridge\" tab, select \"$netdevice (802-3-ethernet)\" and click on \"Edit\""
       echo "Click the \"General Configuration\" tab, check \"Connect automatically with priotity\" and type \"-100\""
       echo "Save and apply all changes"
       echo
+      echo
       echo "If you're having trouble applying changes"
       echo "Run \"sudo netctl stop kvm-bridge\" and then \"sudo netctl start kvm-bridge\""
       echo "You should now be able to make the changes mentioned above"
       echo
       echo "Press any button when you're done"
+      echo
       read ANYBUTTON
       sleep 1s
       echo
+      echo
       echo "To use the bridged network in your VM create a new NIC or Edit existing"
+      echo
+      echo
       echo "\"Network source:\" select \"Bridge device...\""
       echo "\"Device Name:\" must be \"$bridgename\""
       echo "\"Device model:\" choose \"virtio\""
+      echo
+      echo
       echo "If the NIC MAC address doesn't match the MAC address of the network copy-paste it"
       echo "Open Virtual Machine Manager click on Edit->Connection Details, click on \"$bridgename\" and click on \"XML\" tab"
       echo "Copy the \"mac address\" to your VM NIC's mac address"
+      echo
+      echo
       echo "Press any key when you're done"
+      echo
       read ANYKEYDONE
-      echo
-      echo "Done"
-      echo
+      sleep 1s
 else
     sudo netctl start kvm-bridge
 fi
 
 sleep 1s
 echo
-echo "Done..."
+echo "Done."
 echo
 sleep 1s
 echo
-echo "Press Y to reboot now or N if you plan to manually reboot later."
+echo "Press Y to reboot now or any key if you plan to manually reboot later."
 echo
 read REBOOT
 if [ ${REBOOT,,} = y ]; then
