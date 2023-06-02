@@ -46,14 +46,17 @@ sleep 1s
 if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
     sudo modprobe -r kvm_amd
     sleep 1s
-    #adds amd_iommu=on and iommu=pt systemd.unified_cgroup_hierarchy=0 pcie_acs_override=downstream to the grub config
-    GRUB+=" amd_iommu=on iommu=pt video=efifb:off systemd.unified_cgroup_hierarchy=0 pcie_acs_override=downstream\""
+    # Adds amd_iommu=on iommu=pt systemd.unified_cgroup_hierarchy=0 to the grub config
+    # amd_iommu=on is supposed to be on by default in the kernel, but it doesn't hurt to have it here
+    # removed "pcie_acs_override=downstream" for security reasons
+    GRUB+=" amd_iommu=on iommu=pt video=efifb:off systemd.unified_cgroup_hierarchy=0\""
     sleep 1s
 elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
     sudo modprobe -r kvm_intel
     sleep 1s
-    #adds intel_iommu=on and iommu=pt systemd.unified_cgroup_hierarchy=0 pcie_acs_override=downstream to the grub config
-    GRUB+=" intel_iommu=on iommu=pt video=efifb:off systemd.unified_cgroup_hierarchy=0 pcie_acs_override=downstream\""
+    # Adds intel_iommu=on iommu=pt systemd.unified_cgroup_hierarchy=0 to the grub config
+    # removed "pcie_acs_override=downstream" for security reasons
+    GRUB+=" intel_iommu=on iommu=pt video=efifb:off systemd.unified_cgroup_hierarchy=0\""
     sleep 1s
 fi
 sudo sed -i "s|^GRUB_CMDLINE_LINUX.*|${GRUB}|" /etc/default/grub
