@@ -120,7 +120,7 @@ then
 fi
 
 cpath=`pwd`
-hpath="cpath"/Hooks
+hpath="$cpath"/Hooks
 
 sleep 1s
 chmod +x $hpath/*.sh
