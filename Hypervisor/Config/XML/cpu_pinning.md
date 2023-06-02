@@ -1,6 +1,6 @@
 # CPU Pinning
 
-### I'll give details at a later date
+### I'll update soon
     <cputune>
       <vcpupin vcpu="0" cpuset="0"/>
       <vcpupin vcpu="1" cpuset="8"/>
