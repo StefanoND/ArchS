@@ -56,7 +56,7 @@ elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
     GRUB+=" intel_iommu=on iommu=pt video=efifb:off systemd.unified_cgroup_hierarchy=0 pcie_acs_override=downstream\""
     sleep 1s
 fi
-sed -i -e "s|^GRUB_CMDLINE_LINUX.*|${GRUB}|" /etc/default/grub
+sudo sed -i "s|^GRUB_CMDLINE_LINUX.*|${GRUB}|" /etc/default/grub
 
 sleep 1s
 
@@ -68,25 +68,25 @@ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 sleep 1s
     
 if ! test -e /etc/modprobe.d; then
-    mkdir -p /etc/modprobe.d
+    sudo mkdir -p /etc/modprobe.d
     sleep 1s
 fi
 if ! test -e /etc/modprobe.d/kvm.conf; then
-    touch /etc/modprobe.d/kvm.conf
+    sudo touch /etc/modprobe.d/kvm.conf
     sleep 1s
-    printf "options kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\noptions kvm_amd nested=1\n" | tee /etc/modprobe.d/kvm.conf
+    printf "options kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\noptions kvm_amd nested=1\n" | sudo tee /etc/modprobe.d/kvm.conf
     sleep 1s
 elif test -e /etc/modprobe.d/kvm.conf; then
     if grep -q -F "options kvm ignore_msrs=" /etc/modprobe.d/kvm.conf; then
-        sed -i -e "s|[#]*options kvm ignore_msrs=.*|options kvm ignore_msrs=1|g" /etc/modprobe.d/kvm.conf
+        sudo sed -i "s|options kvm ignore_msrs=.*|options kvm ignore_msrs=1|g" /etc/modprobe.d/kvm.conf
         sleep 1s
     fi
     if grep -q -F "options kvm report_ignored_msrs=" /etc/modprobe.d/kvm.conf; then
-        sed -i -e "s|[#]*options kvm report_ignored_msrs=.*|options kvm report_ignored_msrs=0|g" /etc/modprobe.d/kvm.conf
+        sudo sed -i "s|options kvm report_ignored_msrs=.*|options kvm report_ignored_msrs=0|g" /etc/modprobe.d/kvm.conf
         sleep 1s
     fi
-    if grep -q -F "options kvm_intel nested=" /etc/modprobe.d/kvm.conf; then
-        sed -i -e "s|[#]*options kvm_intel nested=.*|options kvm_intel nested=1|g" /etc/modprobe.d/kvm.conf
+    if grep -qF "options kvm_intel nested=" /etc/modprobe.d/kvm.conf; then
+        sudo sed -i "s|options kvm_intel nested=.*|options kvm_intel nested=1|g" /etc/modprobe.d/kvm.conf
         sleep 1s
     fi
 fi
@@ -142,6 +142,56 @@ if [ ${AUTOSTART,,} = y ]; then
     sleep 1s
     sudo virsh net-autostart default
 fi
+
+cpath=`pwd`
+
+sleep 1s
+if grep -qF "user=\"USERNAME\"" "$cpath"/Config/qemu.conf; then
+    echo
+    echo "Adding \"$(logname)\" to qemu.conf's user"
+    echo
+    sleep 1s
+    sed -i "s|user=\"USERNAME\".*|user=\"$(logname)\"|g" "$cpath"/Config/qemu.conf
+    sleep 1s
+fi
+if grep -qF "group=\"USERNAME\"" "$cpath"/Config/qemu.conf; then
+    echo
+    echo "Adding \"$(logname)\" to qemu.conf's group"
+    echo
+    sleep 1s
+    sed -i "s|group=\"USERNAME\".*|group=\"$(logname)\"|g" "$cpath"/Config/qemu.conf
+    sleep 1s
+fi
+
+echo
+echo "Backing up \"/etc/libvirt/libvirtd.conf\" to \"/etc/libvirt/libvirtd.conf.old\""
+echo
+sleep 1s
+sudo mv /etc/libvirt/libvirtd.conf /etc/libvirt/libvirtd.conf.old
+sleep 1s
+echo
+echo "Copying \""$cpath"/Config/libvirtd.conf\" to \"/etc/libvirt\""
+echo
+sleep 1s
+sudo cp "$cpath"/Config/libvirtd.conf /etc/libvirt
+sleep 1s
+echo
+echo "Backing up \"/etc/libvirt/qemu.conf\" to \"/etc/libvirt/qemu.conf.old\""
+echo
+sleep 1s
+sudo mv /etc/libvirt/qemu.conf /etc/libvirt/qemu.conf.old
+sleep 1s
+echo
+echo "Copying \""$cpath"/Config/qemu.conf\" to \"/etc/libvirt\""
+echo
+sleep 1s
+sudo cp "$cpath"/Config/qemu.conf /etc/libvirt
+sleep 1s
+echo
+echo "Enabling libvirt"
+echo
+sleep 1s
+sudo systemctl enable libvirtd
 
 sleep 1s
 echo
