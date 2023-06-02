@@ -95,7 +95,6 @@ elif test -e /etc/modprobe.d/kvm.conf; then
     fi
 fi
 
-
 sleep 1s
 
 PKGS=(
@@ -126,7 +125,6 @@ for PKG in "${PKGS[@]}"; do
     sleep 1s
 done
 
-
 #git clone https://github.com/tianocore/edk2.git
 #sleep 1s
 #cd ./edk2
@@ -141,16 +139,28 @@ done
 #if [[ grep -qF "ACTIVE_PLATFORM       = OvmfPkg/OvmfPkgX64.dsc"  ]] && [[ grep -qF "TARGET_ARCH           = X64"  ]] && [[ grep -qF "TOOL_CHAIN_TAG        = GCC5"  ]]; then
 
 sleep 1s
-        
-sudo usermod -aG kvm,libvirt $(logname)
+
+echo
 echo "usermod -aG kvm,libvirt $(logname)"
+echo
+sleep 1s
+sudo usermod -aG kvm,libvirt $(logname)
+sleep 1s
+echo
+echo "Enabling libvirtd"
+echo
 sudo systemctl enable --now libvirtd
 sleep 1s
-echo "Adding $(logname) to kvm and libvirt groups..."
-sudo gpasswd -M $(logname) kvm
+echo
 echo "gpasswd -M $(logname) kvm"
-sudo gpasswd -M $(logname) libvirt
+echo
+sleep 1s
+sudo gpasswd -M $(logname) kvm
+echo
 echo "gpasswd -M $(logname) libvirt"
+echo
+sleep 1s
+sudo gpasswd -M $(logname) libvirt
 
 echo
 echo "Configuration complete"
