@@ -23,6 +23,13 @@ echo
 sleep 2s
 clear
 
+echo
+echo "Installing Mullvad VPN"
+echo
+sleep 1s
+paru -S mullvad-vpn --noconfirm --needed
+sleep 1s
+
 PKGS=(
     'org.mozilla.firefox'                           # Firefox
     'com.discordapp.Discord'                        # Discord
