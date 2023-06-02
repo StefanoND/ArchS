@@ -95,6 +95,7 @@ if ! test -e /etc/netctl/kvm-bridge; then
           echo
           read ETH
           if [[ `ip addr | grep $ETH` ]]; then
+              netdevice=$ETH
               answereth=y
           else
             echo
@@ -110,6 +111,7 @@ if ! test -e /etc/netctl/kvm-bridge; then
           sleep 1s
           read TAP
           if [[ `ip addr | grep $TAP` ]]; then
+              tapdevice=$TAP
               answertap=y
           else
             echo
