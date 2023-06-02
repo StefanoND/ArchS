@@ -223,6 +223,10 @@ sleep 1s
 echo
 echo "Done."
 echo
+echo "Note, after these changes, the loading screen before the login screen will take much longer, around 3 minutes"
+echo "This is permanent, it'll happen everytime you boot/reboot"
+echo "Probably be cause it's trying to connect to the internet and waits 3 mins to give up trying"
+echo
 sleep 1s
 echo
 echo "Press Y to reboot now or any key if you plan to manually reboot later."
