@@ -9,6 +9,19 @@ if ! [ $EUID -ne 0 ]; then
 fi
 
 clear
+
+echo
+echo
+echo "Running \"3-AutoBridge.sh\" is preffered instead of this one."
+echo "Only continue if you know what you're doing"
+echo
+echo "Press y to continue, press any other key to exit"
+read CONTINUEKEY
+if [[ ${CONTINUEKEY,,} != y ]]; then
+    exit 0
+fi
+
+clear
 echo
 echo
 echo "      _        _                                     ___                               "
