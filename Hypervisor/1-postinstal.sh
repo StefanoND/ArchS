@@ -27,7 +27,7 @@ echo
 echo "Uninstalling KDE Connect"
 echo
 sleep 1s
-sudo apt autoremove --purge kdeconnectd -y
+sudo apt autoremove --purge kdeconnect -y
 sleep 1s
 echo
 echo "Updating System"
@@ -41,7 +41,7 @@ echo "Making changes to GRUB"
 echo
 sleep 1s
 
-GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX" | rev | cut -c 2- | rev`
+GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
 sleep 1s
 if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
     sudo modprobe -r kvm_amd
@@ -59,7 +59,7 @@ elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
     GRUB+=" intel_iommu=on iommu=pt video=efifb:off systemd.unified_cgroup_hierarchy=0\""
     sleep 1s
 fi
-sudo sed -i "s|^GRUB_CMDLINE_LINUX.*|${GRUB}|" /etc/default/grub
+sudo sed -ie "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|g" /etc/default/grub
 
 sleep 1s
 
