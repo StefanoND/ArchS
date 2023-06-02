@@ -22,6 +22,20 @@ echo
 sleep 2s
 clear
 
+echo
+echo "Do you want to install PWGen?"
+echo "Y - Yes | N - No"
+echo
+read PWG
+if [[ ${PWG,,} = y ]]; then
+    echo
+    echo "Installing PWGen"
+    echo
+    sleep 1s
+    sudo pacman -S pwgen --noconfirm --needed
+    sleep 1s
+fi
+
 PWM=0
 
 echo
@@ -31,6 +45,7 @@ echo "1 - Bitwarden"
 echo "2 - KeePassXD"
 echo "3 - Pass"
 echo "4 - All"
+echo "Anything else - skip"
 echo
 read WHICH
 PWM=$WHICH
