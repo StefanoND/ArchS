@@ -1,4 +1,4 @@
-# Rocky Linux 9.2
+# Kubuntu 22
 
 ## BIOS/UEFI Settings:
 
@@ -15,20 +15,9 @@
 
 ## Installation
 
-    Change Keyboard
+    Language
+    Keyboard
     Change Time & Date
-    Install Destination
-        /boot - 1GiB
-        /boot/efi - 1 GiB
-        swap - none (Enabled if 16GB or lower RAM, ENCRYPTED)
-        / - 16 GiB (Encrypted)
-        /home - Rest (Encrypted)
-    KDUMP Disabled
-    Network & Host Name - Any
-    Root Password/Account Disabled
-    User - Admin/Sudo account (password required)
-
-## Initial Setup
-
-    Accept License
-    Keep KDUMP disabled
+    Software (Proprietary + Secure Boot since I'm using NVidia)
+    Disk Setup
+        LVM with Encryption (Remove Swap Later)
