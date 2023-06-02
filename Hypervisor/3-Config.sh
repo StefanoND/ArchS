@@ -44,10 +44,10 @@ if grep -qF "group=\"USERNAME\"" "$cpath"/Config/qemu.conf; then
 fi
 
 echo
-echo "Backing up \"/etc/libvirt/libvirt.conf\" to \"/etc/libvirt/libvirt.conf.old\""
+echo "Backing up \"/etc/libvirt/libvirtd.conf\" to \"/etc/libvirt/libvirtd.conf.old\""
 echo
 sleep 1s
-mv /etc/libvirt/libvirt.conf /etc/libvirt/libvirt.conf.old
+mv /etc/libvirt/libvirtd.conf /etc/libvirt/libvirtd.conf.old
 sleep 1s
 echo
 echo "Copying \""$cpath"/Config/libvirtd.conf\" to \"/etc/libvirt\""
