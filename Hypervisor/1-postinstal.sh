@@ -35,10 +35,10 @@ PKGS=(
     'qemu-kvm'
     'virt-manager'
     'edk2-ovmf'
-    'dnsmasq-utils'
-    'nftables'
-    'bridge-utils'
-    'iptables-nft-services'
+    #'dnsmasq-utils'
+    #'nftables'
+    #'bridge-utils'
+    #'iptables-nft-services'
 )
         
 for PKG in "${PKGS[@]}"; do
