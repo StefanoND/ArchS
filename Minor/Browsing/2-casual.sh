@@ -27,6 +27,8 @@ PKGS=(
     'org.mozilla.firefox'                           # Firefox
     'com.discordapp.Discord'                        # Discord
     'io.github.mimbrero.WhatsAppDesktop'            # Whatsapp
+    'org.signal.Signal'                             # Signal
+    'network.loki.Session'                          # Session
 )
 
 for PKG in "${PKGS[@]}"; do
