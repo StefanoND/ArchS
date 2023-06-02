@@ -107,11 +107,46 @@ sudo sed -ie "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|g" /etc/default/grub
 
 sleep 1s
 
+if ! grep "GRUB_TIMEOUT=" /etc/default/grub; then
+    sudo tee -a "GRUB_TIMEOUT=5" /etc/default/grub
+    sleep 1s
+else
+    sed -i -e "s|GRUB_TIMEOUT=.*|GRUB_TIMEOUT=5|g" /etc/default/grub
+    sleep 1s
+fi
+if ! grep "GRUB_HIDDEN_TIMEOUT=" /etc/default/grub; then
+    sudo tee -a "GRUB_HIDDEN_TIMEOUT=5" /etc/default/grub
+    sleep 1s
+else
+    sed -i -e "s|GRUB_HIDDEN_TIMEOUT=.*|GRUB_HIDDEN_TIMEOUT=5|g" /etc/default/grub
+    sleep 1s
+fi
+if ! grep "GRUB_RECORDFAIL_TIMEOUT=" /etc/default/grub; then
+    sudo tee -a "GRUB_RECORDFAIL_TIMEOUT=5" /etc/default/grub
+    sleep 1s
+else
+    sed -i -e "s|GRUB_RECORDFAIL_TIMEOUT=.*|GRUB_RECORDFAIL_TIMEOUT=5|g" /etc/default/grub
+    sleep 1s
+fi
+if ! grep "GRUB_TIMEOUT_STYLE=" /etc/default/grub; then
+    sudo tee -a "GRUB_TIMEOUT_STYLE=menu" /etc/default/grub
+    sleep 1s
+else
+    sed -i -e "s|GRUB_TIMEOUT_STYLE=.*|GRUB_TIMEOUT_STYLE=menu|g" /etc/default/grub
+    sleep 1s
+fi
+if ! grep "GRUB_SAVEDEFAULT=" /etc/default/grub; then
+    sudo tee -a "GRUB_SAVEDEFAULT=false" /etc/default/grub
+    sleep 1s
+else
+    sed -i -e "s|GRUB_SAVEDEFAULT=.*|GRUB_SAVEDEFAULT=false|g" /etc/default/grub
+    sleep 1s
+fi
+
 echo
 echo "Updating GRUB"
 echo
 sleep 1s
-#sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 sudo update-grub
 sleep 1s
     
@@ -164,23 +199,9 @@ for PKG in "${PKGS[@]}"; do
     echo "INSTALLING: ${PKG}"
     echo
     sleep 1s
-    #sudo dnf install "$PKG" -y
     sudo apt install "$PKG" -y
     sleep 1s
 done
-
-#git clone https://github.com/tianocore/edk2.git
-#sleep 1s
-#cd ./edk2
-#sleep 1s
-#git submodule update --init
-#sleep 1s
-#make -C BaseTools
-
-#cpath=`pwd`
-#edkroot="$cpath"/Conf/target.txt
-
-#if [[ grep -qF "ACTIVE_PLATFORM       = OvmfPkg/OvmfPkgX64.dsc"  ]] && [[ grep -qF "TARGET_ARCH           = X64"  ]] && [[ grep -qF "TOOL_CHAIN_TAG        = GCC5"  ]]; then
 
 sleep 1s
 
