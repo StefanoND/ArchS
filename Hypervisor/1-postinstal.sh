@@ -24,11 +24,55 @@ sleep 2s
 clear
 
 echo
+echo "Open a new tab/window and remove snap apps manually"
+echo
+echo "To remove type \"sudo snap remove APPNAME\""
+echo
+echo "To check installed snap apps type \"snap list\""
+echo
+echo "Usually the order is from first to last:"
+echo "gnome-x-xx-xxxx, gtk-common-themes, firefox, core20, bare, snapd"
+echo
+echo "You'll have removed everything when you use \"snap list\" and it shows \"No snaps are installed yet.(...)\""
+echo
+echo "When you're done, press any key to continue"
+echo
+read ANYKEYTC
+sleep 1s
+echo
+echo "Uninstalling Snap"
+echo
+sleep 1s
+sudo apt autoremove --purge snapd gnome-software-plugin-snap -y
+sleep 1s
+echo
+echo "Stopping snap to auto-reinstall"
+echo
+sleep 1s
+rm -rf ~/snap
+sudo rm -rf /snap
+sudo rm -rf /var/snap
+sudo rm -rf /var/lib/snapd
+sudo rm -rf /var/cache/snapd/
+sleep 1s
+sudo apt-mark hold snapd
+
+sleep 1s
+
+echo
 echo "Uninstalling KDE Connect"
 echo
 sleep 1s
 sudo apt autoremove --purge kdeconnect -y
 sleep 1s
+echo
+echo "Stopping kdeconnect to auto-reinstall"
+echo
+sleep 1s
+sudo apt-mark hold kdeconnect
+
+sleep 1s
+
 echo
 echo "Updating System"
 echo
