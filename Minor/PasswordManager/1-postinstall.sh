@@ -23,10 +23,9 @@ if ! [ $EUID -ne 0 ]; then
 fi
 
 sleep 1s
-
 sudo pacman -Syu --noconfirm --needed
+sleep 1s
 sudo pacman -S flatpak --noconfirm --needed
-
 sleep 1s
 
 echo
