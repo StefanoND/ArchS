@@ -12,7 +12,7 @@
     </clock>
 
 
-## Windows (Add "hypervclock")
+## Windows (Change offset from "UTC" to "Localtime" Add "hypervclock")
     <clock offset="localtime">
      <timer name="rtc" present="no" tickpolicy="catchup"/>
      <timer name="pit" present="no" tickpolicy="delay"/>
