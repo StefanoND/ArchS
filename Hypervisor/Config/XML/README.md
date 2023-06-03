@@ -1,5 +1,7 @@
 # XML configs
 
+## All XML configs condensed here, check their individual files for more information
+
 ## SCSI Controller
     <driver queues="4" iothread="1"/>
 
