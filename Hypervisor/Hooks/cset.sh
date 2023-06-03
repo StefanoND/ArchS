@@ -33,9 +33,9 @@
 # The output was 0x0000000000000F0F, so I put the last characters in my HOST_CORES_MASK (In this case F0F)
 TOTAL_CORES='0-15'
 TOTAL_CORES_MASK=FFFF           # 0-15
-HOST_CORES='0-3,8-11'           # Cores reserved for host
-HOST_CORES_MASK=F0F             # 0-3,8-11
-VIRT_CORES='4-7,12-15'          # Cores reserved for virtual machine(s)
+HOST_CORES='0,8'                # Cores reserved for host
+HOST_CORES_MASK=101             # 0-3,8-11
+VIRT_CORES='1-7,9-15'           # Cores reserved for virtual machine(s)
 
 VM_NAME="$1"
 VM_ACTION="$2/$3"
