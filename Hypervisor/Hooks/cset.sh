@@ -18,10 +18,19 @@
 # $SYSCONFDIR is usually /etc/libvirt.
 #
 
-# Since I want to assign my Host and VM each to a different CCX: I'll leave the first CCX to my Host and the second to my VM
-# Fo a visual representation you can install "hwloc" and run "lstopo" for a visual representation of what I just said
-# Since the 1st CCX have the cores 0-3 and threads 8-11 and the 2nd CCX have the cores 4-7 and threads are 12-15
-# I'll fill HOST_CORES and VIRT_CORES accordingly
+# Since I want to assign my most of my threads to the VM: I'll leave the first core (0) and sibling (8) Host and the rest to my VM
+# For some reason Linux really likes core 0, so giving it to VM will cause a severe performance hit
+# And we leave it's sibling thread (8) aswell for performance reasons as well.
+#
+# Try to keep all threads in the same CCX as possible and prefer the second CCX (or non-first if you have more than two CCX).
+# Fo a visual representation you can install "hwloc" and run "lstopo" for a visual representation of what I just said.
+#
+# If using over 50% of threads, prefer using all threads of one CCX to start using the threads of another CCX
+# If using less than 50% of threads, keep all threads in the same CCX
+#
+# Using "lstopo" you'll have a better understanding of what I'm saing.
+#
+# What you'll want to look for are the "P#X" where the X is the thread number
 #
 # For the masks: use this calulator: https://bitsum.com/tools/cpu-affinity-calculator/
 # Copy the last numbers/letters into the masks for example
@@ -29,12 +38,12 @@
 # I have 16 threads so I select all CPUs from 0 to 15
 # The output was 0x000000000000FFFF, so I put the last characters in my TOTAL_CORES_MASK (In this case FFFF)
 #
-# For the HOST_CORES_MASK I select the CPUs 0 to 3 and 8 to 11
-# The output was 0x0000000000000F0F, so I put the last characters in my HOST_CORES_MASK (In this case F0F)
+# For the HOST_CORES_MASK I select the CPUs 0 and 8
+# The output was 0x0000000000000101, so I put the last characters in my HOST_CORES_MASK (In this case 101)
 TOTAL_CORES='0-15'
 TOTAL_CORES_MASK=FFFF           # 0-15
 HOST_CORES='0,8'                # Cores reserved for host
-HOST_CORES_MASK=101             # 0-3,8-11
+HOST_CORES_MASK=101             # 0,8
 VIRT_CORES='1-7,9-15'           # Cores reserved for virtual machine(s)
 
 VM_NAME="$1"
