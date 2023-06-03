@@ -80,15 +80,32 @@ sleep 1s
 sudo apt update -y && sudo apt upgrade -y
 sleep 1s
 
-echo
-echo "Making changes to GRUB"
-echo
-sleep 1s
+if ! test -e /etc/modprobe.d; then
+    echo
+    echo "Creating \"/etc/modprobe.d\" folder"
+    echo
+    sleep 1s
+    sudo mkdir -p /etc/modprobe.d
+    sleep 1s
+fi
+if ! test -e /etc/modprobe.d/kvm.conf; then
+    echo
+    echo "Creating \"/etc/modprobe.d/kvm.conf\" file"
+    echo
+    sleep 1s
+    sudo touch /etc/modprobe.d/kvm.conf
+    sleep 1s
+fi
 
 GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
 sleep 1s
 if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
-    sudo modprobe -r kvm_amd
+    #sudo modprobe -r kvm_amd
+    sudo rmmod kvm-amd
+    sleep 1s
+    printf "options kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\noptions kvm_amd nested=1\n" | sudo tee /etc/modprobe.d/kvm.conf
+    sleep 1s
+    sudo modprobe kvm-amd
     sleep 1s
     # Adds amd_iommu=on iommu=pt systemd.unified_cgroup_hierarchy=0 to the grub config
     # amd_iommu=on is supposed to be on by default in the kernel, but it doesn't hurt to have it here
@@ -97,6 +114,12 @@ if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
     sleep 1s
 elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
     sudo modprobe -r kvm_intel
+    sleep 1s
+    printf "options kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\noptions kvm-intel nested=1\noptions kvm-intel enable_shadow_vmcs=1\noptions kvm-intel enable_apicv=1\noptions kvm-intel ept=1\n" | sudo tee /etc/modprobe.d/kvm.conf
+    sleep 1s
+    modprobe -r kvm_intel
+    sleep 1s
+    modprobe -a kvm_intel
     sleep 1s
     # Adds intel_iommu=on iommu=pt systemd.unified_cgroup_hierarchy=0 to the grub config
     # removed "pcie_acs_override=downstream" for security reasons
@@ -148,32 +171,6 @@ echo "Updating GRUB"
 echo
 sleep 1s
 sudo update-grub
-sleep 1s
-    
-if ! test -e /etc/modprobe.d; then
-    sudo mkdir -p /etc/modprobe.d
-    sleep 1s
-fi
-if ! test -e /etc/modprobe.d/kvm.conf; then
-    sudo touch /etc/modprobe.d/kvm.conf
-    sleep 1s
-    printf "options kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\noptions kvm_amd nested=1\n" | sudo tee /etc/modprobe.d/kvm.conf
-    sleep 1s
-elif test -e /etc/modprobe.d/kvm.conf; then
-    if grep -qF "options kvm ignore_msrs=" /etc/modprobe.d/kvm.conf; then
-        sudo sed -i "s|options kvm ignore_msrs=.*|options kvm ignore_msrs=1|g" /etc/modprobe.d/kvm.conf
-        sleep 1s
-    fi
-    if grep -qF "options kvm report_ignored_msrs=" /etc/modprobe.d/kvm.conf; then
-        sudo sed -i "s|options kvm report_ignored_msrs=.*|options kvm report_ignored_msrs=0|g" /etc/modprobe.d/kvm.conf
-        sleep 1s
-    fi
-    if grep -qF "options kvm_intel nested=" /etc/modprobe.d/kvm.conf; then
-        sudo sed -i "s|options kvm_intel nested=.*|options kvm_intel nested=1|g" /etc/modprobe.d/kvm.conf
-        sleep 1s
-    fi
-fi
-
 sleep 1s
 
 PKGS=(
