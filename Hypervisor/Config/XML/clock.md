@@ -2,6 +2,9 @@
 
 ### Will update later
 
+### Make sure the command below returns "tsc"
+    cat /sys/devices/system/clocksource/clocksource0/current_clocksource
+
 ## Linux
     <clock offset='utc'>
      <timer name="rtc" present="no" tickpolicy="catchup"/>
