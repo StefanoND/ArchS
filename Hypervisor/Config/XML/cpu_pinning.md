@@ -7,7 +7,8 @@
 ### If just for browsing the internet, 4-8 threads is enough
 ### Since I'm going to Daily Drive this VM and only have 1 GPU I'll do a single GPU-Passthrough so I'll assign all threads to it
 ### Physical CPU siblings must be Virtual CPU siblings (Check "Note 2" at the bottom of this page)
-### Assign at least threads 0 and 8 in "emulatorpin cpuset" which the host will use (Linux likes thread 0, and thread 8 is 0's sibling, in my case, check)
+### Assign at least threads 0 and 8 in "emulatorpin cpuset" which the host will use.
+### Linux likes thread 0 and, in my case, thread 8 is 0's sibling. Check lstopo (need to instal "hwloc") and/or lscpu -e for yours
     <cputune>
       <vcpupin vcpu="0" cpuset="0"/>
       <vcpupin vcpu="1" cpuset="8"/>
