@@ -174,21 +174,14 @@ sudo update-grub
 sleep 1s
 
 PKGS=(
-    'libvirt-daemon'
+    'qemu-kvm'
+    'qemu-utils'
+    'libvirt-daemon-system'
     'libvirt-clients'
-    'qemu'
+    'bridge-utils'
     'virt-manager'
     'ovmf'
     'netctl'
-    #'nasm'
-    #'iasl'
-    #'build-essential'
-    #'uuid-dev'
-    #'edk2-ovmf'
-    #'dnsmasq-utils'
-    #'nftables'
-    #'bridge-utils'
-    #'iptables-nft-services'
 )
         
 for PKG in "${PKGS[@]}"; do
