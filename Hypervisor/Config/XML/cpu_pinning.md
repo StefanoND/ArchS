@@ -65,3 +65,12 @@
 ### Note 2: This is only true for physical CPUs, QEMU's virtual CPUs siblings are 0-1, 2-3, 4-5, 6-7, etc
 ### So to make physical siblings be the same virtual siblings, you'll assign cores 0 and 8 to vcores 0 and 1 respectively,
 ### cores 1 and 9 to vcores 2 and 3 respectively, cores 2 and 10 to vcores 4 and 5 respectively and so on
+#
+### If you want full isolation (IE exclusive threads for Host and exclusive threads for VM) you must install cpuset and use the script hook [cset.sh](https://github.com/StefanoND/ArchS/blob/main/Hypervisor/Hooks/cset.sh)
+### Use this page as well as cset.sh's comments on how to properly configure it
+
+### Debian
+    sudo apt install cpuset -y
+
+### Arch
+    sudo pacman -S cpuset --noconfirm --needed
