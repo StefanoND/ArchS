@@ -12,7 +12,7 @@
 
 #### Note: in the "cpuset" you should have at least 2 threads, anything higher than 4 threads gives diminishing returns
 #### And will affect performance (not much) of the rest of the system
-#### I give 4 threads be cause I have threads to spare (Threads from 0 to 1 and from 8 to 9)
+#### I give 4 threads be cause I have threads to spare (Threads from 1 to 2 and from 9 to 10)
 #### Note 2: The "-" is the range, the "," is a separator, so 0-3 = 4 threads (0, 1, 2 and 3) and 0,3 = 2 threads (0 and 3).
 
 ### The end result should look something like this
@@ -21,7 +21,7 @@
     <cputune>
       <vcpupin vcpu="0" cpuset="4"/>
       ...
-      <iothreadpin iothread="1" cpuset="0-1,8-9"/>
+      <iothreadpin iothread="1" cpuset="1-2,9-10"/>
     <cputune>
 
 ### Now it's time to add the SCSI Controller
@@ -39,7 +39,7 @@
       ...
     </controller>
 
-### Note: The "queues" is the amount of threads from "cpuset" in "iothreadpin" ("0-1,8-9" which are a total of 4 threads)
+### Note: The "queues" is the amount of threads from "cpuset" in "iothreadpin" ("1-2,9-10" which are a total of 4 threads)
 
 ### Now click into your "SCSI Disk X" and click "XML" and change the following line
     <driver name="qemu" type="qcow2" cache="none" discard="unmap"/>
