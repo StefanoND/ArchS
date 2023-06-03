@@ -36,7 +36,11 @@
         <emulatorpin cpuset="0,8"/>
         <iothreadpin iothread="1" cpuset="1-2,9-10"/>
       </cputune>
+      <os>
       ...
+        <smbios mode="host"/>
+      ...
+      </os>
       <features>
         <acpi/>
         <apic/>
