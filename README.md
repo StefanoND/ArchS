@@ -5,13 +5,21 @@ Almost reasonably Secure
 
 ## Reason
 First 8 results (mostly from 2023 alone)
+
 https://firewalltimes.com/recent-data-breaches/
+
 https://purplesec.us/security-insights/data-breaches/
+
 https://www.electric.ai/blog/recent-big-company-data-breaches
+
 https://dataprivacymanager.net/5-biggest-gdpr-fines-so-far-2020/
+
 https://news.bloomberglaw.com/privacy-and-data-security/2023s-largest-health-data-breach-so-far-brings-legal-flurry
+
 https://www.bleepingcomputer.com/news/security/t-mobile-discloses-second-data-breach-since-the-start-of-2023/
+
 https://www.upguard.com/blog/biggest-data-breaches-us
+
 https://www.getastra.com/blog/security-audit/data-breach-statistics/
 
 The list goest on... Infinetly.
