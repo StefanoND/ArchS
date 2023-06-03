@@ -182,6 +182,7 @@ PKGS=(
     'virt-manager'
     'ovmf'
     'netctl'
+    'cpuset'
 )
         
 for PKG in "${PKGS[@]}"; do
