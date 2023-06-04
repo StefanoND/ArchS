@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+if ! [ $EUID -ne 0 ]; then
+    echo
+    echo "Don't run this script as root."
+    echo
+    exit 1
+fi
+
+clear
+echo
 echo
 echo "      _        _                                     ___                               "
 echo "     / \   ___| |_ ___ _ __ _ __  _   _ _ __ ___    / _ \ _ __ ___   ___  __ _  __ _   "
@@ -9,13 +18,9 @@ echo "  /_/   \_\___|\__\___|_|  |_| |_|\__,_|_| |_| |_|  \___/|_| |_| |_|\___|\
 echo "                                                                         |___/         "
 echo "                        Archlinux Post-Install Setup and Config"
 echo
-
-if ! [ $EUID -ne 0 ]; then
-    echo
-    echo "Don't run this script as root."
-    echo
-    exit 1
-fi
+echo
+sleep 2s
+clear
 
 sleep 1s
 
