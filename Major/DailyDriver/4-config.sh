@@ -171,7 +171,7 @@ if test -e /etc/fonts/local.conf; then
 fi
 sudo touch /etc/fonts/local.conf
 sleep 1s
-curl https://raw.githubusercontent.com/StefanoND/Manjaro/main/Misc/local.conf -o - | sudo tee /etc/fonts/local.conf
+curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/local.conf -o - | sudo tee /etc/fonts/local.conf
 sleep 1s
 if test -e /home/$(logname)/.Xresources; then
     sudo mv /home/$(logname)/.Xresources /home/$(logname)/.Xresources.bak;
