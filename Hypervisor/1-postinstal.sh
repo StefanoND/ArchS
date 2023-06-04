@@ -181,6 +181,7 @@ PKGS=(
     'ovmf'
     'netctl'
     'cpuset'
+    'cpufrequtils'
 )
         
 for PKG in "${PKGS[@]}"; do
@@ -193,6 +194,14 @@ for PKG in "${PKGS[@]}"; do
 done
 
 sleep 1s
+
+echo
+echo "Setting CPU Governor to performance"
+echo
+printf "GOVERNOR=\"performance\"\nMIN_SPEED=\"3700MHz\"\nMAX_SPEED=\"4200MHz\"\n" | sudo tee /etc/default/cpufrequtils
+sudo cpufreq-set -d 3700MHz -u 4200MHz -g performance
+sudo update-rc.d ondemand disable
+sudo systemctl disable ondemand
 
 echo
 echo "usermod -aG kvm,libvirt $(logname)"
