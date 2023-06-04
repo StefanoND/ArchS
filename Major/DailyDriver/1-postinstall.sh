@@ -293,7 +293,7 @@ sleep 1s
 cd ~
 git clone https://aur.archlinux.org/paru.git && cd paru
 sleep 1s
-makepkg -si --noconfirm
+makepkg -si --noconfirm --needed
 sleep 1s
 cd ~
 sleep 1s
