@@ -204,7 +204,7 @@ fi
 sleep 1s
 touch /home/$(logname)/.config/fontconfig/fonts.conf
 sleep 1s
-curl https://raw.githubusercontent.com/StefanoND/Manjaro/main/Misc/fonts.conf -o - | sudo tee /home/$(logname)/.config/fontconfig/fonts.conf
+curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/fonts.conf -o - | sudo tee /home/$(logname)/.config/fontconfig/fonts.conf
 sleep 1s
 sudo sed -i "s|#export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|g" /etc/profile.d/freetype2.sh
 sleep 1s
