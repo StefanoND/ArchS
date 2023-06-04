@@ -58,7 +58,7 @@ UUID= /mnt/SSD ntfs user,users,exec,rw,suid,dev,uid=USER,gid=USER,discard,nofail
 # Create swap file, if you search the internet, it has become a religion, where each person says something different
 # But the consensus seems to be the ones below:
 #
-# If you have 8GiB or less RAM. The SWAP size should be RAM * 2 (So 8GiB * 2 = 16GiB)
+# If you have 8GiB or less RAM. The SWAP size should be RAM * 1.5 (So 8GiB * 1.5 = 12GiB)
 #
 # If you have 16GiB or more RAM. The SWAP size should be around 4GiB-8GiB:
 #     No SWAP file you may (extremely rarely) get Out-of-Memory (OOM) errors and more than this is unnecessary unless you want to enable hibernation.
