@@ -1,6 +1,6 @@
 WIP
 
-## Only scripts with "_run" suffix are runnable scripts.
+### Only scripts with "_run" suffix are runnable scripts.
 
 Interesting links:
 
