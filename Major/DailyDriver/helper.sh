@@ -63,7 +63,7 @@ UUID= /mnt/SSD ntfs user,users,exec,rw,suid,dev,uid=USER,gid=USER,discard,nofail
 # If you have 16GiB or more RAM. The SWAP size should be around 4GiB-8GiB:
 #     No SWAP file you may (extremely rarely) get Out-of-Memory (OOM) errors and more than this is unnecessary unless you want to enable hibernation.
 #
-# If you want to enable hibernation. The SWAP size should be a little higher than your RAM
+# If you want to enable hibernation. The SWAP size should be a little higher than your RAM (5% is good enough)
 #     In the arch wiki it's saying that SWAP size lower than RAM has a big CHANCE of success (though not 100%)
 #     I still wouldn't recomend having a SWAP size lower than your RAM (unlesss you really don't have space in your HDD/SSD)
 #
