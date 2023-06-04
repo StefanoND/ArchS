@@ -87,7 +87,6 @@ UUID= /mnt/SSD ntfs user,users,exec,rw,suid,dev,uid=USER,gid=USER,discard,nofail
     swapon /swapfile
 #
 # For btrfs
-    btrfs subvolume create /swap
     # In this case I can use "g" instead of "k"
     btrfs filesystem mkswapfile --size 4g --uuid clear /swapfile
     # Enable swapfile
