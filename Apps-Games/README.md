@@ -1,6 +1,6 @@
 WIP
 
-Everything Game Related
+## Only scripts with "_run" suffix are runnable scripts.
 
 Interesting links:
 
