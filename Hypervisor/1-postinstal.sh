@@ -23,6 +23,14 @@ echo
 sleep 2s
 clear
 
+changetonvim=n
+
+echo
+echo "Change alias VIM to NVIM? Y - Yes | N - No"
+echo
+read CHANGEAL
+changetonvim=$CHANGEAL
+
 echo
 echo "Open a new tab/window and remove snap apps manually"
 echo
@@ -42,13 +50,11 @@ sleep 1s
 echo
 echo "Uninstalling Snap"
 echo
-sleep 1s
 sudo apt autoremove --purge snapd gnome-software-plugin-snap -y
 sleep 1s
 echo
 echo "Stopping snap to auto-reinstall"
 echo
-sleep 1s
 rm -rf ~/snap
 sudo rm -rf /snap
 sudo rm -rf /var/snap
@@ -62,13 +68,11 @@ sleep 1s
 echo
 echo "Uninstalling KDE Connect"
 echo
-sleep 1s
 sudo apt autoremove --purge kdeconnect -y
 sleep 1s
 echo
 echo "Stopping kdeconnect to auto-reinstall"
 echo
-sleep 1s
 sudo apt-mark hold kdeconnect
 
 sleep 1s
@@ -76,7 +80,6 @@ sleep 1s
 echo
 echo "Updating System"
 echo
-sleep 1s
 sudo apt update -y && sudo apt upgrade -y
 sleep 1s
 
@@ -84,7 +87,6 @@ if ! test -e /etc/modprobe.d; then
     echo
     echo "Creating \"/etc/modprobe.d\" folder"
     echo
-    sleep 1s
     sudo mkdir -p /etc/modprobe.d
     sleep 1s
 fi
@@ -92,7 +94,6 @@ if ! test -e /etc/modprobe.d/kvm.conf; then
     echo
     echo "Creating \"/etc/modprobe.d/kvm.conf\" file"
     echo
-    sleep 1s
     sudo touch /etc/modprobe.d/kvm.conf
     sleep 1s
 fi
@@ -167,7 +168,6 @@ fi
 echo
 echo "Updating GRUB"
 echo
-sleep 1s
 sudo update-grub
 sleep 1s
 
@@ -182,16 +182,38 @@ PKGS=(
     'netctl'
     'cpuset'
     'cpufrequtils'
+    'flatpak'
+    'gnome-software-plugin-flatpak'
+    'git'
+    'neovim'
+    'yakuake'
+    'fish'
+    'okteta'
 )
         
 for PKG in "${PKGS[@]}"; do
     echo
     echo "INSTALLING: ${PKG}"
     echo
-    sleep 1s
     sudo apt install "$PKG" -y
     sleep 1s
 done
+
+sleep 1s
+
+if [ ${changetonvim,,} = y ]; then
+    echo
+    echo "Changing alias of VIM to NVIM"
+    echo
+    alias vim=nvim
+    echo 'alias vim=nvim' >> .zshrc
+    sleep 1s
+fi
+
+echo
+echo "Adding Flathub repo"
+echo
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
 sleep 1s
 
@@ -206,7 +228,6 @@ sudo systemctl disable ondemand
 echo
 echo "usermod -aG kvm,libvirt $(logname)"
 echo
-sleep 1s
 sudo usermod -aG kvm,libvirt $(logname)
 sleep 1s
 echo
@@ -217,18 +238,15 @@ sleep 1s
 echo
 echo "gpasswd -M $(logname) kvm"
 echo
-sleep 1s
 sudo gpasswd -M $(logname) kvm
+sleep 1s
 echo
 echo "gpasswd -M $(logname) libvirt"
 echo
-sleep 1s
 sudo gpasswd -M $(logname) libvirt
 
-echo
-echo "Configuration complete"
-echo
 sleep 1s
+
 echo
 echo "Press Y to start VIRSH internal network automatically at boot (Recommended)"
 echo
@@ -248,7 +266,6 @@ if grep -qF "user=\"USERNAME\"" "$cpath"/Config/qemu.conf; then
     echo
     echo "Adding \"$(logname)\" to qemu.conf's user"
     echo
-    sleep 1s
     sed -i "s|user=\"USERNAME\".*|user=\"$(logname)\"|g" "$cpath"/Config/qemu.conf
     sleep 1s
 fi
@@ -256,7 +273,6 @@ if grep -qF "group=\"USERNAME\"" "$cpath"/Config/qemu.conf; then
     echo
     echo "Adding \"$(logname)\" to qemu.conf's group"
     echo
-    sleep 1s
     sed -i "s|group=\"USERNAME\".*|group=\"$(logname)\"|g" "$cpath"/Config/qemu.conf
     sleep 1s
 fi
@@ -264,32 +280,93 @@ fi
 echo
 echo "Backing up \"/etc/libvirt/libvirtd.conf\" to \"/etc/libvirt/libvirtd.conf.old\""
 echo
-sleep 1s
 sudo mv /etc/libvirt/libvirtd.conf /etc/libvirt/libvirtd.conf.old
 sleep 1s
 echo
 echo "Copying \""$cpath"/Config/libvirtd.conf\" to \"/etc/libvirt\""
 echo
-sleep 1s
 sudo cp "$cpath"/Config/libvirtd.conf /etc/libvirt
 sleep 1s
 echo
 echo "Backing up \"/etc/libvirt/qemu.conf\" to \"/etc/libvirt/qemu.conf.old\""
 echo
-sleep 1s
 sudo mv /etc/libvirt/qemu.conf /etc/libvirt/qemu.conf.old
 sleep 1s
 echo
 echo "Copying \""$cpath"/Config/qemu.conf\" to \"/etc/libvirt\""
 echo
-sleep 1s
 sudo cp "$cpath"/Config/qemu.conf /etc/libvirt
 sleep 1s
 echo
 echo "Restarting libvirt"
 echo
-sleep 1s
 sudo systemctl restart libvirtd
+
+echo
+echo "Configuring terminal profiles and setting Fish as default shell"
+echo
+touch "/home/$(logname)/.local/share/konsole/$(logname).profile"
+sleep 1s
+printf "[Appearance]\nColorScheme=Breeze\n\n[General]\nCommand=/bin/fish\nName=$(logname)\nParent=FALLBACK/\n\n[Scrolling]\nHistoryMode=2\nScrollFullPage=1\n\n[Terminal Features]\nBlinkingCursorEnabled=true\n" | tee /home/$(logname)/.local/share/konsole/$(logname).profile
+
+if ! test -e "/home/$(logname)/.config/konsolerc"; then
+    touch "/home/$(logname)/.config/konsolerc";
+fi
+
+sleep 1s
+
+if grep -qF "DefaultProfile=" "/home/$(logname)/.config/konsolerc"; then
+    sed -i "s|DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "/home/$(logname)/.config/konsolerc"
+elif ! grep -qF "DefaultProfile=" "/home/$(logname)/.config/konsolerc" && ! grep -qF "[Desktop Entry]" "/home/$(logname)/.config/konsolerc"; then
+    sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "/home/$(logname)/.config/konsolerc"
+fi
+
+sleep 1s
+
+if apt list | grep 'yakuake'; then
+    echo
+    echo "Configuring Yakuake"
+    echo
+    if ! test -e "/home/$(logname)/.config/yakuakerc"; then
+        touch "/home/$(logname)/.config/yakuakerc";
+    fi
+
+    sleep 1s
+    
+    if grep -qF "DefaultProfile=" "/home/$(logname)/.config/yakuakerc"; then
+        sed -i "s|DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "/home/$(logname)/.config/yakuakerc"
+    elif ! grep -qF "DefaultProfile=" "/home/$(logname)/.config/yakuakerc" && ! grep -qF "[Desktop Entry]" "/home/$(logname)/.config/yakuakerc"; then
+        sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "/home/$(logname)/.config/yakuakerc"
+    fi
+    
+    sleep 1s
+
+    if ! test -e "/home/$(logname)/.config/autostart"; then
+        mkdir "/home/$(logname)/.config/autostart"
+    fi
+    
+    if ! test -e "/home/$(logname)/.config/autostart/org.kde.yakuake.desktop"; then
+        echo
+        echo "Making Yakuake autostart at log-in"
+        echo
+        ln -s /usr/share/applications/org.kde.yakuake.desktop "/home/$(logname)/.config/autostart"
+        sleep 1s
+    fi
+fi
+
+sleep 1s
+
+echo
+echo "Add/Create a new tab/session in the terminal"
+echo "Run these commands"
+echo "curl -L https://get.oh-my.fish | fish"
+echo "omf install bang-bang"
+echo
+sleep 1s
+echo
+echo "When you're done. Press any button to continue"
+echo
+read ANYTHING
 
 sleep 1s
 echo
