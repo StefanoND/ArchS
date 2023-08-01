@@ -1,0 +1,14 @@
+#Disable swapfile, change "/swapfile" to the path of your swapfile if you placed it somewhere else
+sudo swapoff /swapfile
+#
+# Change it's size, 1M means 1 Mehabyte when used in count, so 1024 in count meanst 1024Megabytes
+# If you change to 1G instead, it'll be 1024GigaBytes, so if you want to give 2GB, you can change
+# bs to 1G and count to 2
+# Note that this appends to your swapfile, not overwrite, so you must do the math for the final size you want
+sudo dd if=/dev/zero of=/swapfile bs=1M count=1024 oflag=append conv=notrunc
+#
+# Setup the file as a "Swap file"
+sudo mkswap /swapfile
+#
+# Enable swapping
+sudo swapon /swapfile

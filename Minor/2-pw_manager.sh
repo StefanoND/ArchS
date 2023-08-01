@@ -32,9 +32,16 @@ if [[ ${PWG,,} = y ]]; then
     echo
     echo "Installing PWGen"
     echo
+    sudo apt install pwgen -y
     sleep 1s
-    sudo pacman -S pwgen --noconfirm --needed
+    echo
+    echo "Creating the minimum recommended PWGen command in \"$HOME/pwgencli.txt\""
+    echo
     sleep 1s
+    touch $HOME/pwgencli.txt
+    printf "# This will generate 8 passwords with 16 characters each\n" | tee $HOME/pwgencli.txt
+    printf "\n# c: Adds capitalization\n# n: Adds numbers\n# y: Adds special symbols\n# s: Uses Entropy\n# B: Avoid ambiguous passwords\n" | tee -a $HOME/pwgencli.txt
+    printf "\npwgen -cnysBv 16 8\n" | tee -a $HOME/pwgencli.txt
 fi
 
 PWM=0
@@ -55,22 +62,21 @@ if [[ ${PWM,,} = 1 ]] || [[ ${PWM,,} = 4 ]]; then
     echo
     echo "Installing Bitwarden"
     echo
-    sleep 1s
     flatpak install flathub com.bitwarden.desktop -y --or-update
     sleep 1s
-elif [[ ${PWM,,} = 2 ]] || [[ ${PWM,,} = 4 ]]; then
+fi
+if [[ ${PWM,,} = 2 ]] || [[ ${PWM,,} = 4 ]]; then
     echo
     echo "Installing KeePassXC"
     echo
-    sleep 1s
     flatpak install flathub org.keepassxc.KeePassXC -y --or-update
     sleep 1s
-elif [[ ${PWM,,} = 3 ]] || [[ ${PWM,,} = 4 ]]; then
+fi
+if [[ ${PWM,,} = 3 ]] || [[ ${PWM,,} = 4 ]]; then
     echo
     echo "Installing Pass"
     echo
-    sleep 1s
-    sudo pacman -S pass --noconfirm --needed
+    sudo apt install pass -y
     sleep 1s
 fi
 

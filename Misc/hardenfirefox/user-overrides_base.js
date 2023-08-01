@@ -1,0 +1,9 @@
+user_pref("geo.enabled", false);
+user_pref("media.webspeech.synth.enabled", false);
+user_pref("network.http.sendRefererHeader", 0);
+user_pref("webgl.disabled", false);
+user_pref("gfx.webrender.all", true);
+user_pref("gfx.webrender.enabled", true);
+user_pref("gfx.webrender.compositor", true);
+user_pref("gfx.webrender.compositor.force-enabled", true);
+user_pref("media.ffmpeg.vaapi.enabled", true);

@@ -1,0 +1,11 @@
+When using the flatpak version, it'll be stored in it's own .local/share, instead of the normal .local/share
+
+"$HOME/.local/share" (Normal)
+"$HOME/.var/app/com.valvesoftware.Steam/.local/share" (Flatpak)
+
+If you're placing your NWN's Documents folder elsewhere, you must point to it in flatpak like so:
+flatpak override --user --filesystem=/path/to/nwn/documents com.valvesoftware.Steam
+
+then you edit your flatpak's nwn.ini file to point to the correct location
+
+Note: DON'T FORGET TO COPY YOUR "cdkey.ini" TO THE DESIRED LOCATION

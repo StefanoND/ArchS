@@ -13,4 +13,4 @@ nano ~/.config/spotify/prefs
 "app.cookies-disabled=false"
 #
 # Or just run the command below
-sed -i "s|app.cookies-disabled=.*|app.cookies-disabled=false|g" /home/$(logname)/.config/spotify/prefs
+sed -i "s|app.cookies-disabled=.*|app.cookies-disabled=false|g" $HOME/.config/spotify/prefs

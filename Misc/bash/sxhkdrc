@@ -1,0 +1,7 @@
+# Wezterm
+F12
+  tdrop -amt -w 1728 -h 944 -y 0 -x 96 wezterm
+
+# Restart sxhkd
+super + shift + r
+  bash -ic restartsxhkd

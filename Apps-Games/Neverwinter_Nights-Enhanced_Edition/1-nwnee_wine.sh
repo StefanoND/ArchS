@@ -24,6 +24,13 @@ clear
 
 sleep 1s
 
+echo
+echo "Starting"
+echo
+
+winenwnpath=/mnt/SSD_WORK/NWN/.winenwn
+wnprfpath="$winenwnpath"
+
 # This is a runnable script
 #
 # This is not for the game itself since it runs natively
@@ -36,167 +43,217 @@ sleep 1s
 # Symlinks doesn't work, I mean, you can still make them, but they won't be seen by the program
 #
 # Create a new wineprefix
-echo
-echo "Creating a new wineprefix in \"/home/$(logname)/.winenwn\""
-echo
-WINEPREFIX=/home/$(logname)/.winenwn winecfg &
-echo
-echo "Close the winecfg window when it opens"
-echo "Press any key when it's closed"
-echo
-read THISANYKEY
+if ! test -e $wnprfpath; then
+    echo
+    echo "Creating a new wineprefix in \"$wnprfpath\""
+    echo
+    WINEPREFIX=$wnprfpath winecfg &
+    echo
+    echo "Close the winecfg window when it opens"
+    echo "Press any key when it's closed"
+    echo
+    read THISANYKEY
 sleep 1s
-echo
-echo "Setting the new wineprefix as default wine"
-echo
-printf "WINEPREFIX=/home/$(logname)/.winenwn\n" | sudo tee -a /etc/environment
+fi
+if ! grep -i "WINEPREFIX=$wnprfpath" /etc/environment; then
+    echo
+    echo "Setting the new wineprefix as default wine"
+    echo
+    printf "WINEPREFIX=$wnprfpath\n" | sudo tee -a /etc/environment
+fi
 #
 #-------------------------------------------------------------------------------------------------------------
 #
 # Remove some folders that causes issues with dotNET installationg
 #
 # Mono
-rm -r /home/$(logname)/.winenwn/drive_c/windows/Microsoft.NET
-rm /home/$(logname)/.winenwn/drive_c/windows/system32/mscoree.dll
-rm /home/$(logname)/.winenwn/drive_c/windows/syswow64/mscoree.dll
-sleep 1s
+rm -r $wnprfpath/drive_c/windows/Microsoft.NET
+rm $wnprfpath/drive_c/windows/system32/mscoree.dll
+rm $wnprfpath/drive_c/windows/syswow64/mscoree.dll
 #
 # OpenAL
 # Remove openal (to fix the installer, will be installed later)
-rm /home/$(logname)/.winenwn/drive_c/windows/system32/openal32.dll
-rm /home/$(logname)/.winenwn/drive_c/windows/syswow64/openal32.dll
-sleep 1s
+rm $wnprfpath/drive_c/windows/system32/openal32.dll
+rm $wnprfpath/drive_c/windows/syswow64/openal32.dll
 #
 # Fix: extract_cabinet FDICopy failed error (seen with dotnet40 since Proton 5.13-5 as winxp64)
-rm /home/$(logname)/.winenwn/drive_c/windows/system32/dxva2.dll
-rm /home/$(logname)/.winenwn/drive_c/windows/syswow64/dxva2.dll
-rm /home/$(logname)/.winenwn/drive_c/windows/system32/evr.dll
-rm /home/$(logname)/.winenwn/drive_c/windows/syswow64/evr.dll
-rm /home/$(logname)/.winenwn/drive_c/windows/system32/uiautomationcore.dll
-rm /home/$(logname)/.winenwn/drive_c/windows/syswow64/uiautomationcore.dll
-sleep 1s
+rm $wnprfpath/drive_c/windows/system32/dxva2.dll
+rm $wnprfpath/drive_c/windows/syswow64/dxva2.dll
+rm $wnprfpath/drive_c/windows/system32/evr.dll
+rm $wnprfpath/drive_c/windows/syswow64/evr.dll
+rm $wnprfpath/drive_c/windows/system32/uiautomationcore.dll
+rm $wnprfpath/drive_c/windows/syswow64/uiautomationcore.dll
 #
 # Fix: wine's builtin fusion.dll fails to create legacy assembly directory (https://bugs.winehq.org/show_bug.cgi?id=45930)
-mkdir -p /home/$(logname)/.winenwn/drive_c/windows/assembly
+mkdir -p $wnprfpath/drive_c/windows/assembly
 sleep 1s
 #
 #-------------------------------------------------------------------------------------------------------------
 #
 # Install required apps for dotNET stuff
-WINEPREFIX=/home/$(logname)/.winenwn winetricks msxml3 msxml4 msxml6 -q --force
-sleep 5s
+WINEPREFIX=$wnprfpath winetricks msxml3 msxml4 msxml6 -qf
+sleep 10s
 killall -r mscorsvw.exe
-sleep 5s
+sleep 10s
 #
 # Change to Windows XP
-WINEPREFIX=/home/$(logname)/.winenwn winecfg -v winxp64
+WINEPREFIX=$wnprfpath winecfg -v winxp64
 sleep 1s
 #
 # Install dotNET 2.0 Service Pack 2 (Must run separate)
-WINEPREFIX=/home/$(logname)/.winenwn winetricks dotnet20sp2 -q --force
-sleep 5s
+WINEPREFIX=$wnprfpath winetricks dotnet20sp2 -qf
+sleep 10s
 killall -r mscorsvw.exe
-sleep 5s
+sleep 10s
 #
 # Install dotNET 3.5 Service Pack 1 and dotNET 4.0 (Must run separate)
-WINEPREFIX=/home/$(logname)/.winenwn winetricks dotnet35sp1 -q --force
-sleep 5s
+WINEPREFIX=$wnprfpath winetricks dotnet35sp1 -qf
+sleep 10s
 killall -r mscorsvw.exe
-sleep 5s
+sleep 10s
 #
 # Install dotNET 4.0 (Must run separate)
-WINEPREFIX=/home/$(logname)/.winenwn winetricks dotnet40 -q --force
-sleep 5s
+WINEPREFIX=$wnprfpath winetricks dotnet40 -qf
+sleep 10s
 killall -r mscorsvw.exe
-sleep 5s
+sleep 10s
 #
 # Manually trigger rebuild of the Global Assembly Cache (GAC) after .NET 4.0 Framework installation
 env WINEPREFIX=$HOME/.winenwn wine "c:\\windows\\Microsoft.NET\\Framework\\v4.0.30319\\ngen.exe" update
-sleep 5s
+sleep 10s
 killall -r mscorsvw.exe
-sleep 5s
+sleep 10s
 #
 # Change to Windows 7
-WINEPREFIX=/home/$(logname)/.winenwn winecfg -v win7
+WINEPREFIX=$wnprfpath winecfg -v win7
 sleep 1s
 #
 # Install dotNET 4.8
-WINEPREFIX=/home/$(logname)/.winenwn winetricks dotnet48 xna40 -q --force
-sleep 5s
+WINEPREFIX=$wnprfpath winetricks dotnet48 xna40 -qf
+sleep 10s
 killall -r mscorsvw.exe
-sleep 5s
+sleep 10s
 #
 # Install all fonts
-WINEPREFIX=/home/$(logname)/.winenwn winetricks allfonts -q
-sleep 5s
+WINEPREFIX=$wnprfpath winetricks allfonts -q
+sleep 10s
 killall -r mscorsvw.exe
 killall -r aspnet_regiis.exe
-sleep 5s
+sleep 10s
 #
 # Install apps (For vcrun2022 it'll ask you to continue installation on two occasions, press "y" and "enter" for both)
-WINEPREFIX=/home/$(logname)/.winenwn winetricks dxvk vkd3d openal vcrun2005 vcrun2010 vcrun2012 vcrun2013 vcrun2022 -q --force
-sleep 5s
+WINEPREFIX=$wnprfpath winetricks dxvk vkd3d openal vcrun2005 vcrun2010 vcrun2012 vcrun2013 vcrun2022 -qf
+sleep 10s
 killall -r mscorsvw.exe
 killall -r aspnet_regiis.exe
-sleep 5s
+sleep 10s
 #
 # Change to Windows XP (Again)
-WINEPREFIX=/home/$(logname)/.winenwn winecfg -v winxp64
+WINEPREFIX=$wnprfpath winecfg -v winxp64
 sleep 1s
 #
 # Instal vcrun2008
-WINEPREFIX=/home/$(logname)/.winenwn winetricks vcrun2008 -q --force
-sleep 5s
+WINEPREFIX=$wnprfpath winetricks vcrun2008 -qf
+sleep 10s
 killall -r mscorsvw.exe
 killall -r aspnet_regiis.exe
-sleep 5s
+sleep 10s
+#
+# Instal DirectX 9
+WINEPREFIX=$wnprfpath winetricks dxdiag -qf
+sleep 10s
+killall -r mscorsvw.exe
+killall -r aspnet_regiis.exe
+sleep 10s
+#
+# Change to Windows 10
+WINEPREFIX=$wnprfpath winecfg -v win7
+sleep 1s
 #
 # Configure wine
-WINEPREFIX=/home/$(logname)/.winenwn winecfg &
+WINEPREFIX=$wnprfpath winecfg &
 sleep 1s
 #
 echo
 echo "Click on \"Libraries\" tab"
-echo "Add the following libraries: d3d9, d3d10core, d3d11, d3d12core, dxgi, comdlg32, dxva2, explorerframe, fntcache, fontsub, gamingtcui, gdiplus, opencl, ucrtbase, vulkan-1"
-echo "If you have NVidia GPU and Cuda installed add the following library: nvcuda"
+echo "Add the following libraries with load order \"Native then builtin\": api-ms-win-crt-conio-l1-1-0, api-ms-win-crt-heap-l1-1-0, api-ms-win-crt-locale-l1-1-0, api-ms-win-crt-math-l1-1-0, api-ms-win-crt-runtime-l1-1-0, api-ms-win-crt-stdio-l1-1-0, api-ms-win-crt-time-l1-1-0, atl100, atl110, atl120, atl140, comdlg32, concrt140, crypt32, d3d9, d3d10core, d3d11, d3d12core, devenum, dinput, dinput8, dsound, dxgi, dxva2, explorerframe, fntcache, fontsub, gamingtcui, gdiplus, msvcp100, msvcp110, msvcp120, msvcp140, msvcr100, msvcr110, msvcr120, msvcr140, opencl, ucrtbase, vcomp100, vcomp110, vcomp120, vcomp140, vcruntime140, vulkan-1"
+echo
+echo "Add the following libraries with load order \"Disabled\": mshtml"
+echo
+echo "DON'T CLOSE WINECFG YET"
 echo
 echo "Press any key when you're done"
 echo
 read ANYKEY
-echo
-echo "Click on \"Staging\" tab"
-echo "Enable \"Enable Environmental Audio Extensions (EAX)\", \"Enable VAAPI as backend for DXVA2 GPU decoding\" and \"Enable GTK3 Theming\"."
-echo
-echo "Press any key when you're done"
-echo
-read ANOTHERANYKEY
 sleep 1s
 echo
 echo "Misc stuff, in Graphics you can increase the dpi to 120"
-echo "If you run \"WINEPREFIX=/home/$(logname)/.winenwn wine regedit\" and go to \"HKEY_CURRENT_CONFIG->Software->Fonts\" you can change the \"LogPixels\""
+echo "If you run \"WINEPREFIX=$wnprfpath wine regedit\" and go to \"HKEY_CURRENT_CONFIG->Software->Fonts\" you can change the \"LogPixels\""
 echo "Default value is 60 (96) but it's too small when openning \"Creature Properties\" or other Dialogs in toolset."
 echo "I personally use 64 (100) which increases their sizes to a more readable size and doesn't clip things"
 echo
 sleep 1s
 echo
+echo "Close winecfg now"
+echo "Press any button after closing it"
+echo
+read ANYOTHERBUTTON
+echo
+echo "Wait 5 seconds"
+echo
+sleep 1s
+echo
+echo "Wait 4 seconds"
+echo
+sleep 1s
+echo
+echo "Wait 3 seconds"
+echo
+sleep 1s
+echo
+echo "Wait 2 seconds"
+echo
+sleep 1s
+echo
+echo "Wait 1 second"
+echo
+sleep 1s
+echo
+echo "Rebooting wine"
+echo
+WINEPREFIX=$wnprfpath wineboot
+echo
+echo
+echo
+echo "Done"
+echo
+echo
+echo
+sleep 1s
+echo
+echo "Before opening NWN Explorer:"
 echo "For nwnexplorer to work with NWN:EE you nneed to copy the \"nwn_base.key\" from the \"data\" folder to the game's root install folder"
 echo "If you downloaded from Steam, it's location is ../Steam/steamapps/common/Neverwinter Nights"
 echo "If you downloaded from the Beamdog client, the name of the root install folder is \"00829\""
+echo
+echo "Open NWN Explorer:"
 echo "To point it to the correct location you go in \"Options\" check \"Look for NWN in the followin directory:\" and click on the \"...\" button"
-echo "On the window that pops up, you'll expand \"My Computer\" and in it you'll expand \"Z:\""
+echo "On the window that pops up, you'll expand \"My Computer\" and in it you'll expand \"Z:\" (NOT \"/\")"
 echo "From there you select the path to your game's root install folder then click \"Ok\" then \"Apply\" then \"Ok\""
 echo "Done, the next time you open \"nwnexplorer.exe\" you'll see all NWN:EE's contents"
 echo
-echo "Note: nwnexplorer.exe can't play any audio due to missing \"fmod.dll\". You can't install through winetricks"
-echo "And manually downloading and installing doesn't work. Neither does copy pasting it to the same folder of nwnexplorer.exe"
-echo "Or adding it to library through winecfg or using WINEDLLOVERRIDES=\"fmod=b,n\" or using regsvr32.exe (or wine's regsvr32)"
-echo "Unless there's another way (that I'm not aware of) you can't use anything that relies on fmod.dll to run"
+echo "Note: nwnexplorer.exe need fmod.dll to play audio, use the one included in this folder, extract it and place the \"fmod.dll\" in the same folder as nwnexplorer.exe"
 echo
 sleep 1s
 echo
 echo "Done! You can now run nwtoolset.exe, nwhak.exe, nwnexplorer.exe, etc"
 echo "You can even create a .desktop of them"
 echo "Also you can add them to your \"/usr/bin\" or \"/usr/local/bin\" folder to open them through the terminal"
+echo
+sleep 1s
+echo
+echo "Check out Lexicon on how to use VSCode to program"
+echo "https://nwnlexicon.com/index.php?title=NWN:EE_Script_Editing_Tutorial"
 echo
 sleep 1s
 echo

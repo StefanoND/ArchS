@@ -1,0 +1,50 @@
+System Options->Environment variables
+    Key
+        DXVK_LOG_PATH
+        DXVK_STATE_CACHE_PATH
+        WINEPREFIX
+    Value (for all)
+        /mnt/SSD_WORK/Photoshop/Adobe-Photoshop
+
+Runner Options->DLL OVERRIDES
+    Keys
+        api-ms-win-crt-conio-l1-1-0
+        api-ms-win-crt-heap-l1-1-0
+        api-ms-win-crt-locale-l1-1-0
+        api-ms-win-crt-math-l1-1-0
+        api-ms-win-crt-runtime-l1-1-0
+        api-ms-win-crt-stdio-l1-1-0
+        api-ms-win-crt-time-l1-1-0
+        atl100
+        atl110
+        atl120
+        atl140
+        concrt140
+        d3d10core
+        d3d11
+        d3d12core
+        d3d9
+        dxgi
+        dxva2
+        fntcache
+        gdiplus
+        msvcp100
+        msvcp110
+        msvcp120
+        msvcp140
+        msvcp140_atomic_wait
+        msvcr100
+        msvcr110
+        msvcr120
+        msvcr140
+        opencl
+        ucrtbase
+        vcomp100
+        vcomp110
+        vcomp120
+        vcomp140
+        vcruntime140
+        vulkan-1
+
+    Value (For all)
+    n,b

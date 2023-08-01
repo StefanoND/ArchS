@@ -23,24 +23,28 @@ echo
 sleep 2s
 clear
 
-PKGS=(
-    'org.mozilla.firefox'                           # Firefox
-    'com.discordapp.Discord'                        # Discord
-    'io.github.mimbrero.WhatsAppDesktop'            # Whatsapp
-    'org.signal.Signal'                             # Signal
-    'network.loki.Session'                          # Session
-)
-
-for PKG in "${PKGS[@]}"; do
-    echo
-    echo "INSTALLING: ${PKG}"
-    echo
-    flatpak install flathub "$PKG" -y --or-update
-    echo
-    sleep 1s
-done
+sleep 1s
 
 echo
-echo "Done."
+echo "Installing ckb-next"
+echo
+paru -S ckb-next-git --noconfirm --needed --sudoloop
+
+echo
+echo "Open a new terminal window/tab run this command:"
+echo "sudo EDITOR=nano systemctl edit ckb-next-daemon"
+echo "Add these lines into ckb-next-daemon.service"
+echo
+echo "[Service]"
+echo "ExecStart="
+echo "ExecStart=/usr/bin/ckb-next-daemon --enable-experimental"
+echo
+echo "Save and close it, press any button when you're done"
+read ANYBTN
+
+sudo systemctl enable --now ckb-next-daemon.service
+
+echo
+echo "Done"
 echo
 exit 0

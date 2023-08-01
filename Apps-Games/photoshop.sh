@@ -1,7 +1,3 @@
-# This is not a runnable script
-#
-# I've decided to use photoshop exclusively in a Windows VM, unless it can be done in less than 1 min in Linux
-#
 # ---------------------------------------------------------------------------------------------------------------#
 # DISCLAIMER: I DO NOT CONDONE THE USE OF PHOTOSHOP WITHOUT AN ACTIVE ADOBE SUBSCRIPTION THAT INCLUDES IT OR     #
 # WITHOUT ANY OTHER MEANS THAT ALLOWS YOU LEGALLY TO USE IT BY DEFINED ADOBE.                                    #
@@ -66,7 +62,7 @@ cp ~/PSUserConfig.txt /PATH/TO/Adobe-Photoshop/drive_c/users/USERNAME/AppData/Ro
 # This makes Photoshop to at least recognize the existence of Pen Pressure but it kinda works
 # To fix it we have to uninstall the proprietary Tablet Driver (Whether from Wacom, Huion or Other Brand) or Digimend Drivers
 # And install OpenTabletDriver (The non "-git" version)
-paru -S opentabletdriver --noconfirm --needed
+yay -S opentabletdriver --noconfirm --needed
 #
 # Open the OpenTabletDriver app
 # In the "Output" tab click on the dropdown on the bottom-left corner and select "Artist Mode"
@@ -78,11 +74,7 @@ paru -S opentabletdriver --noconfirm --needed
 #
 # Done
 #
-# Update: If you add photoshop to lutris and use proton-ge as wine version you can use Liquify with GPU Acceleration. Scrubby Zoom works aswell.
-#
-#
-#
-# Note: To use the "Liquify" filter you MUST disable "Use Graphics Processor" in "Edit->Preferences->Performance" or it'll crash
+# Note: To use the "Liquify" filder you MUST disable "Use Graphics Processor" in "Edit->Preferences->Performance" or it'll crash
 # You can enable it again once you're done using it
 #
 # Scrubby Zoom doesn't seem to work, don't know why.

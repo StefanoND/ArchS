@@ -23,21 +23,19 @@ echo
 sleep 2s
 clear
 
-sleep 1s
-
-echo
-echo "Choose \"1) unreal-engine\" when asked about available providers NOT the -bin one"
-echo
-echo "Make changes to the \"unreal-engine.PKGBUILD\" file"
-echo "At line 49: Change \"_install_dir=\"opt/${pkgname}\"\" to \"_install_dir=\"your/custom/path/${pkgname}\"\""
-echo "At line 52: Change \"_WithDDC=false\" to \"_WithDDC=true\""
-echo
-sleep 2s
 echo
 echo "This will take a long time"
 echo
 sleep 2s
-paru -S unreal-engine --sudoloop
+paru -S unreal-engine --noconfirm --needed --sudoloop
+sleep 1s
+echo
+echo "Configuring permissions"
+echo
+sudo groupadd unrealengine-users
+sudo usermod -aG unrealengine-users $(logname)
+sudo chown -R root:unrealengine-users /opt/unreal-engine
+sudo chmod -R 775 /opt/unreal-engine
 echo
 echo "Done!"
 echo
