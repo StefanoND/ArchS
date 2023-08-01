@@ -4,6 +4,7 @@ if ! [ $EUID -ne 0 ]; then
     echo
     echo "Don't run this script as root."
     echo
+    sleep 1s
     exit 1
 fi
 
@@ -25,20 +26,24 @@ clear
 sleep 1s
 
 echo
-echo "CONFIGURING USB HOTPLUG"
+echo "This script will apply the correct settings to your patched.rom file"
 echo
-
-chmod +x usb-libvirt-hotplug.sh
-
-if test -e /opt/usb-libvirt-hotplug/usb-libvirt-hotplug.sh; then
-    sudo mv /opt/usb-libvirt-hotplug/usb-libvirt-hotplug.sh /opt/usb-libvirt-hotplug/usb-libvirt-hotplug.sh.old
-elif ! test -e /opt/usb-libvirt-hotplug; then
-    sudo mkdir -p /opt/usb-libvirt-hotplug;
+if [[ -f /usr/share/vgabios/patched.rom ]]; then
+    sudo chmod -R 644 /usr/share/vgabios/patched.rom
+    sleep 1s
+    sudo chown "$(logname)":"$(logname)" /usr/share/vgabios/patched.rom
+    sleep 1s
+    echo
+    echo "Done"
+    echo
+    exit 0
+else
+    echo
+    echo "There's not \"patched.rom\" in \"/usr/share/vgabios\"."
+    echo "Make sure the file and/or folder exists and named correctly."
+    echo
+    echo "Run this script again when you're done."
+    echo
+    exit 1
 fi
-
-sudo cp usb-libvirt-hotplug.sh /opt/usb-libvirt-hotplug;
-
-echo
-echo "Done"
-echo
 exit 0

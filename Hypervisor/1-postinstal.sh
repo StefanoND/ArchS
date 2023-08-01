@@ -8,6 +8,39 @@ if ! [ $EUID -ne 0 ]; then
     exit 1
 fi
 
+if ! groups | grep sudo>/dev/null; then
+    echo
+    echo "You need to be a member of the sudo group to run this script!"
+    echo
+    echo
+    echo "To add yourself to sudoers group, open a new tab and follow the guide below"
+    echo
+    echo "# Login to root session"
+    echo "su -"
+    echo
+    echo "# Install sudo"
+    echo "apt install sudo -y"
+    echo
+    echo "# Add yourself to sudoers group, change USERNAME to yours"
+    echo "usermod -aG sudo USERNAME"
+    echo
+    echo "# Run visudo"
+    echo "visudo"
+    echo
+    echo "Add these in visudo"
+    echo "Defaults insults" # Replace "Sorry, try again." with humorous insults.
+    echo "Defaults rootpw" # Will require root password for sudo command
+    echo "Defaults timestamp_type=global" # All terminals "share the same timeout" for sudo password
+    echo
+    echo "# Exit root session"
+    echo "exit"
+    echo
+    echo "Reboot and run this script again"
+    echo
+    sleep 1s
+    exit 1
+fi
+
 clear
 echo
 echo
@@ -23,58 +56,6 @@ echo
 sleep 2s
 clear
 
-changetonvim=n
-
-echo
-echo "Change alias VIM to NVIM? Y - Yes | N - No"
-echo
-read CHANGEAL
-changetonvim=$CHANGEAL
-
-echo
-echo "Open a new tab/window and remove snap apps manually"
-echo
-echo "To remove type \"sudo snap remove APPNAME\""
-echo
-echo "To check installed snap apps type \"snap list\""
-echo
-echo "Usually the order is from first to last:"
-echo "gnome-x-xx-xxxx, gtk-common-themes, firefox, core20, bare, snapd"
-echo
-echo "You'll have removed everything when you use \"snap list\" and it shows \"No snaps are installed yet.(...)\""
-echo
-echo "When you're done, press any key to continue"
-echo
-read ANYKEYTC
-sleep 1s
-echo
-echo "Uninstalling Snap"
-echo
-sudo apt autoremove --purge snapd gnome-software-plugin-snap -y
-sleep 1s
-echo
-echo "Stopping snap to auto-reinstall"
-echo
-rm -rf ~/snap
-sudo rm -rf /snap
-sudo rm -rf /var/snap
-sudo rm -rf /var/lib/snapd
-sudo rm -rf /var/cache/snapd/
-sleep 1s
-sudo apt-mark hold snapd
-
-sleep 1s
-
-echo
-echo "Uninstalling KDE Connect"
-echo
-sudo apt autoremove --purge kdeconnect -y
-sleep 1s
-echo
-echo "Stopping kdeconnect to auto-reinstall"
-echo
-sudo apt-mark hold kdeconnect
-
 sleep 1s
 
 echo
@@ -83,114 +64,62 @@ echo
 sudo apt update -y && sudo apt upgrade -y
 sleep 1s
 
-if ! test -e /etc/modprobe.d; then
-    echo
-    echo "Creating \"/etc/modprobe.d\" folder"
-    echo
-    sudo mkdir -p /etc/modprobe.d
-    sleep 1s
-fi
-if ! test -e /etc/modprobe.d/kvm.conf; then
-    echo
-    echo "Creating \"/etc/modprobe.d/kvm.conf\" file"
-    echo
-    sudo touch /etc/modprobe.d/kvm.conf
-    sleep 1s
-fi
+PKGZ=(
+    'kdeconnect'
+    'firefox'
+    'firefox-esr'
+)
 
-GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
-sleep 1s
-if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
-    #sudo modprobe -r kvm_amd
-    sudo rmmod kvm-amd
+for PKG in "${PKGZ[@]}"; do
+    echo
+    echo "UNINSTALLING: ${PKG}"
+    echo
+    sudo apt autoremove --purge "$PKG" -y
     sleep 1s
-    printf "options kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\noptions kvm_amd nested=1\n" | sudo tee /etc/modprobe.d/kvm.conf
-    sleep 1s
-    sudo modprobe kvm-amd
-    sleep 1s
-    # Adds amd_iommu=on iommu=pt systemd.unified_cgroup_hierarchy=0 to the grub config
-    # amd_iommu=on is supposed to be on by default in the kernel, but it doesn't hurt to have it here
-    GRUB+=" amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1 pcie_acs_override=downstream,multifunction video=efifb:off systemd.unified_cgroup_hierarchy=0\""
-    sleep 1s
-elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
-    sudo modprobe -r kvm_intel
-    sleep 1s
-    printf "options kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\noptions kvm-intel nested=1\noptions kvm-intel enable_shadow_vmcs=1\noptions kvm-intel enable_apicv=1\noptions kvm-intel ept=1\n" | sudo tee /etc/modprobe.d/kvm.conf
-    sleep 1s
-    modprobe -r kvm_intel
-    sleep 1s
-    modprobe -a kvm_intel
-    sleep 1s
-    # Adds intel_iommu=on iommu=pt systemd.unified_cgroup_hierarchy=0 to the grub config
-    GRUB+=" intel_iommu=on iommu=pt pcie_acs_override=downstream,multifunction video=efifb:off systemd.unified_cgroup_hierarchy=0\""
-    sleep 1s
-fi
-sudo sed -ie "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|g" /etc/default/grub
-
-sleep 1s
-
-if ! grep "GRUB_TIMEOUT=" /etc/default/grub; then
-    sudo tee -a "GRUB_TIMEOUT=5" /etc/default/grub
-    sleep 1s
-else
-    sed -i -e "s|GRUB_TIMEOUT=.*|GRUB_TIMEOUT=5|g" /etc/default/grub
-    sleep 1s
-fi
-if ! grep "GRUB_HIDDEN_TIMEOUT=" /etc/default/grub; then
-    sudo tee -a "GRUB_HIDDEN_TIMEOUT=5" /etc/default/grub
-    sleep 1s
-else
-    sed -i -e "s|GRUB_HIDDEN_TIMEOUT=.*|GRUB_HIDDEN_TIMEOUT=5|g" /etc/default/grub
-    sleep 1s
-fi
-if ! grep "GRUB_RECORDFAIL_TIMEOUT=" /etc/default/grub; then
-    sudo tee -a "GRUB_RECORDFAIL_TIMEOUT=5" /etc/default/grub
-    sleep 1s
-else
-    sed -i -e "s|GRUB_RECORDFAIL_TIMEOUT=.*|GRUB_RECORDFAIL_TIMEOUT=5|g" /etc/default/grub
-    sleep 1s
-fi
-if ! grep "GRUB_TIMEOUT_STYLE=" /etc/default/grub; then
-    sudo tee -a "GRUB_TIMEOUT_STYLE=menu" /etc/default/grub
-    sleep 1s
-else
-    sed -i -e "s|GRUB_TIMEOUT_STYLE=.*|GRUB_TIMEOUT_STYLE=menu|g" /etc/default/grub
-    sleep 1s
-fi
-if ! grep "GRUB_SAVEDEFAULT=" /etc/default/grub; then
-    sudo tee -a "GRUB_SAVEDEFAULT=false" /etc/default/grub
-    sleep 1s
-else
-    sed -i -e "s|GRUB_SAVEDEFAULT=.*|GRUB_SAVEDEFAULT=false|g" /etc/default/grub
-    sleep 1s
-fi
-
-echo
-echo "Updating GRUB"
-echo
-sudo update-grub
-sleep 1s
+done
 
 PKGS=(
-    'qemu-kvm'
+    # Kernel
+    'build-essential'
+    "linux-headers-$(uname -r)"
+    'dkms'
+
+    # QEMU
+    'qemu-system-x86'
+    'qemu-system'
     'qemu-utils'
-    'libvirt-daemon-system'
+
     'libvirt-clients'
-    'bridge-utils'
+    'libvirt-daemon-system'
+    'libvirt-daemon'
+    'virtinst'
     'virt-manager'
+    'virt-viewer'
+    'bridge-utils'
     'ovmf'
-    'netctl'
-    'cpuset'
-    'cpufrequtils'
+    'vde2'
+    'iptables'
+    'ebtables'
+    'nftables'
+    'swtpm'
+
+#    'netctl'
+#    'dnsmasq'
+#    'openbsd-netcat'
+
+    # misc
+    'gamemode'
     'flatpak'
-    'gnome-software-plugin-flatpak'
+    'gnome-software-plugin-flatpak'             # Flathub plugin
+    'ntfs-3g'
     'git'
+    'curl'
+    'wget'
     'neovim'
     'yakuake'
-    'fish'
-    'okteta'
+    'linux-cpupower'
 )
-        
+
 for PKG in "${PKGS[@]}"; do
     echo
     echo "INSTALLING: ${PKG}"
@@ -199,64 +128,115 @@ for PKG in "${PKGS[@]}"; do
     sleep 1s
 done
 
+echo
+echo "Adding flathub repo to flatpak"
+echo
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 sleep 1s
 
-if [ ${changetonvim,,} = y ]; then
-    echo
-    echo "Changing alias of VIM to NVIM"
-    echo
-    alias vim=nvim
-    echo 'alias vim=nvim' >> .zshrc
-    sleep 1s
+echo
+echo "Installing NixOS Package Manager"
+echo
+sh <(curl -L https://nixos.org/nix/install) --daemon
+sleep 1s
+
+if ! [[ -d "${HOME}"/.config/nix ]]; then
+    mkdir -p "${HOME}"/.config/nix
+fi
+
+if ! [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
+    touch "${HOME}"/.config/nix/nix.conf
 fi
 
 echo
-echo "Adding Flathub repo"
+echo "Nix PM: Enabling nix-command and flakes"
 echo
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+echo 'experimental-features = nix-command flakes' > "${HOME}"/.config/nix/nix.conf
+sleep 1s
 
+if ! [[ -d "${HOME}"/.config/nixpkgs ]]; then
+    mkdir -p "${HOME}"/.config/nixpkgs
+fi
+
+if ! [[ -f "${HOME}"/.config/nixpkgs/config.nix ]]; then
+    touch "${HOME}"/.config/nixpkgs/config.nix
+fi
+
+echo
+echo "Nix PM: Allowing \"Unfree\" packages, enabling sandboxing and enabling auto optimise store"
+echo
+printf "{\n  allowUnfree = true;\n  nix.settings.sandbox = true;\n  nix.settings.auto-optimise-store = true;\n}\n" > "${HOME}"/.config/nixpkgs/config.nix
 sleep 1s
 
 echo
-echo "Setting CPU Governor to performance"
+echo "Setting CPU governor to Performance and setting min and max freq"
 echo
-printf "GOVERNOR=\"performance\"\nMIN_SPEED=\"3700MHz\"\nMAX_SPEED=\"4200MHz\"\n" | sudo tee /etc/default/cpufrequtils
-sudo cpufreq-set -d 3700MHz -u 4200MHz -g performance
+sudo cpupower frequency-set -d 3.7GHz
+sudo cpupower frequency-set -u 4.2GHz
+sudo cpupower frequency-set -g performance
+sleep 1s
+#sudo sed -i "s|#governor=.*|governor='performance'|g" /etc/default/cpupower
+#sudo sed -i "s|#min_freq=.*|min_freq=\"3.7GHz\"|g" /etc/default/cpupower
+#sudo sed -i "s|#max_freq=.*|max_freq=\"4.2GHz\"|g" /etc/default/cpupower
+
+echo
+echo "Enabling cpupower service"
+echo
 sudo update-rc.d ondemand disable
 sudo systemctl disable ondemand
+sudo systemctl mask power-profiles-daemon.service
+sudo systemctl enable --now cpupower.service
+sleep 1s
+
+#sleep 1s
+
+#echo
+#echo "Set make to be multi-threaded by default"
+#echo
+#sudo sed -i "s|MAKEFLAGS=.*|MAKEFLAGS=\"-j$(expr $(nproc) \+ 1)\"|g" /etc/makepkg.conf
+#sudo sed -i "s|COMPRESSXZ=.*|COMPRESSXZ=(xz -c -T $(expr $(nproc) \+ 1) -z -)|g" /etc/makepkg.conf
 
 echo
-echo "usermod -aG kvm,libvirt $(logname)"
+echo "usermod -aG kvm,libvirt \"$(logname)\""
 echo
-sudo usermod -aG kvm,libvirt $(logname)
+sudo usermod -aG kvm,libvirt "$(logname)"
 sleep 1s
+
 echo
 echo "Enabling libvirtd"
 echo
 sudo systemctl enable --now libvirtd
 sleep 1s
-echo
-echo "gpasswd -M $(logname) kvm"
-echo
-sudo gpasswd -M $(logname) kvm
-sleep 1s
-echo
-echo "gpasswd -M $(logname) libvirt"
-echo
-sudo gpasswd -M $(logname) libvirt
 
+echo
+echo "gpasswd -M \"$(logname)\" kvm"
+echo
+sudo gpasswd -M "$(logname)" kvm
 sleep 1s
 
 echo
-echo "Press Y to start VIRSH internal network automatically at boot (Recommended)"
+echo "gpasswd -M \"$(logname)\" libvirt"
 echo
-read AUTOSTART
-if [ ${AUTOSTART,,} = y ]; then
-    echo
-    echo "Enabling VIRSH internal network automatically at boot"
-    echo
+sudo gpasswd -M "$(logname)" libvirt
+sleep 1s
+
+echo
+echo "Enabling VIRSH internal network automatically at boot"
+echo
+sudo virsh net-autostart default
+sleep 1s
+
+if ! [[ -d "${HOME}"/.config/autostart ]]; then
+    mkdir -p "${HOME}"/.config/autostart
     sleep 1s
-    sudo virsh net-autostart default
+fi
+
+if ! [[ -f "${HOME}"/.config/autostart/virt-manager.desktop ]]; then
+    echo
+    echo "Making Virt-manager autostart at log-in"
+    echo
+    ln -s /usr/share/applications/virt-manager.desktop "${HOME}"/.config/autostart
+    sleep 1s
 fi
 
 cpath=`pwd`
@@ -303,81 +283,238 @@ echo
 sudo systemctl restart libvirtd
 
 echo
-echo "Configuring terminal profiles and setting Fish as default shell"
+echo "Configuring terminal profiles and setting Bash as default shell"
 echo
-touch "/home/$(logname)/.local/share/konsole/$(logname).profile"
+touch "${HOME}"/.local/share/konsole/"$(logname)".profile
 sleep 1s
-printf "[Appearance]\nColorScheme=Breeze\n\n[General]\nCommand=/bin/fish\nName=$(logname)\nParent=FALLBACK/\n\n[Scrolling]\nHistoryMode=2\nScrollFullPage=1\n\n[Terminal Features]\nBlinkingCursorEnabled=true\n" | tee /home/$(logname)/.local/share/konsole/$(logname).profile
+printf "[Appearance]\nColorScheme=Breeze\n\n[General]\nCommand=/bin/bash\nName=$(logname)\nParent=FALLBACK/\n\n[Scrolling]\nHistoryMode=2\nScrollFullPage=1\n\n[Terminal Features]\nBlinkingCursorEnabled=true\n" | tee "${HOME}"/.local/share/konsole/"$(logname)".profile
 
-if ! test -e "/home/$(logname)/.config/konsolerc"; then
-    touch "/home/$(logname)/.config/konsolerc";
+if ! [[ -f "${HOME}"/.config/konsolerc ]]; then
+    touch "${HOME}"/.config/konsolerc;
 fi
 
 sleep 1s
 
-if grep -qF "DefaultProfile=" "/home/$(logname)/.config/konsolerc"; then
-    sed -i "s|DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "/home/$(logname)/.config/konsolerc"
-elif ! grep -qF "DefaultProfile=" "/home/$(logname)/.config/konsolerc" && ! grep -qF "[Desktop Entry]" "/home/$(logname)/.config/konsolerc"; then
-    sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "/home/$(logname)/.config/konsolerc"
+if grep -qF "DefaultProfile=" "${HOME}"/.config/konsolerc; then
+    sed -i "s|DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "${HOME}"/.config/konsolerc
+elif ! grep -qF "DefaultProfile=" "${HOME}"/.config/konsolerc && ! grep -qF "[Desktop Entry]" "${HOME}"/.config/konsolerc; then
+    sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "${HOME}"/.config/konsolerc
 fi
 
 sleep 1s
 
-if apt list | grep 'yakuake'; then
+if [[ `apt list --installed | grep -i 'yakuake'` ]]; then
     echo
     echo "Configuring Yakuake"
     echo
-    if ! test -e "/home/$(logname)/.config/yakuakerc"; then
-        touch "/home/$(logname)/.config/yakuakerc";
+    if ! [[ -f "${HOME}"/.config/yakuakerc ]]; then
+        touch "${HOME}"/.config/yakuakerc;
+        printf "[Desktop Entry]\nDefaultProfile=$(logname).profile\n" | tee "${HOME}"/.config/yakuakerc
     fi
 
     sleep 1s
-    
-    if grep -qF "DefaultProfile=" "/home/$(logname)/.config/yakuakerc"; then
-        sed -i "s|DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "/home/$(logname)/.config/yakuakerc"
-    elif ! grep -qF "DefaultProfile=" "/home/$(logname)/.config/yakuakerc" && ! grep -qF "[Desktop Entry]" "/home/$(logname)/.config/yakuakerc"; then
-        sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "/home/$(logname)/.config/yakuakerc"
+
+    if grep -qF "DefaultProfile=" "${HOME}"/.config/yakuakerc; then
+        sed -i "s|DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "${HOME}"/.config/yakuakerc
+    elif ! grep -qF "DefaultProfile=" "${HOME}"/.config/yakuakerc && ! grep -qF "[Desktop Entry]" "${HOME}"/.config/yakuakerc; then
+        sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "${HOME}"/.config/yakuakerc
     fi
-    
+
     sleep 1s
 
-    if ! test -e "/home/$(logname)/.config/autostart"; then
-        mkdir "/home/$(logname)/.config/autostart"
+    if ! [[ -d "${HOME}"/.config/autostart ]]; then
+        mkdir "${HOME}"/.config/autostart
     fi
-    
-    if ! test -e "/home/$(logname)/.config/autostart/org.kde.yakuake.desktop"; then
+
+    if ! [[ -f "${HOME}"/.config/autostart/org.kde.yakuake.desktop ]]; then
         echo
         echo "Making Yakuake autostart at log-in"
         echo
-        ln -s /usr/share/applications/org.kde.yakuake.desktop "/home/$(logname)/.config/autostart"
+        ln -s /usr/share/applications/org.kde.yakuake.desktop "${HOME}"/.config/autostart
         sleep 1s
     fi
 fi
 
+echo
+echo "Setting up fq_pie queue discipline for TCP congestion control"
+echo
+echo 'net.core.default_qdisc = fq_pie' | sudo tee /etc/sysctl.d/90-override.conf
 sleep 1s
 
 echo
-echo "Add/Create a new tab/session in the terminal"
-echo "Run these commands"
-echo "curl -L https://get.oh-my.fish | fish"
-echo "omf install bang-bang"
+echo "Amending journald Logging to 200M"
 echo
+sudo sed -i "s|#SystemMaxUse=.*|SystemMaxUse=200M|g" /etc/systemd/journald.conf
 sleep 1s
+
 echo
-echo "When you're done. Press any button to continue"
+echo "Disabling Coredump logging"
 echo
-read ANYTHING
+sudo sed -i "s|#Storage=.*|Storage=none|g" /etc/systemd/coredump.conf
+sleep 1s
+
+echo
+echo "Increasing open file limit"
+echo
+sudo sed -i "s|# End of file.*|$(logname)        hard    nofile          2097152\n\n# End of file\n|g" /etc/security/limits.conf
+sudo sed -i "s|# End of file.*|$(logname)        soft    nofile          1048576\n\n# End of file\n|g" /etc/security/limits.conf
+sudo sed -i "s|#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=2097152|g" /etc/systemd/system.conf
+sudo sed -i "s|#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=1048576|g" /etc/systemd/user.conf
+sleep 1s
+
+echo
+echo "Restricting Kernel Log Access"
+echo
+sudo sysctl -w kernel.dmesg_restrict=1
+sleep 1s
+
+echo
+echo "Making Gamemode start on boot"
+echo
+systemctl --user enable --now gamemoded.service
+sudo chmod +x /usr/bin/gamemoderun
+sleep 1s
+
+# sleep 1s
+#
+# echo
+# echo "Fixing sound delay when starting to play audio"
+# echo
+# sudo sed -i "s|load-module module-suspend-on-idle.*|#load-module module-suspend-on-idle|g" /etc/pulse/default.pa
+# sudo sed -i "s|load-module module-udev-detect.*|load-module module-udev-detect tsched=0|g" /etc/pulse/default.pa
+# sudo sed -i "s|load-module module-detect.*|load-module module-detect tsched=0|g" /etc/pulse/default.pa
+# sudo sed -i "s|.*default-sample-rate.*|default-sample-rate = 44100|g" /etc/pulse/daemon.conf
+# sudo sed -i "s|.*alternate-sample-rate.*|alternate-sample-rate = 48000|g" /etc/pulse/daemon.conf
+# sleep 1s
+#
+# if [[ -f /etc/modprobe.d/snd-hda-intel.conf ]]; then
+#     sudo cp /etc/modprobe.d/snd-hda-intel.conf /etc/modprobe.d/snd-hda-intel.conf.old
+#     printf "options snd-hda-intel power_save=0\n" | sudo tee /etc/modprobe.d/snd-hda-intel.conf
+#     sleep 1s
+# fi
+
+
+if ! [[ -d /etc/X11/xorg.conf.d ]]; then
+    sudo mkdir -p /etc/X11/xorg.conf.d
+fi
+
+if ! [[ -f /etc/X11/xorg.conf.d/50-mouse-acceleration.conf ]]; then
+    sudo touch /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
+fi
+
+printf "Section \"InputClass\"\n    Identifier \"My Mouse\"\n    Driver \"libinput\"\n    MatchIsPointer \"yes\"\n    Option \"AccelProfile\" \"-1\"\n    Option \"AccelerationScheme\" \"none\"\n    Option \"AccelSpeed\" \"-1\"\nEndSection" | sudo tee /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
+sleep 1s
+
+GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
+grubgpu=""
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+    grubgpu=" nouveau.modeset=0"
+    sleep 1s
+fi
+elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd; then
+    grubgpu=" amdgpu.aspm=0"
+    sleep 1s
+fi
+
+if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
+    GRUB+=" amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1 kvm_amd.nested=1 kvm_amd.sev=1 kvm.ignore_msrs=1 kvm.report_ignored_msrs=0 video=vesafb:off,efifb:off,simplefb:off$grubgpu pcie_acs_override=downstream,multifunction systemd.unified_cgroup_hierarchy=0\""
+    sleep 1s
+elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
+    GRUB+=" intel_iommu=on iommu=pt kvm.ignore_msrs=1 kvm.report_ignored_msrs=0 video=vesafb:off,efifb:off,simplefb:off$grubgpu pcie_acs_override=downstream,multifunction systemd.unified_cgroup_hierarchy=0\""
+    sleep 1s
+fi
+
+sudo sed -ie "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|g" /etc/default/grub
+sleep 1s
+
+if ! grep "GRUB_TIMEOUT=" /etc/default/grub; then
+    printf "GRUB_TIMEOUT=3\n" | sudo tee -a /etc/default/grub
+    sleep 1s
+else
+    sudo sed -i "s|GRUB_TIMEOUT=.*|GRUB_TIMEOUT=3|g" /etc/default/grub
+    sleep 1s
+fi
+
+if ! grep "GRUB_HIDDEN_TIMEOUT=" /etc/default/grub; then
+    printf "GRUB_HIDDEN_TIMEOUT=3\n" | sudo tee -a /etc/default/grub
+    sleep 1s
+else
+    sudo sed -i "s|GRUB_HIDDEN_TIMEOUT=.*|GRUB_HIDDEN_TIMEOUT=3|g" /etc/default/grub
+    sleep 1s
+fi
+
+if ! grep "GRUB_RECORDFAIL_TIMEOUT=" /etc/default/grub; then
+    printf "GRUB_RECORDFAIL_TIMEOUT=3\n" | sudo tee -a /etc/default/grub
+    sleep 1s
+else
+    sudo sed -i "s|GRUB_RECORDFAIL_TIMEOUT=.*|GRUB_RECORDFAIL_TIMEOUT=3|g" /etc/default/grub
+    sleep 1s
+fi
+
+if ! grep "GRUB_TIMEOUT_STYLE=" /etc/default/grub; then
+    printf "GRUB_TIMEOUT_STYLE=menu\n" | sudo tee -a /etc/default/grub
+    sleep 1s
+else
+    sudo sed -i "s|GRUB_TIMEOUT_STYLE=.*|GRUB_TIMEOUT_STYLE=menu|g" /etc/default/grub
+    sleep 1s
+fi
+
+if ! grep "GRUB_SAVEDEFAULT=" /etc/default/grub; then
+    printf "GRUB_SAVEDEFAULT=false\n" | sudo tee -a /etc/default/grub
+    sleep 1s
+else
+    sudo sed -i "s|GRUB_SAVEDEFAULT=.*|GRUB_SAVEDEFAULT=false|g" /etc/default/grub
+    sleep 1s
+fi
+
+echo
+echo "Enabling nested kvm"
+echo
+
+if ! [[ -d /etc/modprobe.d ]]; then
+    echo
+    echo "Creating \"/etc/modprobe.d\" folder"
+    echo
+    sudo mkdir -p /etc/modprobe.d
+    sleep 1s
+fi
 
 sleep 1s
+if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
+    if ! [[ -f /etc/modprobe.d/kvm-amd.conf ]]; then
+        sudo touch /etc/modprobe.d/kvm-amd.conf
+        sleep 1s
+    fi
+
+    printf "options kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\noptions kvm-amd nested=1\n" | sudo tee /etc/modprobe.d/kvm-amd.conf
+    sudo modprobe -r kvm_amd
+    sudo modprobe -a kvm_amd
+    sleep 1s
+elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
+    if ! [[ -f /etc/modprobe.d/kvm-intel.conf ]]; then
+        sudo touch /etc/modprobe.d/kvm-intel.conf
+        sleep 1s
+    fi
+
+    printf "options kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\noptions kvm-intel nested=1\noptions kvm-intel enable_shadow_vmcs=1\noptions kvm-intel enable_apicv=1\noptions kvm-intel ept=1\n" | sudo tee /etc/modprobe.d/kvm-intel.conf
+    sudo modprobe -r kvm_intel
+    sudo modprobe -a kvm_intel
+    sleep 1s
+fi
+
+echo
+echo "Updating GRUB"
+echo
+sudo update-grub
+sleep 1s
+
 echo
 echo "Done..."
-echo
-sleep 1s
 echo
 echo "Press Y to reboot now or N if you plan to manually reboot later."
 echo
 read REBOOT
 if [ ${REBOOT,,} = y ]; then
-    reboot
+    systemctl reboot
 fi
 exit 0

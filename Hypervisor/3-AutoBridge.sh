@@ -8,6 +8,17 @@ if ! [ $EUID -ne 0 ]; then
     exit 1
 fi
 
+echo
+echo "I prefer passing through the NIC instead of bridging it"
+echo "If you prefer to bridge it press Y"
+echo
+read AUTOBRIDGE
+if [[ ${AUTOBRIDGE,,} = y ]]; then
+    echo
+else
+    exit 0
+fi
+
 clear
 echo
 echo
@@ -23,12 +34,12 @@ echo
 sleep 2s
 clear
 
-if ! apt list --installed | grep 'netctl'; then
+if ! pacman -Q | grep 'netctl'; then
     echo
     echo "Installing netctl"
     echo
     sleep 1s
-    sudo apt install netctl -y
+    sudo pacman -S netctl --noconfirm --needed
     sleep 1s
 fi
 
@@ -133,15 +144,15 @@ if ! test -e /etc/netctl/kvm-bridge; then
       sleep 1s
       printf "IP=dhcp\n" | sudo tee -a /etc/netctl/kvm-bridge
       sleep 1s
-      if ! test -e /home/$(logname)/bridged-network.xml; then
-          touch /home/$(logname)/bridged-network.xml
-          printf "<network>\n  <name>$bridgename</name>\n  <forward mode=\"nat\">\n    <nat>\n      <port start=\"1024\" end=\"65535\"/>\n    </nat>\n  </forward>\n  <bridge name=\"$domainame\" stp=\"on\" delay=\"0\"/>\n  <domain name=\"$bridgename\"/>\n  <ip address=\"$ipaddress\" netmask=\"$netmask\">\n    <dhcp>\n      <range start=\"$rangestart\" end=\"$rangeend\"/>\n    </dhcp>\n  </ip>\n</network>" | tee /home/$(logname)/bridged-network.xml
+      if ! test -e $HOME/bridged-network.xml; then
+          touch $HOME/bridged-network.xml
+          printf "<network>\n  <name>$bridgename</name>\n  <forward mode=\"nat\">\n    <nat>\n      <port start=\"1024\" end=\"65535\"/>\n    </nat>\n  </forward>\n  <bridge name=\"$domainame\" stp=\"on\" delay=\"0\"/>\n  <domain name=\"$bridgename\"/>\n  <ip address=\"$ipaddress\" netmask=\"$netmask\">\n    <dhcp>\n      <range start=\"$rangestart\" end=\"$rangeend\"/>\n    </dhcp>\n  </ip>\n</network>" | tee $HOME/bridged-network.xml
       fi
       sleep 1s
       echo
       echo "Defining Virtual Network"
       echo
-      sudo virsh net-define /home/$(logname)/bridged-network.xml
+      sudo virsh net-define $HOME/bridged-network.xml
       sleep 1s
       echo
       echo "Starting Virtual Network"
@@ -233,6 +244,6 @@ echo "Press Y to reboot now or any key if you plan to manually reboot later."
 echo
 read REBOOT
 if [ ${REBOOT,,} = y ]; then
-    reboot
+    systemctl reboot
 fi
 exit 0

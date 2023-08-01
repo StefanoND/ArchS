@@ -1,11 +1,23 @@
 #!/usr/bin/env bash
 
-if ! [ $EUID -ne 0 ]; then
+if ! [ $EUID -ne 0 ] ]]; then
     echo
     echo "Don't run this script as root."
     echo
     sleep 1s
     exit 1
+fi
+
+echo
+echo "Create and setup a VM first"
+echo
+echo "Press Y if you've already done it"
+echo
+read CREATEDVM
+if [[ ${CREATEDVM,,} = y ]]; then
+    echo
+else
+    exit 0
 fi
 
 clear
@@ -24,130 +36,125 @@ sleep 2s
 clear
 
 vmname=null
+cpuisolate=null
+hostgovernor=null
+
+while [[ ${vmname,,} == null ]] || [[ ${vmname,,} == "" ]]; do
+   echo
+   echo "What's the VM's name?"
+   echo
+   read OSNAME
+
+    if [[ ${OSNAME,,} == null ]] || [[ ${OSNAME,,} == "" ]]; then
+        echo
+        echo "You must give a name!"
+        echo
+        sleep 1s
+    else
+        vmname=$OSNAME
+    fi
+done
+
+sleep 1s
 
 echo
-echo "What's the VM's name?"
+echo "Do you want to isolate your VM CPU cores from your host?"
+echo "Y - yes | Anything else - no"
 echo
-read OSNAME
-vmname=$OSNAME
+read CPUISO
+cpuisolate=$CPUISO
 
-if [[ ${vmname,,} == null ]] || [[ ${vmname,,} == "" ]]; then
-    echo
-    echo "You must give a name!"
-    echo
-    exit 0
-fi
+sleep 1s
 
-if test -e /etc/libvirt/ && ! test -e /etc/libvirt/hooks;
-then
-    echo "mkdir -p /etc/libvirt/hooks;"
-    sudo mkdir -p /etc/libvirt/hooks;
-fi
-if test -e /etc/libvirt/hooks/qemu;
-then
-    echo "mv /etc/libvirt/hooks/qemu /etc/libvirt/hooks/qemu_last_backup"
-    sudo mv /etc/libvirt/hooks/qemu /etc/libvirt/hooks/qemu_last_backup
-fi
-if ! test -e /etc/libvirt/hooks/qemu.d;
-then
-    echo "mkdir -p /etc/libvirt/hooks/qemu.d;"
-    sudo mkdir -p /etc/libvirt/hooks/qemu.d;
-fi
-if ! test -e /etc/libvirt/hooks/qemu.d/$vmname;
-then
-    echo "mkdir -p /etc/libvirt/hooks/qemu.d/$vmname;"
-    sudo mkdir -p /etc/libvirt/hooks/qemu.d/$vmname;
-fi
-if ! test -e /etc/libvirt/hooks/qemu.d/$vmname/prepare;
-then
-    echo "mkdir -p /etc/libvirt/hooks/qemu.d/$vmname/prepare;"
-    sudo mkdir -p /etc/libvirt/hooks/qemu.d/$vmname/prepare;
-fi
-if ! test -e /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin;
-then
-    echo "mkdir -p /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin;"
-    sudo mkdir -p /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin;
-fi
-if ! test -e /etc/libvirt/hooks/qemu.d/$vmname/release;
-then
-    echo "mkdir -p /etc/libvirt/hooks/qemu.d/$vmname/release;"
-    sudo mkdir -p /etc/libvirt/hooks/qemu.d/$vmname/release;
-fi
-if ! test -e /etc/libvirt/hooks/qemu.d/$vmname/release/end;
-then
-    echo "mkdir -p /etc/libvirt/hooks/qemu.d/$vmname/release/end;"
-    sudo mkdir -p /etc/libvirt/hooks/qemu.d/$vmname/release/end;
-fi
-if test -e /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/vfio-startup.sh;
-then
-    echo "mv /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/vfio-startup.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/vfio-startup.sh.old"
-    sudo mv /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/vfio-startup.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/vfio-startup.sh.old
-fi
-if test -e /etc/libvirt/hooks/qemu.d/$vmname/release/end/vfio-teardown.sh;
-then
-    echo "mv /etc/libvirt/hooks/qemu.d/$vmname/release/end/vfio-teardown.sh /etc/libvirt/hooks/qemu.d/$vmname/release/end/vfio-teardown.sh.old"
-    sudo mv /etc/libvirt/hooks/qemu.d/$vmname/release/end/vfio-teardown.sh /etc/libvirt/hooks/qemu.d/$vmname/release/end/vfio-teardown.sh.old
-fi
-if test -e /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/cpu_mode_performance.sh;
-then
-    echo "mv /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/cpu_mode_performance.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/cpu_mode_performance.sh.old"
-    sudo mv /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/cpu_mode_performance.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/cpu_mode_performance.sh.old
-fi
-if test -e /etc/libvirt/hooks/qemu.d/$vmname/release/end/cpu_mode_ondemand.sh;
-then
-    echo "mv /etc/libvirt/hooks/qemu.d/$vmname/release/end/cpu_mode_ondemand.sh /etc/libvirt/hooks/qemu.d/$vmname/release/end/cpu_mode_ondemand.sh.old"
-    sudo mv /etc/libvirt/hooks/qemu.d/$vmname/release/end/cpu_mode_ondemand.sh /etc/libvirt/hooks/qemu.d/$vmname/release/end/cpu_mode_ondemand.sh.old
-fi
-if test -e /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/cset.sh;
-then
-    echo "mv /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/cset.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/cset.sh.old"
-    sudo mv /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/cset.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/cset.sh.old
-fi
-if test -e /etc/libvirt/hooks/qemu.d/$vmname/release/end/cset.sh;
-then
-    echo "mv /etc/libvirt/hooks/qemu.d/$vmname/release/end/cset.sh /etc/libvirt/hooks/qemu.d/$vmname/release/end/cset.sh.old"
-    sudo mv /etc/libvirt/hooks/qemu.d/$vmname/release/end/cset.sh /etc/libvirt/hooks/qemu.d/$vmname/release/end/cset.sh.old
-fi
-if test -e /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/better_hugepages.sh;
-then
-    echo "mv /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/better_hugepages.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/better_hugepages.sh.old"
-    sudo mv /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/better_hugepages.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin/better_hugepages.sh.old
-fi
-if test -e /etc/systemd/system/libvirt-nosleep@.service;
-then
-    echo "rm /etc/systemd/system/libvirt-nosleep@.service"
-    sudo rm /etc/systemd/system/libvirt-nosleep@.service
-fi
+echo
+echo "Do you want to change the governor to performance when turning on the VM"
+echo "And changing it back to ondemand when turning off the VM?"
+echo
+echo "Y - yes | Anything else - no"
+echo
+read HOSTGOV
+hostgovernor=$HOSTGOV
 
+beginpath=/etc/libvirt/hooks/qemu.d/"$vmname"/prepare/begin
+endpath=/etc/libvirt/hooks/qemu.d/"$vmname"/release/end
 cpath=`pwd`
 hpath="$cpath"/Hooks
 
 sleep 1s
-chmod +x $hpath/*.sh
+
+if [[ -d /etc/libvirt/ ]] && ! [[ -d /etc/libvirt/hooks ]]; then
+    sudo mkdir -p /etc/libvirt/hooks
+fi
+if ! [[ -d /usr/share/vgabios ]]; then
+    sudo mkdir /usr/share/vgabios
+fi
+fi
+if ! [[ -d "$beginpath" ]]; then
+    sudo mkdir -p "$beginpath"
+fi
+if ! [[ -d "$endpath" ]]; then
+    sudo mkdir -p "$endpath"
+fi
+if [[ -f /etc/libvirt/hooks/qemu ]]; then
+    sudo mv /etc/libvirt/hooks/qemu /etc/libvirt/hooks/qemu.old
+fi
+if [[ -f "$beginpath"/vfio-startup.sh ]]; then
+    sudo mv "$beginpath"/vfio-startup.sh "$beginpath"/vfio-startup.sh.old
+fi
+if [[ -f "$endpath"/vfio-teardown.sh ]]; then
+    sudo mv "$endpath"/vfio-teardown.sh "$endpath"/vfio-teardown.sh.old
+fi
+if [[ -f "$beginpath"/cpu_mode_performance.sh ]]; then
+    sudo mv "$beginpath"/cpu_mode_performance.sh "$beginpath"/cpu_mode_performance.sh.old
+fi
+if [[ -f "$endpath"/cpu_mode_ondemand.sh ]]; then
+    sudo mv "$endpath"/cpu_mode_ondemand.sh "$endpath"/cpu_mode_ondemand.sh.old
+fi
+if [[ -f "$beginpath"/cset.sh ]]; then
+    sudo mv "$beginpath"/cset.sh "$beginpath"/cset.sh.old
+fi
+if [[ -f "$endpath"/cset.sh ]]; then
+    sudo mv "$endpath"/cset.sh "$endpath"/cset.sh.old
+fi
+if [[ -f "$beginpath"/better_hugepages.sh ]]; then
+    sudo mv "$beginpath"/better_hugepages.sh "$beginpath"/better_hugepages.sh.old
+fi
+if [[ -f /etc/systemd/system/libvirt-nosleep@.service ]]; then
+    sudo rm /etc/systemd/system/libvirt-nosleep@.service
+fi
+
+chmod +x "$hpath"/*.sh
+chmod +x "$hpath"/qemu
+chmod +x "$hpath"/libvirt-nosleep@.service
 sleep 1s
 
-echo "cp $hpath/libvirt-nosleep@.service /etc/systemd/system"
-sudo cp $hpath/libvirt-nosleep@.service /etc/systemd/system
-echo "cp $hpath/vfio-startup.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin"
-sudo cp $hpath/vfio-startup.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin
-echo "cp $hpath/cpu_mode_performance.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin"
-sudo cp $hpath/cpu_mode_performance.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin
-echo "cp $hpath/vfio-teardown.sh /etc/libvirt/hooks/qemu.d/$vmname/release/end"
-sudo cp $hpath/vfio-teardown.sh /etc/libvirt/hooks/qemu.d/$vmname/release/end
-echo "cp $hpath/cpu_mode_ondemand.sh /etc/libvirt/hooks/qemu.d/$vmname/release/end"
-sudo cp $hpath/cpu_mode_ondemand.sh /etc/libvirt/hooks/qemu.d/$vmname/release/end
-#echo "cp $hpath/cset.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin"
-#sudo cp $hpath/cset.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin
-#echo "cp $hpath/cset.sh /etc/libvirt/hooks/qemu.d/$vmname/release/end"
-#sudo cp $hpath/cset.sh /etc/libvirt/hooks/qemu.d/$vmname/release/end
-echo "cp $hpath/better_hugepages.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin"
-sudo cp $hpath/better_hugepages.sh /etc/libvirt/hooks/qemu.d/$vmname/prepare/begin
-echo "cp $hpath/qemu /etc/libvirt/hooks"
-sudo cp $hpath/qemu /etc/libvirt/hooks
-
+sudo cp "$hpath"/libvirt-nosleep@.service /etc/systemd/system
+sudo cp "$hpath"/vfio-startup.sh "$beginpath"
+sudo cp "$hpath"/vfio-teardown.sh "$endpath"
+sudo cp "$hpath"/better_hugepages.sh "$beginpath"
+sudo cp "$hpath"/qemu /etc/libvirt/hooks
 sleep 1s
+
+if [[ ${hostgovernor,,} = y ]]; then
+    sudo cp "$hpath"/cpu_mode_performance.sh "$beginpath"
+    sudo cp "$hpath"/cpu_mode_ondemand.sh "$endpath"
+    sleep 1s
+fi
+
+if [[ ${cpuisolate,,} = y ]]; then
+    sudo cp "$hpath"/cset.sh "$beginpath"
+    sudo cp "$hpath"/cset.sh "$endpath"
+    sleep 1s
+fi
+
+sudo cp "$hpath"/dev-hugepages.mount /etc/systemd/system
+sleep 1s
+
+sudo systemctl restart libvirtd
+sleep 1s
+
 echo
 echo "Done"
 echo
-sleep 1s
+
 exit 0

@@ -95,6 +95,6 @@ while read -r consoleNumber; do
   fi
 done < "$input"
 
-su -s /bin/bash -c "/usr/bin/startx" -g $(logname) $(logname)
-
 echo "$DATE End of Teardown!"
+
+su -s /bin/bash -c "/usr/bin/startx" -g $(logname) $(logname)

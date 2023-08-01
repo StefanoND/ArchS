@@ -26,12 +26,14 @@ clear
 sleep 1s
 
 # FLATPAK
-PKGZ=(
+PKGS=(
     'com.github.tchx84.Flatseal'                    # Flatpak permission manager
     'org.mozilla.firefox'                           # Firefox Browser
+    'org.qbittorrent.qBittorrent'                   # Torrent app
+    'org.kde.okteta'                                # Hex Editor
 )
 
-for PKG in "${PKGZ[@]}"; do
+for PKG in "${PKGS[@]}"; do
     echo
     echo "INSTALLING: ${PKG}"
     echo
@@ -39,8 +41,6 @@ for PKG in "${PKGZ[@]}"; do
     echo
     sleep 1s
 done
-
-sleep 1s
 
 echo
 echo "Done"

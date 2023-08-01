@@ -47,7 +47,6 @@ echo "Mounting Guest Additions to /mnt"
 echo
 sudo mount /dev/cdrom /mnt
 cd /mnt
-sudo chmod +x VBoxLinuxAdditions.run
 sudo ./VBoxLinuxAdditions.run
 sleep 1s
 
@@ -56,6 +55,11 @@ echo "Modprobing 'vboxguest', 'vboxsf' and 'vboxvideo'"
 echo
 sudo /usr/sbin/modprobe -a vboxguest vboxsf vboxvideo
 sleep 1s
+
+echo
+echo "Enabling virtualbox service"
+echo
+sudo systemctl enable vboxservice.service
 
 if ! [[ -f /etc/systemd/system/vbclient.service ]]; then
     echo

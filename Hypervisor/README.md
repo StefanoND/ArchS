@@ -1,4 +1,4 @@
-# Kubuntu 22
+# Debian 12
 
 ## BIOS/UEFI Settings:
 
@@ -18,6 +18,6 @@
     Language
     Keyboard
     Change Time & Date
-    Software (Proprietary + Secure Boot since I'm using NVidia)
+    Software (Proprietary (I have NVidia GPU) + Secure Boot)
     Disk Setup
-        LVM with Encryption (Remove Swap Later)
+        LVM with Encryption (16GiB Swap)

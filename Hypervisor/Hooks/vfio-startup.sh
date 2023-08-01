@@ -1,5 +1,7 @@
 #!/bin/bash
 
+killall -u $(logname)
+
 #############################################################################
 ##     ______  _                _  _______         _                 _     ##
 ##    (_____ \(_)              | |(_______)       | |               | |    ##
@@ -31,8 +33,6 @@ DISPMGR="null"
 ################################## Script ###################################
 
 echo "$DATE Beginning of Startup!"
-
-killall -u $(logname)
 
 function stop_display_manager_if_running {
     ## Get display manager on systemd based distros ##
