@@ -212,7 +212,6 @@ PKGS=(
     'dnsmasq'
     'vde2'
     'openbsd-netcat'
-    'iptables-nft'
     'ebtables'
     'nftables'
     'swtpm'
@@ -267,9 +266,33 @@ printf "RANGER_LOAD_DEFAULT_RC=false\n" | sudo tee -a /etc/environment
 sleep 1s
 
 echo
+echo "Installing stable version of Rustup"
+echo
+rustup install stable
+sleep 1s
+
+echo
+echo "Adding i686 architecture support for Rustup"
+echo
+rustup target install i686-unknown-linux-gnu
+sleep 1s
+
+echo
+echo "Setting stable as our default Rustup toolchain"
+echo
+rustup default stable
+sleep 1s
+
+echo
+echo "Setting Cargo to run commands in parallel"
+echo
+cargo install async-cmd
+sleep 1s
+
+echo
 echo "Installing Paru"
 echo
-cd ${APPSPATH} && sudo git clone https://aur.archlinux.org/paru.git && cd paru && makepkg --noconfirm --needed -si
+cd ${APPSPATH} && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg --noconfirm --needed -si
 sleep 1s
 
 cd ~
@@ -286,6 +309,9 @@ PKGA=(
     'autojump'
     'i3-gaps-rounded-git'
     'spicetify-cli'
+    'pamac-aur'
+    'libpamac-aur'
+    'pamac-tray-icon-plasma'
 )
 
 for PKG in "${PKGA[@]}"; do
@@ -467,30 +493,6 @@ echo
 echo "Increasing file watcher count. This prevents a \"too many files\" error in VS Code(ium)"
 echo
 echo 'fs.inotify.max_user_watches=524288' | sudo tee /etc/sysctl.d/40-max-user-watches.conf && sudo sysctl --system
-sleep 1s
-
-echo
-echo "Installing stable version of Rustup"
-echo
-rustup install stable
-sleep 1s
-
-echo
-echo "Adding i686 architecture support for Rustup"
-echo
-rustup target install i686-unknown-linux-gnu
-sleep 1s
-
-echo
-echo "Setting stable as our default Rustup toolchain"
-echo
-rustup default stable
-sleep 1s
-
-echo
-echo "Setting Cargo to run commands in parallel"
-echo
-cargo install async-cmd
 sleep 1s
 
 echo
