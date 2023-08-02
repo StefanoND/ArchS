@@ -115,30 +115,12 @@ echo
 sudo pacman -Syyu --noconfirm --needed
 sleep 2s
 
-PKGZ=(
-    'firefox'
-    'linux-nvidia'
-    'linux61-nvidia'
-    'linux62-nvidia'
-    'linux63-nvidia'
-    'linux64-nvidia'
-)
-
-for PKG in "${PKGZ[@]}"; do
-    echo
-    echo "UNINSTALLING: ${PKG}"
-    echo
-    sudo pacman -Rsn "$PKG" --noconfirm
-    sleep 1s
-done
-
 if [[ `pacman -Q | grep -i 'iptables'` ]] && ! [[ `pacman -Q | grep -i 'iptables-nft'` ]]; then
     echo
     echo "Replacing iptables with iptables-nft"
+    echo "Press Y when it asks to remove iptables"
     echo
-    sudo pacman -Rdd iptables --noconfirm
-    sleep 1s
-    sudo pacman -S iptables-nft --noconfirm --needed
+    sudo pacman -S iptables-nft --needed
     sleep 1s
 fi
 
@@ -163,13 +145,13 @@ PKGS=(
     'lib32-llvm-libs'
     'make'
     'cmake'
-    'cmake-extras'
+    'extra-cmake-modules'
     'gnome-keyring'                             # Required by some apps for authentication
     'libgnome-keyring'                          # Required by some apps for authentication
 
     # Packet Manager
     'flatpak'                                   # Flatpak
-    'libpamac-flatpak-plugin'                   # Flathub plugin
+    #'libpamac-flatpak-plugin'                   # Flathub plugin
 
     # Fonts
     'ttf-fira-code'                             # My personal favorite font for programming
@@ -177,8 +159,7 @@ PKGS=(
     'noto-fonts-cjk'                            # Chinese Japanese Korean (CJK) characters support
     'noto-fonts-emoji'                          # Support for emojis
     'gnu-free-fonts'                            # Free family of scalable outline fonts
-    'powerline-fonts'                           # Patched fonts for powerline
-    'ttf-meslo-nerd-font-powerlevel10k'         # Meslo Nerd font patched for Powerlevel10k
+    'powerline-fonts'                           # Patched fonts for powerline Powerlevel10k
     'ttf-nerd-fonts-symbols'                    #
     'ttf-nerd-fonts-symbols-common'             #
     'ttf-nerd-fonts-symbols-mono'               #
@@ -312,6 +293,7 @@ PKGA=(
     'pamac-aur'
     'libpamac-aur'
     'pamac-tray-icon-plasma'
+    'ttf-meslo-nerd-font-powerlevel10k'         # Meslo Nerd font patched for
 )
 
 for PKG in "${PKGA[@]}"; do
