@@ -149,13 +149,6 @@ sudo pacman -S meson --asdep --noconfirm
 sleep 1s
 
 PKGS=(
-    # Kernel
-    'base-devel'
-    'linux-headers'
-    'linux-lts'
-    'linux-lts-headers'
-    'dkms'
-
     # Tools
     'rustup'                                    # Rust toolchain
     'mingw-w64'                                 # MinGW Cross-compiler pack (binutils, crt, gcc, headers and winpthreads)
@@ -231,7 +224,6 @@ PKGS=(
     #'virtualbox-guest-iso'
 
     # Extras
-    'neovim'
     'dolphin'
     'dolphin-plugins'
     'baloo-widgets'
