@@ -74,13 +74,16 @@
 
 # Prep
 ### Install base packages (add intel-ucode if you're not using amd CPU)
-    pacstrap -K /mnt base base-devel linux linux-firmware linux-headers linux-lts linux-lts-headers dkms neovim
+    pacstrap -K /mnt base base-devel linux linux-firmware linux-headers
 
 ### Create fstab
     genfstab -U -p /mnt >> /mnt/etc/fstab
 
 ### chroot into mnt
     arch-chroot /mnt /bin/bash
+
+### Usually not required
+    mkinitcpio -P
 
 ### Install networking, dhcp, and other useful pkgs
     pacman -S networkmanager dhcpcd nano git curl pacman-contrib bash-completion --noconfirm --needed
@@ -275,17 +278,14 @@
     Defaults rootpw # Will require root password for sudo command
     Defaults timestamp_type=global # All terminals "share the same timeout" for sudo password
 
-# Audio
-
-### Install pipewire and its stuff
-    pacman -S pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack wireplumber qpwgraph pulsemixer --noconfirm --needed
-
 # Desktop Environment
 ### Instal Xorg, sddm and plasma
     pacman -S xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm --noconfirm --needed
 
-### Sometimes installing DE gives some errors
-    mkinitcpio -P
+# Audio
+
+### Install pipewire and its stuff (Remove conflicting)
+    pacman -S pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack wireplumber qpwgraph pulsemixer --noconfirm --needed
 
 ### Enable sddm service
     systemctl enable sddm.service
