@@ -62,7 +62,7 @@
     mkfs.fat -F 32 /dev/sda1
     mkswap /dev/sda2
     swapon /dev/sda2
-    mkfs.btrfs -f /dev/sda3
+    mkfs.ext4 /dev/sda3
     mkfs.ext4 /dev/sda4
 
 ### Mount the partitions
