@@ -149,8 +149,14 @@ sudo pacman -S meson --asdep --noconfirm
 sleep 1s
 
 PKGS=(
+    # Kernel
+    'base-devel'
+    'linux-headers'
+    'linux-lts'
+    'linux-lts-headers'
+    'dkms'
+
     # Tools
-    'base-devel'                                # Basic tools
     'rustup'                                    # Rust toolchain
     'mingw-w64'                                 # MinGW Cross-compiler pack (binutils, crt, gcc, headers and winpthreads)
     'libconfig'                                 # C/C++ Configuration file library
@@ -167,12 +173,6 @@ PKGS=(
     'cmake-extras'
     'gnome-keyring'                             # Required by some apps for authentication
     'libgnome-keyring'                          # Required by some apps for authentication
-
-    # Kernel
-    'linux-lts'
-    'linux-lts-headers'
-    'dkms'
-    'neovim'
 
     # Packet Manager
     'flatpak'                                   # Flatpak
@@ -231,6 +231,7 @@ PKGS=(
     #'virtualbox-guest-iso'
 
     # Extras
+    'neovim'
     'dolphin'
     'dolphin-plugins'
     'baloo-widgets'
