@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CURRDIR=`pwd`
+CURRDIR="$(cd $(dirname $0) && pwd)"
 
 if ! [[ `pacman -Q | grep -i 'kvantum'` ]]; then
     sudo pacman -S kvantum ttf-fira-code --noconfirm --needed
@@ -22,7 +22,7 @@ cp ${CURRDIR}/ff/.gtkrc-2.0 ${HOME}/
 cp ${CURRDIR}/ff/settings.ini ${HOME}/.config/gtk-3.0
 cp ${CURRDIR}/ff/settings.ini ${HOME}/.config/gtk-4.0
 cp -r ${CURRDIR}/ff/Orchis-dark ${HOME}/.config/Kvantum
-
+clear
 echo
 printf "Change all your fonts to Fira Code."
 echo

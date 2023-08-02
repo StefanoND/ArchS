@@ -208,10 +208,10 @@ echo "Enabling opentrabletdriver service"
 echo
 systemctl --user enable --now opentabletdriver.service
 
-echo
-echo "Setting SDDM as owner of /var/lib/sddm/.config"
-echo
-sudo chown sddm:sddm /var/lib/sddm/.config
+#echo
+#echo "Setting SDDM as owner of /var/lib/sddm/.config"
+#echo
+#sudo chown sddm:sddm /var/lib/sddm/.config
 
 echo
 echo "Done!"

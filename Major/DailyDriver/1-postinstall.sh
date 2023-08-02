@@ -39,7 +39,8 @@ sourcen=0
 linkn=0
 
 echo
-printf "Check $SRCPATH/Aesthetic/downloadstuff.txt when you're done come back here"
+printf "Check \"${SRCPATH}/aesthetic/downloadstuff.sh\""
+printf "When you're done come back here."
 echo
 read ANYTING
 clear
@@ -93,11 +94,11 @@ sleep 1s
 
 clear
 
-if ! [[ -f "$APPSPATH" ]]; then
+if ! [[ -f "${APPSPATH}" ]]; then
     echo
-    printf "Creating $APPSPATH path"
+    printf "Creating ${APPSPATH} path"
     echo
-    mkdir -p "$APPSPATH"
+    mkdir -p "${APPSPATH}"
     sleep 1s
 fi
 
@@ -111,7 +112,7 @@ sleep 2s
 echo
 echo "Updating system"
 echo
-sudo pacman -Syyu --noconfirm --needed
+sudo pacman -Syyu --noconfirm
 sleep 2s
 
 PKGZ=(
@@ -131,16 +132,20 @@ for PKG in "${PKGZ[@]}"; do
     sleep 1s
 done
 
+if [[ `pacman -Q | grep -i 'iptables'` ]] && ! [[ `pacman -Q | grep -i 'iptables-nft'` ]]; then
+    echo
+    echo "Replacing iptables with iptables-nft"
+    echo
+    sudo pacman -Rdd iptables --noconfirm
+    sleep 1s
+    sudo pacman -S iptables-nft --noconfirm
+    sleep 1s
+fi
+
 echo
 echo "Installing meson as dependency"
 echo
-sudo pacman -S meson --asdep --noconfirm --needed
-sleep 1s
-
-echo
-echo "Removing iptables"
-echo
-sudo pacman -Rdd iptables --noconfirm
+sudo pacman -S meson --asdep --noconfirm
 sleep 1s
 
 PKGS=(
@@ -195,7 +200,7 @@ PKGS=(
     'ranger'                                    # File manager
     'python-pyqt5'                              #
     'ntfs-3g'                                   # NTFS support
-    'startship'
+    'starship'
 
     # QEMU
     'qemu-desktop'
@@ -214,10 +219,23 @@ PKGS=(
     'swtpm'
 
     # Virtualbox
-    'virtualbox-host-dkms'
-    'virtualbox'
-    'virtualbox-ext-vnc'
-    'virtualbox-guest-iso'
+    #'virtualbox-host-dkms'
+    #'virtualbox'
+    #'virtualbox-ext-vnc'
+    #'virtualbox-guest-iso'
+
+    # Extras
+    'dolphin'
+    'dolphin-plugins'
+    'baloo-widgets'
+    'ffmpegthumbs'
+    'kde-inotify-survey'
+    'kdegraphics-thumbnailers'
+    'kdenetwork-filesharing'
+    'print-manager'
+    'power-profiles-daemon'
+    'xdg-desktop-portal-gtk'
+    'xsettingsd'
 
     # i3
     'i3blocks'
@@ -236,7 +254,7 @@ for PKG in "${PKGS[@]}"; do
     echo
     echo "INSTALLING: ${PKG}"
     echo
-    sudo pacman -S "$PKG" --noconfirm --needed
+    sudo pacman -S "$PKG" --noconfirm
     echo
     sleep 1s
 done
@@ -252,7 +270,7 @@ sleep 1s
 echo
 echo "Installing Paru"
 echo
-cd $APPSPATH && sudo git clone https://aur.archlinux.org/paru.git && cd paru && makepkg --noconfirm -si
+cd ${APPSPATH} && sudo git clone https://aur.archlinux.org/paru.git && cd paru && makepkg --noconfirm -si
 sleep 1s
 
 cd ~
@@ -275,7 +293,7 @@ for PKG in "${PKGA[@]}"; do
     echo
     echo "INSTALLING: ${PKG}"
     echo
-    paru -S "$PKG" --noconfirm --needed --sudoloop
+    paru -S "$PKG" --noconfirm --sudoloop
     echo
     sleep 1s
 done
@@ -393,7 +411,7 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
         echo
         echo "Installing NVidia dkms"
         echo
-        sudo pacman -S nvidia-dkms --noconfirm --needed
+        sudo pacman -S nvidia-dkms --noconfirm
         sleep 1s
     fi
 fi
