@@ -74,7 +74,7 @@
 
 # Prep
 ### Install base packages (add intel-ucode if you're using an intel CPU)
-    pacstrap -K /mnt base linux linux-firmware
+    pacstrap -K /mnt base base-devel linux linux-firmware linux-headers linux-lts linux-lts-headers dkms neovim
 
 ### Populate fstab
     genfstab -U -p /mnt >> /mnt/etc/fstab
