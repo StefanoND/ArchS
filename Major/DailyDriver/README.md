@@ -32,10 +32,10 @@
     Y # Confirm
     Y # Confirm
 
+# Partition Layout
+
 ### Change sda to the drive you want
     cgdisk /dev/sda
-
-# Partition Layout
 
 ### Label gpt
 
@@ -73,10 +73,10 @@
     mount /dev/sda4 /mnt/home
 
 # Prep
-### Install base packages (add intel-ucode if you're not using amd CPU)
-    pacstrap -K /mnt base base-devel linux linux-firmware linux-headers
+### Install base packages (add intel-ucode if you're using an intel CPU)
+    pacstrap -K /mnt base linux linux-firmware
 
-### Create fstab
+### Populate fstab
     genfstab -U -p /mnt >> /mnt/etc/fstab
 
 ### chroot into mnt
