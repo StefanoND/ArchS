@@ -543,12 +543,6 @@ sudo sed -i "s|#Storage=.*|Storage=none|g" /etc/systemd/coredump.conf
 sleep 1s
 
 echo
-echo "Setting MinimumVT to 7"
-echo
-sudo sed -i "s|MinimumVT=.*|MinimumVT=7|g" /usr/lib/sddm/sddm.conf.d/default.conf
-sleep 1s
-
-echo
 echo "Increasing open file limit"
 echo
 sudo sed -i "s|# End of file.*|$(logname)        hard    nofile          2097152\n\n# End of file\n|g" /etc/security/limits.conf

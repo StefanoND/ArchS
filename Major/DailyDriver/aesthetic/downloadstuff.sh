@@ -17,6 +17,16 @@ fi
 if [[ -f "${HOME}"/.gtkrc-2.0 ]]; then
     mv "${HOME}"/.gtkrc-2.0 "${HOME}"/.gtkrc-2.0.old
 fi
+if ! [[ -f /etc/sddm.conf.d/avatars.conf ]]; then
+    sudo touch /etc/sddm.conf.d/avatars.conf
+    printf "[Theme]\nEnableAvatars=true\nDisableAvatarsThreshold=7" | sudo tee /etc/sddm.conf.d/avatars.conf
+fi
+if ! [[ -f /usr/share/sddm/scripts/Xsetup ]]; then
+    sudo touch /usr/share/sddm/scripts/Xsetup
+    printf "#!/bin/sh\n# Xsetup - run as root before the login dialog appears\n" | sudo tee /usr/share/sddm/scripts/Xsetup
+fi
+
+echo 'setxkbmap pt' | sudo tee -a /usr/share/sddm/scripts/Xsetup
 
 sudo sed -i '/^Current=.*/a CursorSize=36' /etc/sddm.conf.d/kde_settings.conf
 sudo sed -i '/^Current=.*/a CursorTheme=Sweet-cursors' /etc/sddm.conf.d/kde_settings.conf
