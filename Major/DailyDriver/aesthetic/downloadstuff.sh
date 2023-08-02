@@ -5,23 +5,28 @@ CURRDIR="$(cd $(dirname $0) && pwd)"
 if ! [[ `pacman -Q | grep -i 'kvantum'` ]]; then
     sudo pacman -S kvantum ttf-fira-code --noconfirm --needed
 fi
-if ! [[ -d ${HOME}/.config/Kvantum ]]; then
-    mkdir -p ${HOME}/.config/Kvantum
+if ! [[ -d "${HOME}"/.config/Kvantum ]]; then
+    mkdir -p "${HOME}"/.config/Kvantum
 fi
-if ! [[ -d ${HOME}/.config/gtk-3.0 ]]; then
-    mkdir -p ${HOME}/.config/gtk-3.0
+if ! [[ -d "${HOME}"/.config/gtk-3.0 ]]; then
+    mkdir -p "${HOME}"/.config/gtk-3.0
 fi
-if ! [[ -d ${HOME}/.config/gtk-4.0 ]]; then
-    mkdir -p ${HOME}/.config/gtk-4.0
+if ! [[ -d "${HOME}"/.config/gtk-4.0 ]]; then
+    mkdir -p "${HOME}"/.config/gtk-4.0
 fi
-if [[ -f ${HOME}/.gtkrc-2.0 ]]; then
-    mv ${HOME}/.gtkrc-2.0 ${HOME}/.gtkrc-2.0.old
+if [[ -f "${HOME}"/.gtkrc-2.0 ]]; then
+    mv "${HOME}"/.gtkrc-2.0 "${HOME}"/.gtkrc-2.0.old
 fi
 
-cp ${CURRDIR}/ff/.gtkrc-2.0 ${HOME}/
-cp ${CURRDIR}/ff/settings.ini ${HOME}/.config/gtk-3.0
-cp ${CURRDIR}/ff/settings.ini ${HOME}/.config/gtk-4.0
-cp -r ${CURRDIR}/ff/Orchis-dark ${HOME}/.config/Kvantum
+sudo sed -i '/^Current=.*/a CursorSize=36' /etc/sddm.conf.d/kde_settings.conf
+sudo sed -i '/^Current=.*/a CursorTheme=Sweet-cursors' /etc/sddm.conf.d/kde_settings.conf
+sudo sed -i "/^Current=.*/a Font='Fira Code'" /etc/sddm.conf.d/kde_settings.conf
+
+cp "${CURRDIR}"/ff/.gtkrc-2.0 "${HOME}"/
+cp "${CURRDIR}"/ff/settings.ini "${HOME}"/.config/gtk-3.0
+cp "${CURRDIR}"/ff/settings.ini "${HOME}"/.config/gtk-4.0
+cp -r "${CURRDIR}"/ff/Orchis-dark "${HOME}"/.config/Kvantum
+sudo cp -r "${CURRDIR}"/ff/Sweet-cursors /usr/share/icons
 clear
 echo
 printf "Change all your fonts to Fira Code."
