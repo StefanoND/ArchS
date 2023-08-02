@@ -168,6 +168,12 @@ PKGS=(
     'gnome-keyring'                             # Required by some apps for authentication
     'libgnome-keyring'                          # Required by some apps for authentication
 
+    # Kernel
+    'linux-lts'
+    'linux-lts-headers'
+    'dkms'
+    'neovim'
+
     # Packet Manager
     'flatpak'                                   # Flatpak
     'libpamac-flatpak-plugin'                   # Flathub plugin
