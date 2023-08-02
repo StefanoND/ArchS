@@ -109,7 +109,7 @@
     bootctl install
 
 ### Configure systemd-boot
-    nvim /boot/loader/loader.conf
+    nano /boot/loader/loader.conf
 
 ###   Make sure it looks like below
 #### loader.conf
@@ -119,7 +119,7 @@
     editor no
 
 ### Create arch.conf
-    nvim /boot/loader/entries/arch.conf
+    nano /boot/loader/entries/arch.conf
 
 ### Make sure it looks like below
 #### arch.conf
@@ -129,7 +129,7 @@
     # initrd /intel-ucode.img # Add this line if you're using an intel CPU
 
 ### Create arch-lts.conf (If you installed it earlier)
-    nvim /boot/loader/entries/arch-lts.conf
+    nano /boot/loader/entries/arch-lts.conf
 
 ### Make sure it looks like below
 #### arch-lts.conf
@@ -148,7 +148,7 @@
     pacman -S nvidia-dkms libglvnd nvidia-utils opencl-nvidia lib32-libglvnd lib32-nvidia-utils lib32-opencl-nvidia nvidia-settings --noconfirm --needed
 
 ### Enable NVdia stuff, must be in that order
-    nvim /etc/mkinitcpio.conf
+    nano /etc/mkinitcpio.conf
 
 ### Uncomment MODULES=() and add nvidia nvidia_modeset nvidia_uvm nvidia_drm
 #### /etc/mkinitcpio.conf
@@ -157,7 +157,7 @@
     [...]
 
 ### Also make sure they're enabled at boot time
-    nvim /boot/loader/entries/arch.conf
+    nano /boot/loader/entries/arch.conf
 
 ### Add nvidia-drm.modeset=1 at the end of options root=PARTUUID....
 #### /boot/loader/entries/arch.conf
@@ -169,7 +169,7 @@
     mkdir /etc/pacman.d/hooks
 
 ### Add nvidia hook
-    nvim /etc/pacman.d/hooks/nvidia.hook
+    nano /etc/pacman.d/hooks/nvidia.hook
 
 
 ### Make sure it looks like below
@@ -200,7 +200,7 @@
 # Locale
 ### Generate locale uncomment the locales you want
 #### You can press "/" and the name of the locale to search for it
-    nvim /etc/locale.gen
+    nano /etc/locale.gen
 
 ### Generate locale
     locale-gen
@@ -232,7 +232,7 @@
     rankmirrors -n 20 /etc/pacman.d/mirrorlist.old > /etc/pacman.d/mirrorlist
 
 # Change pacman.conf
-    nvim /etc/pacman.conf
+    nano /etc/pacman.conf
 
 ###   Uncomment Multilib, add Valve repo to pacman.conf
 ###   Uncomment Color and add ILoveCandy if you want
@@ -269,7 +269,7 @@
 ### Grant sudo privileges to wheel, remove the "#" before "%wheel"
 ### And defaults to using the root password to run sudo commands
 ### instead of users' password
-    EDITOR=nvim visudo
+    EDITOR=nano visudo
 
 ### visudo
     %wheel ALL=(ALL:ALL) ALL
@@ -278,14 +278,14 @@
     Defaults rootpw # Will require root password for sudo command
     Defaults timestamp_type=global # All terminals "share the same timeout" for sudo password
 
-# Desktop Environment
-### Instal Xorg, sddm and plasma
-    pacman -S xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm --noconfirm --needed
-
 # Audio
 
 ### Install pipewire and its stuff (Remove conflicting)
     pacman -S pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack wireplumber qpwgraph pulsemixer --noconfirm --needed
+
+# Desktop Environment
+### Instal Xorg, sddm and plasma
+    pacman -S xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm --noconfirm --needed
 
 ### Enable sddm service
     systemctl enable sddm.service
