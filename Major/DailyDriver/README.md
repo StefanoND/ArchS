@@ -128,8 +128,19 @@
     initrd /initramfs-linux.img
     # initrd /intel-ucode.img # Add this line if you're using an intel CPU
 
+### Create arch-lts.conf
+    nano /boot/loader/entries/archlts.conf
+
+### Make sure it looks like below
+#### arch-lts.conf
+    title Arch (LTS)
+    linux /vmlinuz-linux-lts
+    initrd /initramfs-linux-lts.img
+    # initrd /intel-ucode.img # Add this line if you're using an intel CPU
+
 ### Add the PARTUUID to arch.conf aswell
     printf "options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/sda3) rw" >> /boot/loader/entries/arch.conf
+    printf "options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/sda3) rw" >> /boot/loader/entries/arch-lts.conf
 
 # NVIDIA ONLY
 
