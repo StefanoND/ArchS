@@ -26,294 +26,240 @@ clear
 sleep 1s
 
 echo
-echo "CONFIGURING SYSTEM"
+echo "These processes will take a long time to finish, increase sudo timeout."
+echo "use 'sudo EDITOR=vim visudo' or 'sudo EDITOR=nano visudo' and add 'Defaults passwd_timeout=-1'"
+echo "WARNING: THE ABOVE IS EXTREMELY DANGEROUS, REMOVE THEM AFTER EVERYTHING IS DONE"
+echo "WARNING: DON'T LEAVE YOUR PC/LAPTOP UNATENDED"
 echo
+echo "Press anything to continue"
+echo
+read READY
+
+changetonvim=n
+disablemouseaccel=n
+
+echo
+echo "Change alias VIM to NVIM? Y - Yes | N - No"
+echo
+read CHANGEAL
+changetonvim=$CHANGEAL
+
+echo
+echo "Disable mouse acceleration?"
+echo "Y - Disable | Anything else - Keep enabled"
+echo
+read DISMOUSACEL
+disablemouseaccel=$DISMOUSACEL
+
+sleep 1s
+
+echo
+echo "Removing install blocker, nothing was supposed to be installing anyway"
+echo
+sudo rm -f /var/lib/pacman/db.lck
+
+sleep 1s
+
+echo
+echo "Removing leftover files that may exist"
+echo
+rm .b* .z*
+
+sleep 1s
+
+clear
+
+echo
+echo
+echo
+echo "Grab a coffee and come back later, it'll take some time"
+echo
+
+sleep 2s
+
+echo
+echo "Adding Valve aur repo to the mirror list"
+echo
+printf "[valveaur]\n" | sudo tee -a /etc/pacman.conf
+printf "SigLevel = Optional TrustedOnly\n" | sudo tee -a /etc/pacman.conf
+printf "Server = http://repo.steampowered.com/arch/valveaur\n" | sudo tee -a /etc/pacman.conf
+sleep 2s
+sudo pacman -Syy
+
+sleep 1s
+
+echo
+echo "Enabling Color and ILoveCandy"
+echo
+sudo sed -i "s|#Color.*|Color\nILoveCandy|g" /etc/pacman.conf
+
+sleep 1s
+
+echo
+echo "Updating mirrors with fast ones"
+echo
+sudo pacman-mirrors --fasttrack --api --protocols all --set-branch stable
+
+sleep 1s
+
+echo
+echo "Updating system"
+echo
+sleep 1s
+sudo pacman -Syyu --noconfirm --needed
+
+sleep 2s
+
+PKGZ=(
+    'firefox'
+    'linux-nvidia'
+    'linux61-nvidia'
+    'linux62-nvidia'
+    'linux63-nvidia'
+    'linux64-nvidia'
+)
+
+for PKG in "${PKGZ[@]}"; do
+    echo
+    echo "UNINSTALLING: ${PKG}"
+    echo
+    sudo pacman -Rsn "$PKG" --noconfirm
+    sleep 1s
+done
+
+sudo pacman -S meson --asdep --noconfirm --needed
+sleep 1s
+
+PKGS=(
+    # Tools
+    'base-devel'                                # Basic tools
+    'rustup'                                    # Rust toolchain
+    'mingw-w64'                                 # MinGW Cross-compiler pack (binutils, crt, gcc, headers and winpthreads)
+    'libconfig'                                 # C/C++ Configuration file library
+    'gdb'                                       # GNU Debugger
+    'lldb'                                      # High performance debugger
+    'clang'
+    'lib32-clang'
+    'llvm'
+    'llvm-libs'
+    'lib32-llvm'
+    'lib32-llvm-libs'
+    'alsa-utils'                                # Better audio config
+    'extra-cmake-modules'
+    'gnome-keyring'                             # Required by some apps for authentication
+
+    # Kernel
+    'linux63'                                   # Kernel and modules
+    'linux63-headers'                           # Header files
+    'linux61'                                   # Kernel and modules (LTS)
+    'linux61-headers'                           # Header files (LTS)
+    'dkms'                                      # Dynamic Kernel Modules System
+
+    # Packet Manager
+    'flatpak'                                   # Flatpak
+    'libpamac-flatpak-plugin'                   # Flathub plugin
+    'discover'                                  # GUI Packet Manager
+
+    # Fonts
+    'noto-fonts-extra'                          # Additional variants of noto fonts
+    'noto-fonts-cjk'                            # Chinese Japanese Korean (CJK) characters support
+    'noto-fonts-emoji'                          # Support for emojis
+    'ttf-fira-code'                             # My personal favorite font for programming
+    'gnu-free-fonts'                            # Free family of scalable outline fonts
+    'powerline-fonts'                           # Patched fonts for powerline
+    'ttf-meslo-nerd-font-powerlevel10k'         # Meslo Nerd font patched for Powerlevel10k
+    'ttf-nerd-fonts-symbols'                    #
+    'ttf-nerd-fonts-symbols-common'             #
+    'ttf-nerd-fonts-symbols-mono'               #
+    'ttf-ubuntu-font-family'                    # Ubuntu font
+
+    # Shell/Terminal
+    'kitty'                                     # Terminal
+    'yakuake'                                   # Dropdown Terminal
+
+    # Misc
+    'neovim'                                    #
+    'cpupower'                                  # CPU tuning utility
+    'vifm'                                      # Filemanager
+    'lsd'
+    'curl'
+    'python-pyqt5'
+
+    # Virtualbox
+    'linux63-virtualbox-host-modules'           # For Manjaro
+    #'virtualbox-host-dkms'                     # For Non-Manjaro
+    'virtualbox'
+    'virtualbox-ext-vnc'
+    'virtualbox-guest-utils'
+    'virtualbox-guest-iso'
+)
+
+for PKG in "${PKGS[@]}"; do
+    echo
+    echo "INSTALLING: ${PKG}"
+    echo
+    sudo pacman -S "$PKG" --noconfirm --needed
+    echo
+    sleep 1s
+done
+
+flatpak remote-add flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 
 sleep 1s
 
 if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
     echo
-    echo "Set Vulkan ICD to NVidia's. Y - Yes | N - No"
+    echo "Installing NVidia dkms"
     echo
     sleep 1s
-    read VULKANPATH
-    if [ ${VULKANPATH,,} = y ]; then
-        echo
-        echo "Setting Vulkan ICD for NVIDIA"
-        echo
-        printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json\n" | sudo tee -a /etc/environment
-        printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n" | sudo tee -a /etc/environment
-        
-        sleep 1s
-
-        echo
-        echo "Uninstalling non-NVIDIA vulkan stuff to prevent issues with other apps"
-        echo "If you get target not found errors it means they're not installed, which is good"
-        echo
-        sleep 1s
-        sudo pacman -Rsn vulkan-radeon lib32-vulkan-radeon vulkan-intel lib32-vulkan-intel vulkan-amdgpu-pro amf-amdgpu-pro --noconfirm
-    fi
-    sleep 1s
+    sudo pacman -S nvidia-dkms --noconfirm --needed
 fi
 
-# Enabling TRIM
-sudo systemctl enable --now fstrim.timer
-# SSH
-#sudo systemctl enable --now sshd.service
-# Mullvad VPN
-#sudo systemctl enable --now mullvad-daemon.service
-# CUPS service
-sudo systemctl enable --now cups.service
-# Enable OpenTabletDriver service
-systemctl --user enable --now opentabletdriver.service
-# Reloading systemctl daemon
-sudo systemctl daemon-reload
-
 sleep 1s
 
-echo
-echo "Setting up fq_pie queue discipline for TCP congestion control"
-echo
-echo 'net.core.default_qdisc = fq_pie' | sudo tee /etc/sysctl.d/90-override.conf
+if ! test -e $HOME/.bash_aliases; then
+    touch $HOME/.bash_aliases
+fi
 
-sleep 1s
+if ! grep -q ".bash_aliases" $HOME/.bashrc; then
+    printf "\nif [ -e $HOME/.bash_aliases ]; then\n    source $HOME/.bash_aliases\nfi\n" | tee -a $HOME/.bashrc
+fi
 
-PKGS=(
-    'ostree'                        # Dependency
-    'cmake'                         # Required
-    'ninja'                         # Required
-    'meson'                         # Required
-    'mingw-w64-environment'         # I use
-    'mingw-w64-pkg-config'          # I use
-    'mingw-w64-cmake'               # I use
-    'opencl-headers'                # Dependency
-    'npm'                           # I use
-    'node-gyp'                      # Used by npm
-    'semver'                        # Used by npm
-    'nodejs-nopt'                   # Used by npm
-    'libmysofa'                     # Dependency
-)
-
-for PKG in "${PKGS[@]}"; do
+if [ ${changetonvim,,} = y ]; then
     echo
-    echo "Marking ${PKG} as explicitly installed so it doesn't get removed by mistake as a dependency"
-    echo
-    sudo pacman -D --asexplicit "$PKG"
-    sleep 1s
-done
-
-sleep 1s
-
-echo
-echo "Amending journald Logging to 200M"
-echo
-sudo sed -i "s|#SystemMaxUse=.*|SystemMaxUse=200M|g" /etc/systemd/journald.conf
-
-sleep 1s
-
-echo
-echo "Disabling Coredump logging"
-echo
-sudo sed -i "s|#Storage=.*|Storage=none|g" /etc/systemd/coredump.conf
-
-sleep 1s
-
-echo
-echo "Setting MinimumVT to 7"
-echo
-sudo sed -i "s|MinimumVT=.*|MinimumVT=7|g" /usr/lib/sddm/sddm.conf.d/default.conf
-
-sleep 1s
-
-echo
-echo "Increasing open file limit"
-echo
-sudo sed -i "s|# End of file.*|$(logname)        hard    nofile          2097152\n\n# End of file\n|g" /etc/security/limits.conf
-sudo sed -i "s|# End of file.*|$(logname)        soft    nofile          1048576\n\n# End of file\n|g" /etc/security/limits.conf
-sleep 1s
-sudo sed -i "s|#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=2097152|g" /etc/systemd/system.conf
-sleep 1s
-sudo sed -i "s|#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=1048576|g" /etc/systemd/user.conf
-
-sleep 1s
-
-echo
-echo "Disabling built-in kernel modules of tablet so OpenTablerDriver can work"
-echo
-sleep 1s
-if ! test -e /etc/modprobe.d/blacklist.conf; then
-    sudo touch /etc/modprobe.d/blacklist.conf
-    printf "blacklist wacom\nblacklist hid_uclogic" | sudo tee /etc/modprobe.d/blacklist.conf
-else
-    printf "\nblacklist wacom\nblacklist hid_uclogic" | sudo tee -a /etc/modprobe.d/blacklist.conf
-fi
-sleep 1s
-echo
-echo "Stopping Wacom kernel module (if present)"
-echo
-sleep 1s
-sudo rmmod wacom
-sleep 1s
-echo
-echo "Stopping non-Wacom kernel module (if present)"
-echo
-sleep 1s
-sudo rmmod hid_uclogic
-
-sleep 1s
-
-echo
-echo "Improving font rendering"
-echo
-if test -e /etc/fonts/local.conf; then
-    sudo mv /etc/fonts/local.conf /etc/fonts/local.conf.old
-    sleep 1s
-fi
-sudo touch /etc/fonts/local.conf
-sleep 1s
-curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/local.conf -o - | sudo tee /etc/fonts/local.conf
-sleep 1s
-if test -e /home/$(logname)/.Xresources; then
-    sudo mv /home/$(logname)/.Xresources /home/$(logname)/.Xresources.bak;
-fi
-touch /home/$(logname)/.Xresources
-sleep 1s
-printf "Xft.antialias: 1\nXft.hinting: 1\nXft.rgba: rgb\nXft.hintstyle: hintslight\nXft.lcdfilter: lcddefault" | tee /home/$(logname)/.Xresources
-sleep 1s
-xrdb -merge /home/$(logname)/.Xresources
-sleep 1s
-if ! test -e /etc/fonts/conf.d/10-sub-pixel-rgb.conf; then
-    sudo ln -s /usr/share/fontconfig/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
-fi
-sleep 1s
-if ! test -e /etc/fonts/conf.d/10-hinting-slight.conf; then
-    sudo ln -s /usr/share/fontconfig/conf.avail/10-hinting-slight.conf /etc/fonts/conf.d
-fi
-sleep 1s
-if ! test -e /etc/fonts/conf.d/11-lcdfilter-default.conf; then
-    sudo ln -s /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
-fi
-sleep 1s
-if ! test -e /home/$(logname)/.config/fontconfig; then
-    mkdir -p /home/$(logname)/.config/fontconfig
-fi
-sleep 1s
-if test -e /home/$(logname)/.config/fontconfig/fonts.conf; then
-    mv /home/$(logname)/.config/fontconfig/fonts.conf /home/$(logname)/.config/fontconfig/fonts.conf.bak;
-fi
-sleep 1s
-touch /home/$(logname)/.config/fontconfig/fonts.conf
-sleep 1s
-curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/fonts.conf -o - | sudo tee /home/$(logname)/.config/fontconfig/fonts.conf
-sleep 1s
-sudo sed -i "s|#export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|g" /etc/profile.d/freetype2.sh
-sleep 1s
-sudo fc-cache -fv
-
-sleep 1s
-
-echo
-echo "Enabling CUPs service"
-echo
-sleep 1s
-cd /usr/bin
-./cupsenable
-
-sleep 1s
-
-echo
-echo "Creating udev rule for AntiMicroX to avoid problems with wayland"
-echo
-sleep 1s
-if test -e /usr/lib/udev/rules.d/60-antimicrox-uinput.rules; then
-    sudo mv /usr/lib/udev/rules.d/60-antimicrox-uinput.rules /usr/lib/udev/rules.d/60-antimicrox-uinput.rules.old
-fi
-sudo touch /usr/lib/udev/rules.d/60-antimicrox-uinput.rules
-sleep 1s
-curl https://raw.githubusercontent.com/AntiMicroX/antimicrox/master/other/60-antimicrox-uinput.rules -o - | sudo tee /usr/lib/udev/rules.d/60-antimicrox-uinput.rules
-
-sleep 1s
-
-echo
-echo "Making Gamemode start on boot"
-echo
-sleep 1s
-sudo systemctl --user enable --now gamemoded.service
-sleep 1s
-sudo chmod +x /usr/bin/gamemoderun
-
-sleep 1s
-
-echo
-echo "Restricting Kernel Log Access"
-echo
-sleep 1s
-sudo sysctl -w kernel.dmesg_restrict=1
-
-sleep 1s
-
-echo
-echo "Improving audio"
-echo
-sleep 1s
-if test -e /etc/pulse/daemon.conf; then
-    echo
-    echo "Making a backup of \"/etc/pulse/daemon.conf\" to \"/etc/pulse/daemon.conf.old\""
-    echo
-    sleep 1s
-    sudo mv /etc/pulse/daemon.conf /etc/pulse/daemon.conf.old
+    alias vim=nvim
+    echo 'alias vim=nvim' >> $HOME/.bash_aliases
     sleep 1s
 fi
 
-sudo touch /etc/pulse/daemon.conf
-sleep 1s
-printf "default-sample-format = float32le\ndefault-sample-rate = 48000\nalternate-sample-rate = 44100\ndefault-sample-channels = 2\ndefault-channel-map = front-left,front-right\ndefault-fragments = 2\ndefault-fragment-size-msec = 125\nresample-method = speex-float-10\nhigh-priority = yes\nnice-level = -11\nrealtime-scheduling = yes\nrealtime-priority = 9\nrlimit-rtprio = 9\ndaemonize = no\nremixing-produce-lfe = no\nremixing-consume-lfe = no" | sudo tee /etc/pulse/daemon.conf
 echo
+alias ls=lsd
+echo 'alias ls=lsd' >> $HOME/.bash_aliases
 sleep 1s
 
-echo
-echo "Fixing sound delay when starting to play audio"
-echo
-sleep 1s
-sudo sed -i "s|load-module module-suspend-on-idle.*|#load-module module-suspend-on-idle|g" /etc/pulse/default.pa
-sleep 1s
-sudo sed -i "s|load-module module-udev-detect.*|load-module module-udev-detect tsched=0|g" /etc/pulse/default.pa
-sleep 1s
-sudo sed -i "s|load-module module-detect.*|load-module module-detect tsched=0|g" /etc/pulse/default.pa
-
-sleep 1s
-
-if test -e /etc/modprobe.d/snd-hda-intel.conf; then
-    sudo cp /etc/modprobe.d/snd-hda-intel.conf /etc/modprobe.d/snd-hda-intel.conf.old
-    sleep 1s
-fi
-sudo tee /etc/modprobe.d/snd-hda-intel.conf <<<'options snd-hda-intel power_save=0'
-sleep 1s
+git clone --recursive https://github.com/akinomyoga/ble.sh.git
+make -C ble.sh
+printf "\nsource ble.sh/out/ble.sh\n" | tee -a $HOME/.bashrc
 
 echo
-echo "Reset sudo password timeout to default"
-echo "use 'sudo EDITOR=nvim visudo' or 'sudo EDITOR=nano visudo' and remove 'Defaults passwd_timeout=-1'"
-echo "Ignore if you haven't changed visudo"
+echo "Setting CPU governor to Performance and setting min and max freq"
 echo
-echo "Press any button to continue"
+sudo cpupower frequency-set -d 3.7GHz -u 4.2GHz -g performance
+sudo sed -i "s|#governor=.*|governor=performance|g" /etc/default/cpupower
+sudo sed -i "s|#min_freq=.*|min_freq=3.7GHz|g" /etc/default/cpupower
+sudo sed -i "s|#max_freq=.*|max_freq=4.2GHz|g" /etc/default/cpupower
+sleep 1s
 echo
-read ANYTHING
+echo "Enabling cpupower service"
+echo
+sudo update-rc.d ondemand disable
+sudo systemctl disable ondemand
+sudo systemctl mask power-profiles-daemon.service
+sudo systemctl enable --now cpupower.service
 
 sleep 1s
 
 echo
-echo "Done!"
+echo "Enabling gnome-keyring service"
 echo
-
-sleep 1s
-
-echo
-echo "Some changes will be applied after reboot, do you want to reboot now?"
-echo "Y - yes | N - No"
-echo
-
-read REBOOT
-if [ ${REBOOT,,} = y ]; then
-    sudo reboot now
-fi
-exit 0
+systemctl --user enable --now gnome-keyring-daem

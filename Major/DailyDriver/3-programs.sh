@@ -27,8 +27,12 @@ sleep 1s
 
 # PACMAN
 PKGX=(
+    'docker'                                        #
+    'docker-buildx'                                 #
     'filelight'                                     # Show disk usage analyzer
     'gparted'                                       # Partitions Manager
+    'neofetch'                                      # System Information tool
+    'print-manager'
     'hplip'                                         # Driver for HP Deskjet (All-in-One) printers
     'skanlite'                                      # Image Scanning App (If you have a scanner or aio printer/scanner)
     'wine-staging'                                  # Compatibility Layer for running Windows programs (Staging Branch)
@@ -37,6 +41,9 @@ PKGX=(
     'wine-gecko'                                    # Wine's built-in replacement for Microsoft's Internet Explorer
     'dos2unix'                                      # Converting DOS stuff to unix
     'npm'                                           # Package manager for Javascript
+    'lutris'                                        # Lutris
+    'steam'                                         # Steam
+    'distrobox'                                     #
 #    ''                                              # 
 )
 
@@ -48,8 +55,6 @@ for PKG in "${PKGX[@]}"; do
     echo
     sleep 1s
 done
-
-sleep 1s
 
 echo
 echo "Enabling npm's tab completion"
@@ -65,28 +70,28 @@ sudo npm install -g npm@latest
 
 sleep 1s
 
-echo
-echo "Auditting and fixing npm's issues/vulnerabilities (if there's any)"
-echo
-npm i --package-lock-only
-sleep 1s
-npm audit fix
-
-sleep 1s
-
 # AUR
 PKGY=(
+    'ttf-ms-fonts'
+    'qt5-tools'
     'vscodium-bin'                                  # VS Code without Microsoft's branding/telemetry/licensing
     'vscodium-bin-marketplace'                      # VS Codium market place
     'vscodium-bin-features'                         # Unblock some features blocked for non-MS's VSCode
-    'davinci-resolve'                               # Video editing software
     'deckboard-appimage'                            # Streamdeck alternative
     'hplip-plugin'                                  # Plugin for HP Deskjet (All-in-One) printers
-    'mullvad-vpn'                                   # VPN
+    'protonup-qt'                                   # ProtonUp-Qt
+    'eam-git'                                       # Epic Games' Marketplace for Linux
+    'heroic-games-launcher-bin'                     # Epic Games and GOG launcher
+    'bottles'                                       # Bottles
+    'protontricks'                                  # Wrapper to make winetricks work with Proton enabled games
     'dxvk-bin'                                      # Vulkan-based compatibility layer for Direct3D 9/10/11
-    'vkd3d-proton-bin'                              # Vulkan-based compatibility layer for Direct3D 12
+    'vkd3d-proton-mingw'                            # Vulkan-based compatibility layer for Direct3D 12
     'ventoy-bin'                                    # Multiboot USB Solution
-#    ''                                              # 
+    'jetbrains-toolbox'                             #
+    'tdrop-git'                                     # Hide/Show terminal emulators
+    'mullvad-vpn'                                   # VPN
+    'davinci-resolve'                               # Video editing software
+#    ''                                              #
 )
 
 for PKG in "${PKGY[@]}"; do
@@ -98,19 +103,53 @@ for PKG in "${PKGY[@]}"; do
     sleep 1s
 done
 
+if lspci | grep -iq renesas; then
+    echo
+    echo "Found hardware that requires \"Renesas' USB 3.0 chipset firmware\""
+    echo
+    echo "Installing \"upd72020x-fw\""
+    echo
+    paru -S upd72020x-fw --noconfirm --needed --sudoloop
+    sleep 1s
+fi
+
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+    echo
+    echo "NVidia GPU found, downloading packages for it"
+    echo
+    PKGG=(
+        'gwe'                                           # System Util for controlling NVidia GPUs
+#        ''                                              #
+    )
+
+    for PKG in "${PKGG[@]}"; do
+        echo
+        echo "INSTALLING: ${PKG}"
+        echo
+        paru -S "$PKG" --noconfirm --needed --sudoloop
+        echo
+        sleep 1s
+    done
+fi
+
 # FLATPAK
 PKGZ=(
     'com.github.tchx84.Flatseal'                    # Flatpak permission manager
     'org.mozilla.firefox'                           # Firefox Browser
     'net.mullvad.MullvadBrowser'                    # Mullvad Browser
     'com.github.micahflee.torbrowser-launcher'      # Tor Browser
+    'com.discordapp.Discord'                        # Discord
+    'io.github.mimbrero.WhatsAppDesktop'            # Whatsapp
+    'org.signal.Signal'                             # Signal
+    'network.loki.Session'                          # Session
     'net.agalwood.Motrix'                           # Download Manager
-    'org.onlyoffice.desktopeditors'                 # Open-source office suite ("replaces" MS Word, PowerPoint and Excel)
+    'org.libreoffice.LibreOffice'                   # FLOSS office suite ("replaces" MS Word, PowerPoint and Excel)
     'md.obsidian.Obsidian'                          # A knowledge base that works on local Markdown files
     'org.kde.okteta'                                # Hex Editor
     'org.kde.kleopatra'                             # Certificate Manager and Unified Crypto GUI
     'org.qbittorrent.qBittorrent'                   # Torrent app
     'io.mpv.Mpv'                                    # Media player
+    'info.smplayer.SMPlayer'                        # SMPlayer
     'org.gimp.GIMP'                                 # GNU Image Manipulator
     'org.kde.krita'                                 # Digital Painting Software
     'org.inkscape.Inkscape'                         # Vector Graphics Editor
@@ -119,14 +158,6 @@ PKGZ=(
     'io.github.Qalculate.qalculate-qt'              # Calculator
     'com.spotify.Client'                            # Spotify
     'com.obsproject.Studio'                         # Streaming software
-    'io.github.achetagames.epic_asset_manager'      # Epic Games' Marketplace for Linux
-    'com.heroicgameslauncher.hgl'                   # Epic Games and GOG launcher
-    'com.valvesoftware.Steam'                       # Steam
-    'net.lutris.Lutris'                             # Lutris
-    'com.usebottles.bottles'                        # Bottles
-    'org.phoenicis.playonlinux'                     # "PlayOnLinux's Designated Successor"
-    'net.davidotek.pupgui2'                         # ProtonUp-Qt
-    'com.github.Matoking.protontricks'              # Wrapper to make winetricks work with Proton
     'io.github.antimicrox.antimicrox'               # Graphical program used to map gamepad keys to keyboard, mouse, scripts and macros
     'nl.hjdskes.gcolor3'                            # Color Picker
 #    ''         # 
@@ -141,7 +172,44 @@ for PKG in "${PKGZ[@]}"; do
     sleep 1s
 done
 
+echo
+echo "Fixing cursor changing to Default when over flatpak apps"
+echo
 sleep 1s
+echo 'cp -nur /usr/share/icons $HOME/.icons'
+cp -nur /usr/share/icons $HOME/.icons
+echo 'cp -nur $HOME/.icons /usr/share/icons'
+cp -nur $HOME/.icons /usr/share/icons
+mkdir -p $HOME/.fonts
+cp -nur /usr/share/fonts $HOME/.fonts
+echo 'flatpak --user override --filesystem=$HOME/.icons/:ro'
+flatpak --user override --filesystem=$HOME/.icons/:ro
+echo 'flatpak --user override --filesystem=/usr/share/icons/:ro'
+flatpak --user override --filesystem=/usr/share/icons/:ro
+echo 'flatpak --user override --filesystem=/usr/share/fonts/:ro'
+flatpak --user override --filesystem=/usr/share/fonts/:ro
+echo 'flatpak --user override --filesystem=$HOME/.fonts/:ro'
+flatpak --user override --filesystem=$HOME/.fonts/:ro
+echo 'flatpak --user override --env=XCURSOR_PATH=~/.icons'
+flatpak --user override --env=XCURSOR_PATH=~/.icons
+echo 'flatpak --user override --filesystem=xdg-config/gtk-3.0:ro'
+flatpak --user override --filesystem=xdg-config/gtk-3.0:ro
+sleep 1s
+
+echo
+echo "Running GIMP"
+echo
+org.gimp.GIMP &
+sleep 5s
+killall gimp-2.10
+
+echo
+echo "Installing PhotoGIMP"
+echo
+cd $HOME/Downloads
+wget https://github.com/Diolinux/PhotoGIMP/releases/download/1.1/PhotoGIMP.zip
+cp -rf PhotGIMP-master/.var $HOME
+cp -rf PhotGIMP-master/.local $HOME
 
 echo
 echo " Done!"

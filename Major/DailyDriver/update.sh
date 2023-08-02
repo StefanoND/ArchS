@@ -25,57 +25,50 @@ clear
 sleep 1s
 
 echo
-echo "pacman update/upgrade"
+echo "System update/upgrade"
 echo
+paru
 sleep 1s
-sudo pacman -Syu --noconfirm --needed
-sleep 1s
-echo
-echo "Paru update/upgrade"
-echo
-sleep 1s
-paru -Syu --noconfirm --needed --sudoloop
-sleep 1s
-echo
-echo "rus
-sleep 1stup update/upgrade"
-echo
-rustup self upgrade-data
-sleep 1s
-echo
-echo "flatpak update/upgrade"
-echo
-sleep 1s
-flatpak update
-sleep 1s
-cd /usr/bin/
-sudo ./cups-genppdupdate
-cd ~
-echo
-echo "wine update/upgrade"
-echo
-sleep 1s
-sudo winetricks --self-update
-
-sleep 1s
+if pacman -Q | grep rust; then
+    echo
+    echo "rustup update/upgrade"
+    echo
+    rustup self upgrade-data
+    sleep 1s
+fi
+if pacman -Q | grep flatpak; then
+    echo
+    echo "flatpak update/upgrade"
+    echo
+    flatpak update -y
+    sleep 1s
+fi
+if pacman -Q | grep wine; then
+    echo
+    echo "wine update/upgrade"
+    echo
+    sudo winetricks --self-update
+    sleep 1s
+fi
 echo
 echo "Demon-reload"
 echo
-sleep 1s
 sudo systemctl daemon-reload
 sleep 1s
 echo
-echo "Restart cups"
+echo "Restarting cups"
 echo
-sleep 1s
 sudo systemctl restart cups
-
 sleep 1s
 echo
-echo "update-grub"
+echo "Modprobin NVidia"
 echo
+sudo nvidia-modprobe
 sleep 1s
-sudo update-grub
+echo
+echo "Updating systemd-boot"
+echo
+sudo bootctl update
 sleep 1s
 
 echo

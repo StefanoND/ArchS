@@ -25,11 +25,15 @@ clear
 
 sleep 1s
 
-echo
-echo "INSTALLING DEPENDENCIES/LIBRARIES STUFF"
-echo
-
-sleep 1s
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+    echo
+    echo "Installing \"libva-nvidia-driver\""
+    echo
+    echo "Select the non-git version"
+    echo "Remove conflicting \"libva-vdpau-driver\""
+    paru -S libva-nvidia-driver --needed --sudoloop
+    sleep 1s
+fi
 
 echo
 echo "This will take a while, take a break, grab a coffee, come back later"
@@ -38,7 +42,7 @@ echo
 sleep 1s
 
 echo
-echo "Updating/Upgrading repos and apps"
+echo "Updating system"
 paru
 echo
 
@@ -89,12 +93,19 @@ PKGS=(
     'cups'                                      # Wine Dependency Hell
     'samba'                                     # Wine Dependency Hell
     'dosbox'                                    # Wine Dependency Hell
+    'vkd3d'                                     #
+    'lib32-vkd3d'                               #
+    'lib32-sqlite'                              # Lutris Dependency
     'vulkan-headers'                            # Vulkan Header Files
     'vulkan-validation-layers'                  # Vulkan Validation Layers
     'vulkan-tools'                              # Vulkan Utilities and Tools
     'unrar'                                     # Requires to install some games in Lutris
     'opencl-headers'                            # Requires to enable OpenCL in Photoshop
     'opencl-clhpp'                              # Requires to enable OpenCL in Photoshop
+    'libvdpau-va-gl'                            # Hardware Acceleration
+    'gstreamer'                                 # Hardware Acceleration
+    'gstreamer-vaapi'                           # Hardware Acceleration
+    'lib32-libappindicator-gtk2'                # Tray Icon Support for Steam
 )
 
 for PKG in "${PKGS[@]}"; do
@@ -115,6 +126,9 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
     echo
     sleep 1s
     sudo pacman -S nvidia-utils lib32-nvidia-utils opencl-nvidia --noconfirm --needed
+    sleep 1s
+    export LIBVA_DRIVER_NAME=nvidia
+    printf "LIBVA_DRIVER_NAME=nvidia\n" | sudo tee -a /etc/environment
 fi
 if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd; then
     echo
@@ -180,6 +194,24 @@ for PKG in "${PKGZ[@]}"; do
     paru -S "$PKG" --noconfirm --needed --sudoloop
     sleep 1s
 done
+
+echo
+echo "Enabling gamemode service"
+echo
+systemctl --user enable --now gamemoded.service
+sudo chmod +x /usr/bin/gamemoderun
+
+sleep 1s
+
+echo
+echo "Enabling opentrabletdriver service"
+echo
+systemctl --user enable --now opentabletdriver.service
+
+echo
+echo "Setting SDDM as owner of /var/lib/sddm/.config"
+echo
+sudo chown sddm:sddm /var/lib/sddm/.config
 
 echo
 echo "Done!"
