@@ -106,7 +106,7 @@
     mount -t efivarfs efivarfs /sys/firmware/efi/efivars/
 
 ### Install systemd-boot
-    bootctl install
+    bootctl --path=/boot install
 
 ### Configure systemd-boot
     nano /boot/loader/loader.conf
@@ -189,7 +189,7 @@
 # Update bootctl and check status
 
 ### Update bootctl
-    bootctl update
+    bootctl --path/boot update
 
 ### Check bootctl status
     bootctl status
