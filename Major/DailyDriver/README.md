@@ -74,7 +74,7 @@
 
 # Prep
 ### Install base packages (add intel-ucode if you're using an intel CPU)
-    pacstrap -K /mnt base base-devel linux linux-firmware linux-headers linux-lts linux-lts-headers dkms neovim
+    pacstrap -K /mnt base linux linux-firmware
 
 ### Populate fstab
     genfstab -U -p /mnt >> /mnt/etc/fstab
@@ -86,7 +86,7 @@
     mkinitcpio -P
 
 ### Install networking, dhcp, and other useful pkgs
-    pacman -S networkmanager dhcpcd nano git curl pacman-contrib bash-completion --noconfirm --needed
+    pacman -S networkmanager dhcpcd nano git curl pacman-contrib bash-completion base-devel linux-headers linux-lts linux-lts-headers dkms neovim --noconfirm --needed
 
 ### Enable dhcp
     systemctl enable dhcpcd@enpXsX.service
