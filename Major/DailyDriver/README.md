@@ -49,11 +49,11 @@
     Name: swap
 ### Root partition
     Size: XX
-    Type: 8300
+    Type: 8304
     Name: root
 ### Home partition
     Size: rest
-    Type: 8300
+    Type: 8302
     Name: home
     
 # Formatting and mounting
