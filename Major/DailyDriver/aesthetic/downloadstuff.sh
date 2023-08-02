@@ -1,11 +1,9 @@
 #!/bin/bash
 
-#CURRDIR=`pwd`
-CURRDIR=${BASH_SOURCE}
-CURRDIR=${DIR%"downloadstuff.sh"}
+CURRDIR=`pwd`
 
 if ! [[ `pacman -Q | grep -i 'kvantum'` ]]; then
-    sudo pacman -S kvantum --noconfirm --needed
+    sudo pacman -S kvantum ttf-fira-code --noconfirm --needed
 fi
 if ! [[ -d ${HOME}/.config/Kvantum ]]; then
     mkdir -p ${HOME}/.config/Kvantum
@@ -25,9 +23,13 @@ cp ${CURRDIR}/ff/settings.ini ${HOME}/.config/gtk-3.0
 cp ${CURRDIR}/ff/settings.ini ${HOME}/.config/gtk-4.0
 cp -r ${CURRDIR}/ff/Orchis-dark ${HOME}/.config/Kvantum
 
+echo
+printf "Change all your fonts to Fira Code."
+echo
 printf "Open kvantum manager and choose Orchis-dark in \"Change/Delete Theme\" section"
-
+echo
 printf "in \"Configure Active Theme\" section in \"Sizes & Delays\" change \"Tooltip delay\" to 150 ms and save"
+echo
 
 #echo
 #echo "Download themes"
