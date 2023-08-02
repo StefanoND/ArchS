@@ -46,7 +46,7 @@ if [[ ${WHICHDISTRO,,} == 1 ]]; then
 elif [[ ${WHICHDISTRO,,} == 2 ]]; then
     sudo pacman -Syy
     sudo pacman -S dkms virtualbox-guest-utils --noconfirm --needed
-    modprobe -a vboxguest vboxsf vboxvideo
+    sudo modprobe -a vboxguest vboxsf vboxvideo
 fi
 
 if ! [[ -f /etc/systemd/system/vbclient.service ]]; then
