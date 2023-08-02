@@ -89,13 +89,13 @@
     pacman -S networkmanager dhcpcd nano git curl pacman-contrib bash-completion base-devel linux-headers linux-lts linux-lts-headers dkms neovim --noconfirm --needed
 
 ### Enable dhcp
-    systemctl enable dhcpcd@enpXsX.service
+    systemctl enable dhcpcd@enpXsX
 
 ### To check your network card use the following command
     ip link
 
 ### Enable Network Manager service
-    systemctl enable NetworkManager.service
+    systemctl enable NetworkManager
 
 ### If you're installing in an SSD, enable trim
     systemctl enable fstrim.timer
@@ -228,10 +228,10 @@
 ### Make a backup of your mirrorlist
     cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.old
 
-# Use fastest mirrors for our mirrorlist
+### Use fastest mirrors for our mirrorlist
     rankmirrors -n 20 /etc/pacman.d/mirrorlist.old > /etc/pacman.d/mirrorlist
 
-# Change pacman.conf
+### Change pacman.conf
     nano /etc/pacman.conf
 
 ###   Uncomment Multilib, add Valve repo to pacman.conf
@@ -277,6 +277,7 @@
     Defaults insults # Replace "Sorry, try again." with humorous insults.
     Defaults rootpw # Will require root password for sudo command
     Defaults timestamp_type=global # All terminals "share the same timeout" for sudo password
+    #Defaults passwd_timeout=0 # I'm not your parent
 
 # Audio
 
@@ -288,7 +289,7 @@
     pacman -S xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm --noconfirm --needed
 
 ### Enable sddm service
-    systemctl enable sddm.service
+    systemctl enable sddm
 
 ### Install a terminal
     pacman -S wezterm wezterm-shell-integration wezterm-terminfo --noconfirm --needed
