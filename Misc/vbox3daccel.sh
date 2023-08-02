@@ -49,12 +49,15 @@ elif [[ ${WHICHDISTRO,,} == 2 ]]; then
     sudo modprobe -a vboxguest vboxsf vboxvideo
 fi
 
-if ! [[ -f /etc/systemd/system/vbclient.service ]]; then
-    sudo touch /etc/systemd/system/vbclient.service
-    printf "[Unit]\nDescription=VBoxClient\n\n[Service]\nExecStart=/bin/bash VBoxClient-all\n\n[Install]\nWantedBy=multi-user.target\n" | sudo tee /etc/systemd/system/vbclient.service
+if ! [[ -f /usr/lib/systemd/system/vbclient.service ]]; then
+    sudo touch /usr/lib/systemd/system/vbclient.service
 fi
 
-sudo systemctl enable vbclient.service
+printf "[Unit]\nDescription=VBoxClient\n\n[Service]\nExecStart=/bin/bash VBoxClient-all\n\n[Install]\nWantedBy=multi-user.target\n" | sudo tee /usr/lib/systemd/system/vbclient.service
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now vboxservice.service
+sudo systemctl enable --now vbclient.service
 
 echo
 echo "You may now shut down and enable 3D Acceleration"
