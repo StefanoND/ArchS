@@ -121,7 +121,7 @@ fi
 echo
 echo
 echo
-echo "Grab a coffee and come back later, it'll take some time"
+echo "Grab a coffee, it'll take some time"
 echo
 sleep 2s
 
@@ -344,12 +344,6 @@ sudo mkdir -p /usr/local/bin/autojump
 sudo ln -s /etc/profile.d/autojump.sh /usr/share/autojump/autojump.sh
 sudo chmod +x /usr/share/autojump/autojump.sh
 
-if [[ -f "${HOME}"/.bashrc ]]; then
-    mv "${HOME}"/.bashrc "${HOME}"/.bashrc.old
-fi
-if [[ -f "${HOME}"/.bash_aliases ]]; then
-    mv "${HOME}"/.bash_aliases "${HOME}"/.bash_aliases.old
-fi
 if [[ -f "${HOME}"/.config/starship.toml ]]; then
     mv "${HOME}"/.config/starship.toml "${HOME}"/.config/starship.toml.old
 fi
@@ -360,11 +354,7 @@ if ! [[ -d "${HOME}"/.config/i3blocks ]]; then
     mkdir -p "${HOME}"/.config/i3blocks
 fi
 
-ln -svf "${SRCPATH}"/home/.bashrc "${HOME}"/.bashrc
-ln -svf "${SRCPATH}"/home/.bash_aliases "${HOME}"/.bash_aliases
 ln -svf "${SRCPATH}"/home/starship.toml "${HOME}"/.config/starship.toml
-ln -svf "${SRCPATH}"/home/.wezterm.lua "${HOME}"/.wezterm.lua
-ln -svf "${SRCPATH}"/home/.xinitrc "${HOME}"/.xinitrc
 
 cp "${SRCPATH}"/wallpapers/* "${HOME}"/Pictures/Wallpapers
 
