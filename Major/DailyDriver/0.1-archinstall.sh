@@ -32,9 +32,9 @@ ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
 hwclock --systohc --utc
 
 # Use fastest mirrors for our mirrorlist
-reflector -c $COUNTRIES -p $PROTOCOLS -a 10 --sort rate --save /etc/pacman.d/mirrorlist
+reflector -c $COUNTRIES -p $PROTOCOLS -a 6 --sort rate --save /etc/pacman.d/mirrorlist
 
-printf "\--save /etc/pacman.d/mirrorlist\n--country $COUNTRIES\n--protocol $PROTOCOLS\n--age 3\n" > /etc/xdg/reflector/reflector.conf
+printf "\--save /etc/pacman.d/mirrorlist\n--country $COUNTRIES\n--protocol $PROTOCOLS\n--age 6\n" > /etc/xdg/reflector/reflector.conf
 
 sed -i 's/\\--/--/g' /etc/xdg/reflector/reflector.conf
 
