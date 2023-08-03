@@ -1,6 +1,5 @@
 #!/bin/bash
 
-SRCPATH=`pwd`
 SPCACHE=",space_cache"
 sleep 1s
 if [[ `pacman -Q | grep -i 'virtualbox-guest-utils'` ]]; then
@@ -9,9 +8,9 @@ fi
 
 # Partition names
 lsblk
-read -p "Enter the name of the EFI partition (eg. nvme0n1p1): " nvme0n1p1
-read -p "Enter the name of the ROOT partition (eg. nvme0n1p2): " nvme0n1p2
-read -p "Enter the name of the HOME partition (eg. nvme0n1p3): " nvme0n1p3
+read -p "Enter the name of the EFI partition (eg. sda1, nvme0n1p1): " nvme0n1p1
+read -p "Enter the name of the ROOT partition (eg. sda2, nvme0n1p2): " nvme0n1p2
+read -p "Enter the name of the HOME partition (eg. sda3, nvme0n1p3): " nvme0n1p3
 
 # Sync time
 timedatectl set-ntp true
@@ -57,7 +56,7 @@ pacstrap -K /mnt base base-devel btrfs-progs linux linux-firmware linux-headers 
 genfstab -Up /mnt >> /mnt/etc/fstab
 
 # chroot into mnt
-arch-chroot /mnt ."$SRCPATH"/0.1-archinstall.sh
+arch-chroot /mnt ./ArchS/Major/DailyDriver/0.1-archinstall.sh
 
 # Unmount all drives (-R will remove everything mounted to that path)
 umount -R /mnt
