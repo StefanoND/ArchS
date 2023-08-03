@@ -6,16 +6,13 @@ USERNAME="archuser"
 GROUPNAME="archuser"
 SWAPSIZE="16G"
 
-ip link
-read -p "Enter the name of the NIC you want to enable dhcp (eg. enp0s3): " enp0s0
+sleep 1s
 
 # Desktop Environment
 # Instal Xorg, sddm and plasma
 pacman -S networkmanager dhcpcd nvim git curl pacman-contrib bash-completion xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm wezterm wezterm-shell-integration wezterm-terminfo cups openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip--noconfirm --needed
 
-ip link
 # Enable services
-systemctl enable dhcpcd@$enp0s0
 systemctl enable NetworkManager
 systemctl enable fstrim.timer
 systemctl enable cups.service
