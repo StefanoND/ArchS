@@ -8,7 +8,21 @@ SWAPSIZE="16G"
 COUNTRIES="Germany,Portugal,Spain,France"
 PROTOCOLS="https"
 VALIDNIC=n
+VALIDPARTTWO=n
+nvme0n1p2=null
 
+lsblk
+while [[ ${VALIDPARTTWO,,} = n ]]; do
+    read -p "Enter the name of the ROOT partition (eg. sda2, nvme0n1p2): " PARTTWO
+    nvme0n1p2=$PARTTWO
+    if [[ `lsblk | grep $nvme0n1p2` ]]; then
+        VALIDPARTTWO=y
+    else
+        echo
+        printf "Could not find /dev/$nvme0n1p2, try again"
+        echo
+    fi
+done
 while [[ ${VALIDNIC,,} = n ]]; do
     ip link
     read -p "Enter the name of the NIC you want to enable dhcp (eg. enp0s3): " enp0s0
@@ -59,6 +73,9 @@ mkinitcpio -P
 btrfs filesystem mkswapfile --size $SWAPSIZE --uuid clear /swap/swapfile
 
 # Create root password
+echo
+echo 'Root password'
+echo
 passwd
 
 # Locale
@@ -84,8 +101,7 @@ echo "127.0.1.1 $MYHOSTNAME.localdomain $MYHOSTNAME" >> /etc/hosts
 
 # Change pacman.conf
 sed -i "s/#Color/Color\nILoveCandy/g" /etc/pacman.conf
-sed -i 's/#[multilib]/[multilib]/g' /etc/pacman.conf
-sed -i "s/#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/g" /etc/pacman.conf
+sed -i "s/\#[multilib]/[multilib]\nInclude = \/etc\/pacman.d\/mirrorlist/g" /etc/pacman.conf
 echo '' >> /etc/pacman.conf
 echo '[valveaur]' >> /etc/pacman.conf
 echo 'SigLevel = Optional TrustedOnly' >> /etc/pacman.conf
@@ -109,6 +125,9 @@ sudo -u $USERNAME bash -c 'pulsemixer --create-config'
 sudo -u $USERNAME bash -c 'kwriteconfig5 --file kdesurc --group super-user-command --key super-user-command sudo'
 
 # Give a password to it, rename USER to the one you set above
+echo
+printf "$USERNAME password"
+echo
 passwd $USERNAME
 
 # Bootloader
@@ -134,7 +153,7 @@ bootctl install
 printf "default arch.conf\ntimeout 3\nconsole-mode max\neditor no\n" > /boot/loader/loader.conf
 
 printf "title Arch\nlinux /vmlinuz-linux\ninitrd /initramfs-linux.img\n" > /boot/loader/entries/arch.conf
-printf "title Arch\nlinux /vmlinuz-linux-lts\ninitrd /initramfs-linux-lts.img\n" > /boot/loader/entries/arch-lts.conf
+printf "title Arch (LTS)\nlinux /vmlinuz-linux-lts\ninitrd /initramfs-linux-lts.img\n" > /boot/loader/entries/arch-lts.conf
 
 if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
     printf "initrd /amd-ucode.img\n" >> /boot/loader/entries/arch.conf
