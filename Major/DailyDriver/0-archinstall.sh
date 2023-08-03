@@ -4,7 +4,6 @@ SRCPATH="$(cd $(dirname $0) && pwd)"
 
 # Partition names
 lsblk
-read -p "Enter the name of the DRIVE you want to partition (eg. nvme0n1): " nvme0n1
 read -p "Enter the name of the EFI partition (eg. nvme0n1p1): " nvme0n1p1
 read -p "Enter the name of the ROOT partition (eg. nvme0n1p2): " nvme0n1p2
 read -p "Enter the name of the HOME partition (eg. nvme0n1p3): " nvme0n1p3
@@ -15,39 +14,12 @@ setfont ter-p20b
 # Sync time
 timedatectl set-ntp true
 
-# Partitioning
-# Wipe everything in your drive
-gdisk /dev/$nvme0n1 # or /dev/sda
-# x z Y Y
-
-# Layout
-# Change sda to the drive you want
-cgdisk /dev/$nvme0n1
-
-### Label gpt
-
-# Boot partition
-#    Size: 2GiB
-#    Type: EF00
-#    Name: boot
-# Root partition
-#    Size: XX
-#    Type: 8304
-#    Name: root
-# Home partition
-#    Size: XX
-#    Type: 8302
-#    Name: home
-
-# We'll create a swapfile instead of partition
-
-# Formatting and mounting
 # Format partitions
 mkfs.fat -F 32 /dev/$nvme0n1p1
 mkfs.btrfs -f /dev/$nvme0n1p2
 mkfs.btrfs -f /dev/$nvme0n1p3
 
-### Mount the partitions
+# Mount the partitions
 mount /dev/$nvme0n1p2 /mnt
 btrfs su cr /mnt/@
 btrfs su cr /mnt/@opt
