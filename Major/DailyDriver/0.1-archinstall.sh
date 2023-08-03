@@ -103,10 +103,10 @@ groupadd $GROUPNAME
 useradd -m -g $GROUPNAME -G sys,lp,kvm,network,power,storage -s /bin/bash $USERNAME
 
 # Let's do some stuff in the user account before adding password
-su - $USERNAME -c systemctl --user enable pipewire
-su - $USERNAME -c systemctl --user enable pipewire-pulse
-su - $USERNAME -c pulsemixer --create-config
-su - $USERNAME -c kwriteconfig5 --file kdesurc --group super-user-command --key super-user-command sudo
+sudo -u $USERNAME bash -c 'systemctl --user enable pipewire'
+sudo -u $USERNAME bash -c 'systemctl --user enable pipewire-pulse'
+sudo -u $USERNAME bash -c 'pulsemixer --create-config'
+sudo -u $USERNAME bash -c 'kwriteconfig5 --file kdesurc --group super-user-command --key super-user-command sudo'
 
 # Give a password to it, rename USER to the one you set above
 passwd $USERNAME
