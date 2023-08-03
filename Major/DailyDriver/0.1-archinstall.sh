@@ -124,9 +124,9 @@ cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.old
 rankmirrors -n 20 /etc/pacman.d/mirrorlist.old > /etc/pacman.d/mirrorlist
 
 ### Change pacman.conf
-sed -i "s/\#Color/Color\nILoveCandy/g" /etc/pacman.conf
+sed -i "s/#Color/Color\nILoveCandy/g" /etc/pacman.conf
 sed -i 's/#[multilib]/[multilib]/g' /etc/pacman.conf
-sed -i 's/#Include = /etc/pacman.d/mirrorlist/Include = /etc/pacman.d/mirrorlist/g' /etc/pacman.conf
+sed -i 's/#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/g' /etc/pacman.conf
 echo '' >> /etc/pacman.conf
 echo '[valveaur]' >> /etc/pacman.conf
 echo 'SigLevel = Optional TrustedOnly' >> /etc/pacman.conf
