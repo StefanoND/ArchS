@@ -55,6 +55,9 @@ pacstrap -K /mnt base base-devel btrfs-progs linux linux-firmware linux-headers 
 # Populate fstab
 genfstab -Up /mnt >> /mnt/etc/fstab
 
+# Copy current folder to /mnt
+cp -r ArchS /mnt/
+
 # chroot into mnt
 arch-chroot /mnt ./ArchS/Major/DailyDriver/0.1-archinstall.sh
 
