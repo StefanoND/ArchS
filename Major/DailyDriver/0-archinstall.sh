@@ -26,7 +26,7 @@ while [[ ${VALIDPARTONE,,} = n ]]; do
     fi
 done
 while [[ ${VALIDPARTTWO,,} = n ]]; do
-    read -p "Enter the name of the EFI partition (eg. sda1, nvme0n1p1): " PARTTWO
+    read -p "Enter the name of the ROOT partition (eg. sda2, nvme0n1p2): " PARTTWO
     nvme0n1p2=$PARTTWO
     if [[ `lsblk | grep $nvme0n1p2` ]]; then
         VALIDPARTTWO=y
@@ -37,7 +37,7 @@ while [[ ${VALIDPARTTWO,,} = n ]]; do
     fi
 done
 while [[ ${VALIDPARTTHREE,,} = n ]]; do
-    read -p "Enter the name of the EFI partition (eg. sda1, nvme0n1p1): " PARTTHREE
+    read -p "Enter the name of the HOME partition (eg. sda3, nvme0n1p3): " PARTTHREE
     nvme0n1p3=$PARTTHREE
     if [[ `lsblk | grep $nvme0n1p3` ]]; then
         VALIDPARTTHREE=y
