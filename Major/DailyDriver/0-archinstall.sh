@@ -6,11 +6,52 @@ if [[ `pacman -Q | grep -i 'virtualbox-guest-utils'` ]]; then
     SPCACHE=""
 fi
 
-# Partition names
+VALIDPARTONE=n
+VALIDPARTTWO=n
+VALIDPARTTHREE=n
+nvme0n1p1=null
+nvme0n1p2=null
+nvme0n1p3=null
+
 lsblk
-read -p "Enter the name of the EFI partition (eg. sda1, nvme0n1p1): " nvme0n1p1
-read -p "Enter the name of the ROOT partition (eg. sda2, nvme0n1p2): " nvme0n1p2
-read -p "Enter the name of the HOME partition (eg. sda3, nvme0n1p3): " nvme0n1p3
+while [[ ${VALIDPARTONE,,} = n ]]; do
+    read -p "Enter the name of the EFI partition (eg. sda1, nvme0n1p1): " PARTONE
+    nvme0n1p1=$PARTONE
+    if [[ `lsblk | grep $` ]]; then
+        VALIDPARTONE=y
+    else
+        echo
+        printf "Could not find /dev/$nvme0n1p1, try again"
+        echo
+    fi
+done
+while [[ ${VALIDPARTTWO,,} = n ]]; do
+    read -p "Enter the name of the EFI partition (eg. sda1, nvme0n1p1): " PARTTWO
+    nvme0n1p2=$PARTTWO
+    if [[ `lsblk | grep $` ]]; then
+        VALIDPARTTWO=y
+    else
+        echo
+        printf "Could not find /dev/$nvme0n1p2, try again"
+        echo
+    fi
+done
+while [[ ${VALIDPARTTHREE,,} = n ]]; do
+    read -p "Enter the name of the EFI partition (eg. sda1, nvme0n1p1): " PARTTHREE
+    nvme0n1p3=$PARTTHREE
+    if [[ `lsblk | grep $` ]]; then
+        VALIDPARTTHREE=y
+    else
+        echo
+        printf "Could not find /dev/$nvme0n1p3, try again"
+        echo
+    fi
+done
+# Partition names
+#lsblk
+#read -p "Enter the name of the EFI partition (eg. sda1, nvme0n1p1): " nvme0n1p1
+#read -p "Enter the name of the ROOT partition (eg. sda2, nvme0n1p2): " nvme0n1p2
+#read -p "Enter the name of the HOME partition (eg. sda3, nvme0n1p3): " nvme0n1p3
 
 # Sync time
 timedatectl set-ntp true
