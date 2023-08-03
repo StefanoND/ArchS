@@ -108,7 +108,8 @@ echo
 sudo pacman -Syyu --noconfirm --needed
 sleep 2s
 
-if [[ `pacman -Q | grep -i 'iptables'` ]] && ! [[ `pacman -Q | grep -i 'iptables-nft'` ]]; then
+if [[ `pacman -Q | grep -i 'iptables'` ]] && \
+ ! [[ `pacman -Q | grep -i 'iptables-nft'` ]]; then
     echo
     echo "Replacing iptables with iptables-nft"
     echo "Press Y when it asks to remove iptables"

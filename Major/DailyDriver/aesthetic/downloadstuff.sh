@@ -14,6 +14,10 @@ fi
 if ! [[ -d "${HOME}"/.config/gtk-4.0 ]]; then
     mkdir -p "${HOME}"/.config/gtk-4.0
 fi
+if ! [[ -d /usr/share/icons/Sweet-cursors ]] &&  \
+     [[ -d "${HOME}"/.icons/Sweet-cursors ]]
+    sudo ln -s "${HOME}"/.icons/Sweet-cursors /usr/share/icons
+fi
 if [[ -f "${HOME}"/.gtkrc-2.0 ]]; then
     mv "${HOME}"/.gtkrc-2.0 "${HOME}"/.gtkrc-2.0.old
 fi
@@ -26,7 +30,7 @@ if ! [[ -f /usr/share/sddm/scripts/Xsetup ]]; then
     printf "#!/bin/sh\n# Xsetup - run as root before the login dialog appears\n" | sudo tee /usr/share/sddm/scripts/Xsetup
 fi
 
-echo 'setxkbmap pt' | sudo tee -a /usr/share/sddm/scripts/Xsetup
+printf "setxkbmap pt\n" | sudo tee -a /usr/share/sddm/scripts/Xsetup
 
 sudo sed -i '/^Current=.*/a CursorSize=36' /etc/sddm.conf.d/kde_settings.conf
 sudo sed -i '/^Current=.*/a CursorTheme=Sweet-cursors' /etc/sddm.conf.d/kde_settings.conf
@@ -36,7 +40,8 @@ cp "${CURRDIR}"/ff/.gtkrc-2.0 "${HOME}"/
 cp "${CURRDIR}"/ff/settings.ini "${HOME}"/.config/gtk-3.0
 cp "${CURRDIR}"/ff/settings.ini "${HOME}"/.config/gtk-4.0
 cp -r "${CURRDIR}"/ff/Orchis-dark "${HOME}"/.config/Kvantum
-sudo cp -r "${CURRDIR}"/ff/Sweet-cursors /usr/share/icons
+
+# sudo ln -s "${CURRDIR}"/ff/Sweet-cursors /usr/share/icons
 clear
 echo
 printf "Change all your fonts to Fira Code."
