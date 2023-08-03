@@ -543,6 +543,12 @@ echo
 echo 'fs.inotify.max_user_watches=524288' | sudo tee /etc/sysctl.d/40-max-user-watches.conf && sudo sysctl --system
 sleep 1s
 
+echo
+echo "Decreasing swappiness"
+echo
+sysctl -w vm.swappiness=10
+sudo bash -c 'echo "vm.swappiness = 10" > /etc/sysctl.d/99-swappiness.conf'
+
 if ! [[ -f "${HOME}"/.local/share/konsole ]]; then
     echo
     echo "Creating ${HOME}/.local/share/konsole folder"
