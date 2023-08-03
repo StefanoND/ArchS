@@ -193,6 +193,33 @@ PKGS=(
     'python-pyqt5'                              #
     'ntfs-3g'                                   # NTFS support
     'starship'
+    'htop'
+    'neofetch'
+    'dialog'
+    'wpa_supplicant'
+    'mtools'
+    'dosfstools'
+    'xdg-user-dirs'
+    'xdg-utils'
+    'nfs-utils'
+    'inetutils'
+    'bind'
+    'rsync'
+    'sof-firmware'
+    'ipset'
+    'nss-mdns'
+    'os-prober'
+    'terminus-font'
+    'exa'
+    'bat'
+    'gparted'
+    'filelight'
+    'xclip'
+    'brightnessctl'
+    'xf86-video-amdgpu'
+    'xf86-video-nouveau'
+    'xf86-video-intel'
+    'xf86-video-qxl'
 
     # QEMU
     'qemu-desktop'
@@ -306,6 +333,9 @@ sudo sed -i "s|#FileManager.*|FileManager = ranger|g" /etc/paru.conf
 sleep 1s
 
 PKGA=(
+    'zram-generator'
+    'timeshift-bin'
+    'preload'
     'autojump'
     'i3-gaps-rounded-git'
     'spicetify-cli'
@@ -363,6 +393,16 @@ fi
 
 printf "{\n  allowUnfree = true;\n  nix.settings.sandbox = true;\n  nix.settings.auto-optimise-store = true;\n}\n" > "${HOME}"/.config/nixpkgs/config.nix
 sleep 1s
+
+if [[ -f /etc/systemd/zram-generator.conf ]]; then
+    sudo mv /etc/systemd/zram-generator.conf /etc/systemd/zram-generator.conf.old
+fi
+
+sudo touch /etc/systemd/zram-generator.conf
+sudo bash -c 'echo "[zram0]" >> /etc/systemd/zram-generator.conf'
+sudo bash -c 'echo "zram-size = ram / 2" >> /etc/systemd/zram-generator.conf'
+sudo systemctl daemon-reload
+sudo systemctl start /dev/zram0
 
 sudo mkdir -p /usr/local/bin/autojump
 sudo ln -s /etc/profile.d/autojump.sh /usr/share/autojump/autojump.sh
