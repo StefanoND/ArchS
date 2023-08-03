@@ -37,6 +37,7 @@ APPSPATH="${HOME}/.apps"
 SRCPATH="$(cd $(dirname $0) && pwd)"
 sourcen=0
 linkn=0
+enablevb=n
 
 echo
 printf "Check \"${SRCPATH}/aesthetic/downloadstuff.sh\""
@@ -58,6 +59,14 @@ echo "Press anything to continue"
 echo
 read READY
 clear
+sleep 1s
+
+echo
+echo "Do you want to modprobe and enable vbox services?"
+echo "Y - Yes | Anything else - no"
+echo
+read VBENABLE
+enablevb=$VBENABLE
 sleep 1s
 
 pactl list sources
@@ -110,6 +119,8 @@ sleep 2s
 
 if [[ `pacman -Q | grep -i 'iptables'` ]] && \
  ! [[ `pacman -Q | grep -i 'iptables-nft'` ]]; then
+    echo
+    echo
     echo
     echo "Replacing iptables with iptables-nft"
     echo "Press Y when it asks to remove iptables"
@@ -219,6 +230,7 @@ PKGS=(
 
     # i3
     'i3blocks'
+    #'i3status'
     'rofi'
     'nitrogen'
     'wmctrl'
@@ -319,10 +331,16 @@ sh <(curl -L https://nixos.org/nix/install) --daemon
 sleep 1s
 
 if ! [[ -d "${HOME}"/.config/nix ]]; then
+    echo
+    printf "mkdir -p \"${HOME}/.config/nix\""
+    echo
     mkdir -p "${HOME}"/.config/nix
 fi
 
 if ! [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
+    echo
+    printf "touch \"${HOME}/.config/nix/nix.conf\""
+    echo
     touch "${HOME}"/.config/nix/nix.conf
 fi
 
@@ -330,10 +348,16 @@ echo 'experimental-features = nix-command flakes' > "${HOME}"/.config/nix/nix.co
 sleep 1s
 
 if ! [[ -d "${HOME}"/.config/nixpkgs ]]; then
+    echo
+    printf "mkdir -p \"${HOME}/.config/nixpkgs\""
+    echo
     mkdir -p "${HOME}"/.config/nixpkgs
 fi
 
 if ! [[ -f "${HOME}"/.config/nixpkgs/config.nix ]]; then
+    echo
+    printf "touch \"${HOME}/.config/nixpkgs/config.nix\""
+    echo
     touch "${HOME}"/.config/nixpkgs/config.nix
 fi
 
@@ -349,6 +373,9 @@ if [[ -f "${HOME}"/.config/starship.toml ]]; then
 fi
 if ! [[ -d "${HOME}"/Pictures/Wallpapers ]]; then
     mkdir -p "${HOME}"/Pictures/Wallpapers
+fi
+if ! [[ -d "${HOME}"/.config/i3 ]]; then
+    mkdir -p "${HOME}"/.config/i3
 fi
 if ! [[ -d "${HOME}"/.config/i3blocks ]]; then
     mkdir -p "${HOME}"/.config/i3blocks
@@ -447,7 +474,7 @@ systemctl --user enable --now gnome-keyring-daemon.service
 
 sleep 1s
 
-if [[ `pacman -Q | grep -i 'virtualbox'` ]]; then
+if [[ `pacman -Q | grep -i 'virtualbox-host-dkms'` ]] && [[ ${enablevb,,} = y ]]; then
     echo
     echo "Modprobing vboxdrv, vboxnetadp and vboxnetflt"
     echo
