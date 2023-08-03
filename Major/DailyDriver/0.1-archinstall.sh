@@ -102,8 +102,8 @@ echo LANG=en_US.UTF-8 > /etc/locale.conf
 export LANG=en_US.UTF-8
 
 # Set keyboard layout permanent (optional)
-echo KEYMAP=pt-latin9 > /etc/vconsole.conf
-export KEYMAP=pt-latin9
+echo KEYMAP=pt-latin1 > /etc/vconsole.conf
+export KEYMAP=pt-latin1
 
 # Set hostname and localhost (change MYHOSTNAME to your liking at the top of this script)
 echo $MYHOSTNAME > /etc/hostname
