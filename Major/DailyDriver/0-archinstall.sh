@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SRCPATH="$(cd $(dirname $0) && pwd)"
+SRCPATH=`pwd`
 SPCACHE=",space_cache"
 sleep 1s
 if [[ `pacman -Q | grep -i 'virtualbox-guest-utils'` ]]; then
@@ -57,7 +57,7 @@ pacstrap -K /mnt base base-devel btrfs-progs linux linux-firmware linux-headers 
 genfstab -Up /mnt >> /mnt/etc/fstab
 
 # chroot into mnt
-arch-chroot /mnt ."${SRCPATH}"/0.1-archinstall.sh
+arch-chroot /mnt ."$SRCPATH"/0.1-archinstall.sh
 
 # Unmount all drives (-R will remove everything mounted to that path)
 umount -R /mnt
