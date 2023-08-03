@@ -1,6 +1,11 @@
 #!/bin/bash
 
 SRCPATH="$(cd $(dirname $0) && pwd)"
+SPCACHE=",space_cache"
+sleep 1s
+if [[ `pacman -Q | grep -i 'virtualbox-guest-utils'` ]]; then
+    SPCACHE=""
+fi
 
 # Partition names
 lsblk
@@ -34,14 +39,14 @@ btrfs su cr /mnt/@home
 umount /mnt
 
 # remove "space_cache" if on a VM without disk fully allocated
-mount -o compress=zstd:3,space_cache,noatime,ssd,defaults,x-mount.mkdir,subvol=@ /dev/$nvme0n1p2 /mnt
+mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@ /dev/$nvme0n1p2 /mnt
 mkdir -p /mnt/{boot,swap,home,.snapshots,opt,var/{cache,log}}
-mount -o compress=zstd:3,space_cache,noatime,ssd,defaults,x-mount.mkdir,subvol=@opt /dev/$nvme0n1p2 /mnt/opt
-mount -o compress=zstd:3,space_cache,noatime,ssd,defaults,x-mount.mkdir,subvol=@swap /dev/$nvme0n1p2 /mnt/swap
-mount -o compress=zstd:3,space_cache,noatime,ssd,defaults,x-mount.mkdir,subvol=@snapshots /dev/$nvme0n1p2 /mnt/.snapshots
-mount -o compress=zstd:3,space_cache,noatime,ssd,defaults,x-mount.mkdir,subvol=@cache /dev/$nvme0n1p2 /mnt/var/cache
-mount -o compress=zstd:3,space_cache,noatime,ssd,defaults,x-mount.mkdir,subvol=@log /dev/$nvme0n1p2 /mnt/var/log
-mount -o compress=zstd:3,space_cache,noatime,ssd,defaults,x-mount.mkdir,subvol=@home /dev/$nvme0n1p3 /mnt/home
+mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@opt /dev/$nvme0n1p2 /mnt/opt
+mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@swap /dev/$nvme0n1p2 /mnt/swap
+mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@snapshots /dev/$nvme0n1p2 /mnt/.snapshots
+mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@cache /dev/$nvme0n1p2 /mnt/var/cache
+mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@log /dev/$nvme0n1p2 /mnt/var/log
+mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@home /dev/$nvme0n1p3 /mnt/home
 mount /dev/$nvme0n1p1 /mnt/boot
 
 # Prep
