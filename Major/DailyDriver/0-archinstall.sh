@@ -13,9 +13,6 @@ read -p "Enter the name of the EFI partition (eg. nvme0n1p1): " nvme0n1p1
 read -p "Enter the name of the ROOT partition (eg. nvme0n1p2): " nvme0n1p2
 read -p "Enter the name of the HOME partition (eg. nvme0n1p3): " nvme0n1p3
 
-# Increase fontsize (optional)
-setfont ter-p20b
-
 # Sync time
 timedatectl set-ntp true
 
