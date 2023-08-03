@@ -118,7 +118,9 @@ ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
 # Generate /etc/adjtime
 hwclock --systohc --utc
 
-printf "--save /etc/pacman.d/mirrorlist\n--country France,Germany\n--protocol https\n--age 3\n" > /etc/xdg/reflector/reflector.conf
+printf "\--save /etc/pacman.d/mirrorlist\n--country $COUNTRIES\n--protocol $PROTOCOLS\n--age 3\n" > /etc/xdg/reflector/reflector.conf
+
+sed -i 's/\\--/--/g' /etc/xdg/reflector/reflector.conf
 
 # Use fastest mirrors for our mirrorlist
 reflector -c $COUNTRIES -p $PROTOCOLS -a 3 --sort rate --save /etc/pacman.d/mirrorlist
