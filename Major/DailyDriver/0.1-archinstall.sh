@@ -48,8 +48,8 @@ pacman -Syy
 sed -i 's/BINARIES=()/BINARIES=(btrfs setfont)/g' /etc/mkinitcpio.conf
 
 # Add "btrfs" before "filesystems":
-# HOOKS=(base udev autodetect modconf kms keyboard btrfs setfont keymap consolefont block encrypt filesystems fsck)
-sed -i 's/HOOKS=(.*/HOOKS=(base udev autodetect modconf kms keyboard btrfs setfont keymap consolefont block encrypt filesystems fsck)/g' /etc/mkinitcpio.conf
+# HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap consolefont block encrypt filesystems fsck)
+sed -i 's/HOOKS=(.*/HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap consolefont block encrypt filesystems fsck)/g' /etc/mkinitcpio.conf
 
 # Update mkinitcpio
 mkinitcpio -P
@@ -85,7 +85,7 @@ echo "127.0.1.1 $MYHOSTNAME.localdomain $MYHOSTNAME" >> /etc/hosts
 # Change pacman.conf
 sed -i "s/#Color/Color\nILoveCandy/g" /etc/pacman.conf
 sed -i 's/#[multilib]/[multilib]/g' /etc/pacman.conf
-sed -i 's/#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/g' /etc/pacman.conf
+sed -i "s/#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/g" /etc/pacman.conf
 echo '' >> /etc/pacman.conf
 echo '[valveaur]' >> /etc/pacman.conf
 echo 'SigLevel = Optional TrustedOnly' >> /etc/pacman.conf
