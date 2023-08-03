@@ -17,7 +17,7 @@ lsblk
 while [[ ${VALIDPARTONE,,} = n ]]; do
     read -p "Enter the name of the EFI partition (eg. sda1, nvme0n1p1): " PARTONE
     nvme0n1p1=$PARTONE
-    if [[ `lsblk | grep $` ]]; then
+    if [[ `lsblk | grep $nvme0n1p1` ]]; then
         VALIDPARTONE=y
     else
         echo
@@ -28,7 +28,7 @@ done
 while [[ ${VALIDPARTTWO,,} = n ]]; do
     read -p "Enter the name of the EFI partition (eg. sda1, nvme0n1p1): " PARTTWO
     nvme0n1p2=$PARTTWO
-    if [[ `lsblk | grep $` ]]; then
+    if [[ `lsblk | grep $nvme0n1p2` ]]; then
         VALIDPARTTWO=y
     else
         echo
@@ -39,7 +39,7 @@ done
 while [[ ${VALIDPARTTHREE,,} = n ]]; do
     read -p "Enter the name of the EFI partition (eg. sda1, nvme0n1p1): " PARTTHREE
     nvme0n1p3=$PARTTHREE
-    if [[ `lsblk | grep $` ]]; then
+    if [[ `lsblk | grep $nvme0n1p3` ]]; then
         VALIDPARTTHREE=y
     else
         echo
