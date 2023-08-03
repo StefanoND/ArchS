@@ -5,15 +5,16 @@ TIMEZONE="Europe/Lisbon"
 USERNAME="archuser"
 GROUPNAME="archuser"
 SWAPSIZE="16G"
+COUNTRIES="Germany,Portugal,Spain,France,Ireland,United Kingdom,Belgium,Switzerland,Netherland,Italy,Austria"
+PROTOCOLS="https"
 
 ip link
 read -p "Enter the name of the NIC you want to enable dhcp (eg. enp0s3): " enp0s0
 
 # Desktop Environment
 # Instal Xorg, sddm and plasma
-pacman -S networkmanager dhcpcd neovim git curl pacman-contrib bash-completion xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm wezterm wezterm-shell-integration wezterm-terminfo cups openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip --noconfirm --needed
+pacman -S networkmanager dhcpcd neovim git curl pacman-contrib bash-completion xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm wezterm wezterm-shell-integration wezterm-terminfo cups openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip pciutils reflector --noconfirm --needed
 
-ip link
 # Enable services
 systemctl enable dhcpcd@$enp0s0
 systemctl enable NetworkManager
@@ -117,13 +118,18 @@ ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
 # Generate /etc/adjtime
 hwclock --systohc --utc
 
-# Pacman
-cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.old
+printf "--save /etc/pacman.d/mirrorlist\n--country France,Germany\n--protocol https\n--age 3\n" > /etc/xdg/reflector/reflector.conf
 
 # Use fastest mirrors for our mirrorlist
-rankmirrors -n 20 /etc/pacman.d/mirrorlist.old > /etc/pacman.d/mirrorlist
+reflector -c $COUNTRIES -p $PROTOCOLS -a 3 --sort rate --save /etc/pacman.d/mirrorlist
 
-### Change pacman.conf
+# Enable reflector timer
+systemctl enable reflector.timer
+
+# Update pacman repo cache
+pacman -Syy
+
+# Change pacman.conf
 sed -i "s/#Color/Color\nILoveCandy/g" /etc/pacman.conf
 sed -i 's/#[multilib]/[multilib]/g' /etc/pacman.conf
 sed -i 's/#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/g' /etc/pacman.conf
