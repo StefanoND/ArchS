@@ -5,7 +5,7 @@ TIMEZONE="Europe/Lisbon"
 USERNAME="archuser"
 GROUPNAME="archuser"
 SWAPSIZE="16G"
-COUNTRIES="Germany,Portugal,Spain,France,Ireland,United Kingdom,Belgium,Switzerland,Netherland,Italy,Austria"
+COUNTRIES="Germany,Portugal,Spain,France,Ireland,United Kingdom,Belgium,Switzerland,Netherlands,Italy,Austria"
 PROTOCOLS="https"
 
 ip link
