@@ -2,7 +2,7 @@
 # Arch Linux
 # (U)EFI system
 
-### Change keyboard layout if needed (Default is us)
+### Change keyboard layout if needed (optional)
     loadkeys pt-latin9
 
 ###   To list keymaps available
@@ -10,6 +10,17 @@
 
 ###   For more finetuned you can use grep
     localtectl list-keymaps | grep -i "pt"
+
+### Increase fontsize (optional)
+    setfont ter-p20b
+
+# Wifi (If not using cable)
+
+### Connect to WLAN
+iwctl --passphrase PASSWORD station wlan0 connect NETWORK
+
+### Check internet connection
+ping -c4 www.archlinux.org
 
 # Time
 
@@ -24,7 +35,7 @@
     lsblk
 
 ### Wipe everything in your drive
-    gdisk /dev/sda
+    gdisk /dev/nvme0n1 # or /dev/sda
 
 ### Press these keys
     x # Expert mode
@@ -43,50 +54,78 @@
     Size: 2GiB
     Type: EF00
     Name: boot
-### Swap partition
-    Size: 16GiB
-    Type: 8200
-    Name: swap
 ### Root partition
     Size: XX
     Type: 8304
     Name: root
 ### Home partition
-    Size: rest
+    Size: XX
     Type: 8302
     Name: home
-    
+
+#### We'll create a swapfile instead of partition
+
 # Formatting and mounting
 
 ### Format partitions
-    mkfs.fat -F 32 /dev/sda1
-    mkswap /dev/sda2
-    swapon /dev/sda2
-    mkfs.ext4 /dev/sda3
-    mkfs.ext4 /dev/sda4
+    mkfs.fat -F 32 /dev/nvme0n1p1
+    mkfs.btrfs -f /dev/nvme0n1p2
+    mkfs.btrfs -f /dev/nvme0n1p3
 
 ### Mount the partitions
-    mount /dev/sda3 /mnt
-    mkdir /mnt/boot
-    mkdir /mnt/home
-    mount /dev/sda1 /mnt/boot
-    mount /dev/sda4 /mnt/home
+    mount /dev/nvme0n1p2 /mnt
+    btrfs su cr /mnt/@
+    btrfs su cr /mnt/@opt
+    btrfs su cr /mnt/@swap
+    btrfs su cr /mnt/@snapshots
+    btrfs su cr /mnt/@cache
+    btrfs su cr /mnt/@log
+    umount /mnt
+
+    mount /dev/nvme0n1p3 /mnt
+    btrfs su cr /mnt/@home
+    umount /mnt
+
+    # remove "space_cache" if on a VM without disk fully allocated
+    mount -o compress=zstd:3,space_cache,noatime,ssd,defaults,x-mount.mkdir,subvol=@ /dev/nvme0n1p2 /mnt
+    mkdir -p /mnt/{boot,swap,home,.snapshots,opt,var/{cache,log}}
+    mount -o compress=zstd:3,space_cache,noatime,ssd,defaults,x-mount.mkdir,subvol=@opt /dev/nvme0n1p2 /mnt/opt
+    mount -o compress=zstd:3,space_cache,noatime,ssd,defaults,x-mount.mkdir,subvol=@swap /dev/nvme0n1p2 /mnt/swap
+    mount -o compress=zstd:3,space_cache,noatime,ssd,defaults,x-mount.mkdir,subvol=@snapshots /dev/nvme0n1p2 /mnt/.snapshots
+    mount -o compress=zstd:3,space_cache,noatime,ssd,defaults,x-mount.mkdir,subvol=@cache /dev/nvme0n1p2 /mnt/var/cache
+    mount -o compress=zstd:3,space_cache,noatime,ssd,defaults,x-mount.mkdir,subvol=@log /dev/nvme0n1p2 /mnt/var/log
+    mount -o compress=zstd:3,space_cache,noatime,ssd,defaults,x-mount.mkdir,subvol=@home /dev/nvme0n1p3 /mnt/home # nvme0n1p3 NOT p2
+    mount /dev/nvme0n1p1 /mnt/boot
 
 # Prep
-### Install base packages (add intel-ucode if you're using an intel CPU)
-    pacstrap -K /mnt base linux linux-firmware
+
+### Install current archlinux keyring and sync packages
+    pacman -Sy && pacman -S archlinux-keyring --noconfirm --needed && pacman -Syy
+
+### Install base packages (add intel-ucode if you're using an intel CPU or amd-ucode if using amd CPU or none if in a VM w/o passthrough)
+    pacstrap -K /mnt base base-devel btrfs-progs linux linux-firmware linux-headers linux-lts linux-lts-headers dkms neovim
 
 ### Populate fstab
-    genfstab -U -p /mnt >> /mnt/etc/fstab
+    genfstab -Up /mnt >> /mnt/etc/fstab
 
 ### chroot into mnt
     arch-chroot /mnt /bin/bash
 
-### Usually not required
+### Add btrfs and setfont to mkinitcpio's binaries
+    sed -i 's/BINARIES=()/BINARIES=(btrfs setfont)/g' /etc/mkinitcpio.conf
+
+#### Add "btrfs" before "filesystems": 
+#### HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap consolefont block encrypt filesystems fsck)
+
+### Update mkinitcpio
     mkinitcpio -P
 
+### Create swapfile (Change size to your liking)
+#### We'll turn it on later
+    btrfs filesystem mkswapfile --size 16G --uuid clear /swap/swapfile
+
 ### Install networking, dhcp, and other useful pkgs
-    pacman -S networkmanager dhcpcd nano git curl pacman-contrib bash-completion base-devel linux-headers linux-lts linux-lts-headers dkms neovim --noconfirm --needed
+    pacman -S networkmanager dhcpcd nvim git curl pacman-contrib bash-completion --noconfirm --needed
 
 ### Enable dhcp
     systemctl enable dhcpcd@enpXsX
@@ -94,10 +133,8 @@
 ### To check your network card use the following command
     ip link
 
-### Enable Network Manager service
+### Enable Services
     systemctl enable NetworkManager
-
-### If you're installing in an SSD, enable trim
     systemctl enable fstrim.timer
 
 # Bootloader
@@ -106,10 +143,10 @@
     mount -t efivarfs efivarfs /sys/firmware/efi/efivars/
 
 ### Install systemd-boot
-    bootctl --path=/boot install
+    bootctl install
 
 ### Configure systemd-boot
-    nano /boot/loader/loader.conf
+    nvim /boot/loader/loader.conf
 
 ###   Make sure it looks like below
 #### loader.conf
@@ -119,7 +156,7 @@
     editor no
 
 ### Create arch.conf
-    nano /boot/loader/entries/arch.conf
+    nvim /boot/loader/entries/arch.conf
 
 ### Make sure it looks like below
 #### arch.conf
@@ -129,7 +166,7 @@
     # initrd /intel-ucode.img # Add this line if you're using an intel CPU
 
 ### Create arch-lts.conf
-    nano /boot/loader/entries/archlts.conf
+    nvim /boot/loader/entries/arch-lts.conf
 
 ### Make sure it looks like below
 #### arch-lts.conf
@@ -139,8 +176,13 @@
     # initrd /intel-ucode.img # Add this line if you're using an intel CPU
 
 ### Add the PARTUUID to arch.conf aswell
-    printf "options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/sda3) rw" >> /boot/loader/entries/arch.conf
-    printf "options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/sda3) rw" >> /boot/loader/entries/arch-lts.conf
+    RPARTUUID="$(blkid -s PARTUUID -o value /dev/nvme0n1p2)"
+    printf "options root=PARTUUID=$RPARTUUID rootflags=subvol=@ rw" >> /boot/loader/entries/arch.conf
+    printf "options root=PARTUUID=$RPARTUUID rootflags=subvol=@ rw" >> /boot/loader/entries/arch-lts.conf
+
+### Check if it worked
+    cat /boot/loader/entries/arch-lts.conf
+    cat /boot/loader/entries/arch.conf
 
 # NVIDIA ONLY
 
@@ -148,7 +190,7 @@
     pacman -S nvidia-dkms libglvnd nvidia-utils opencl-nvidia lib32-libglvnd lib32-nvidia-utils lib32-opencl-nvidia nvidia-settings --noconfirm --needed
 
 ### Enable NVdia stuff, must be in that order
-    nano /etc/mkinitcpio.conf
+    nvim /etc/mkinitcpio.conf
 
 ### Uncomment MODULES=() and add nvidia nvidia_modeset nvidia_uvm nvidia_drm
 #### /etc/mkinitcpio.conf
@@ -157,7 +199,7 @@
     [...]
 
 ### Also make sure they're enabled at boot time
-    nano /boot/loader/entries/arch.conf
+    nvim /boot/loader/entries/arch.conf
 
 ### Add nvidia-drm.modeset=1 at the end of options root=PARTUUID....
 #### /boot/loader/entries/arch.conf
@@ -169,7 +211,7 @@
     mkdir /etc/pacman.d/hooks
 
 ### Add nvidia hook
-    nano /etc/pacman.d/hooks/nvidia.hook
+    nvim /etc/pacman.d/hooks/nvidia.hook
 
 
 ### Make sure it looks like below
@@ -186,10 +228,12 @@
     When=PostTransaction
     Exec=/usr/bin/mkinitcpio -P
 # End of NVIDIA ONLY
+
 # Update bootctl and check status
 
-### Update bootctl
-    bootctl --path/boot update
+### Update bootctl and enable auto-update service
+    bootctl update
+    systemctl enable systemd-boot-update.service
 
 ### Check bootctl status
     bootctl status
@@ -200,22 +244,26 @@
 # Locale
 ### Generate locale uncomment the locales you want
 #### You can press "/" and the name of the locale to search for it
-    nano /etc/locale.gen
+    # nvim /etc/locale.gen
+    sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
+    sed -i 's/#en_US ISO-8859-1/en_US ISO-8859-1/g' /etc/locale.gen
 
 ### Generate locale
     locale-gen
 
-### Set the system language
+### Set the system language and export it
     echo LANG=en_US.UTF-8 > /etc/locale.conf
-
-### Export it aswell
     export LANG=en_US.UTF-8
 
-### Set keyboard layout permanent (Not needed for US keyboard, change pt-latin9 to your layout)
+### Set keyboard layout permanent (optional)
     echo KEYMAP=pt-latin9 > /etc/vconsole.conf
+    export KEYMAP=pt-latin9
 
-# Set hostname (change MYHOSTNAME to your liking)
+# Set hostname and localhost (change MYHOSTNAME to your liking)
     echo MYHOSTNAME > /etc/hostname
+    echo "127.0.0.1 localhost" >> /etc/hosts
+    echo "::1       localhost" >> /etc/hosts
+    echo "127.0.1.1 MYHOSTNAME.localdomain MYHOSTNAME" >> /etc/hosts
 
 # Time
 ### Set you system time
@@ -232,21 +280,27 @@
     rankmirrors -n 20 /etc/pacman.d/mirrorlist.old > /etc/pacman.d/mirrorlist
 
 ### Change pacman.conf
-    nano /etc/pacman.conf
+    # nvim /etc/pacman.conf
+    sed -i "s/\#Color/Color\nILoveCandy/g" /etc/pacman.conf
+    sed -i 's/#[multilib]/[multilib]/g' /etc/pacman.conf
+    sed -i 's/#Include = /etc/pacman.d/mirrorlist/Include = /etc/pacman.d/mirrorlist/g' /etc/pacman.conf
+    echo '' >> /etc/pacman.conf
+    echo '[valveaur]' >> /etc/pacman.conf
+    echo 'SigLevel = Optional TrustedOnly' >> /etc/pacman.conf
+    echo 'Server = http://repo.steampowered.com/arch/valveaur' >> /etc/pacman.conf
 
 ###   Uncomment Multilib, add Valve repo to pacman.conf
 ###   Uncomment Color and add ILoveCandy if you want
 ####   pacman.conf
-    Color       # Colored terminal
-    ILoveCandy  # Pacman progressbar
-    [...]
-    [multilib]  # 32-bit support
-    SigLevel = PackageRequired
-    Include = /etc/pacman.d/mirrorlist
-    [...]
-    [valveaur]  # Valve AUR
-    SigLevel = Optional TrustedOnly
-    Server = http://repo.steampowered.com/arch/valveaur
+    # Color       # Colored terminal
+    # ILoveCandy  # Pacman progressbar
+    # [...]
+    # [multilib]  # 32-bit support
+    # Include = /etc/pacman.d/mirrorlist
+    # [...]
+    # [valveaur]  # Valve AUR
+    # SigLevel = Optional TrustedOnly
+    # Server = http://repo.steampowered.com/arch/valveaur
 
 ### Update pacman repo cache
     pacman -Syy
@@ -269,15 +323,15 @@
 ### Grant sudo privileges to wheel, remove the "#" before "%wheel"
 ### And defaults to using the root password to run sudo commands
 ### instead of users' password
-    EDITOR=nano visudo
+    EDITOR=nvim sudo -E visudo
 
 ### visudo
-    %wheel ALL=(ALL:ALL) ALL
-    [...]
-    Defaults insults # Replace "Sorry, try again." with humorous insults.
-    Defaults rootpw # Will require root password for sudo command
-    Defaults timestamp_type=global # All terminals "share the same timeout" for sudo password
-    #Defaults passwd_timeout=0 # I'm not your parent
+    # %wheel ALL=(ALL:ALL) ALL
+    # [...]
+    # Defaults insults # Replace "Sorry, try again." with humorous insults.
+    # Defaults rootpw # Will require root password for sudo command
+    # Defaults timestamp_type=global # All terminals "share the same timeout" for sudo password
+    # Defaults passwd_timeout=0 # I'm not your parent
 
 # Audio
 
@@ -288,21 +342,25 @@
 ### Instal Xorg, sddm and plasma
     pacman -S xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm --noconfirm --needed
 
-### Enable sddm service
-    systemctl enable sddm
+### Install terminal and other pkgs
+    pacman -S wezterm wezterm-shell-integration wezterm-terminfo cups openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip --noconfirm --needed
 
-### Install a terminal
-    pacman -S wezterm wezterm-shell-integration wezterm-terminfo --noconfirm --needed
+### Enable services
+    systemctl enable sddm
+    systemctl enable cups.service
+    systemctl enable avahi-daemon
+    systemctl enable sshd
+    systemctl enable firewalld
+    systemctl enable bluetooth
+    systemctl enable acpid
 
 # Local config
 
 ### Let's do some stuff in the user account, change USER to the one you created earlier
     sudo -u USER bash
 
-### Enable pipewire
+### Enable pipewire and pipewire-pulse
     systemctl --user enable pipewire
-
-### Enable pipewire-pulse
     systemctl --user enable pipewire-pulse
 
 ### Create config file of pulsemixer ($HOME/.config/pulsemixer.cfg)
@@ -333,6 +391,10 @@
 ### To check for available keymaps use
     localectl list-x11-keymap-layouts
 
+### Turn on swap
+    sudo swapon /swap/swapfile
+
 ### Reboot to apply changes
+    shutdown -r now
 
 # Done
