@@ -23,12 +23,16 @@ FFPATH="${SRCPATH}/aesthetic/ff"
 APPSPATH="${HOME}/.apps"
 
 if ! [[ -d "${APPSPATH}" ]]; then
+    echo
     printf "mkdir -p \"${APPSPATH}\""
+    echo
     mkdir -p "${APPSPATH}"
     sleep 1s
 fi
 if ! [[ -d "${APPSPATH}"/archs ]]; then
+    echo
     printf "mkdir -p \"${APPSPATH}\"/archs"
+    echo
     mkdir -p "${APPSPATH}"/archs
     sleep 1s
 fi
@@ -37,39 +41,53 @@ if ! [[ `pacman -Q | grep -i 'kvantum'` ]]; then
     sleep 1s
 fi
 if ! [[ -d "${HOME}"/.config/Kvantum ]]; then
+    echo
     printf "mkdir -p "${HOME}"/.config/Kvantum"
+    echo
     mkdir -p "${HOME}"/.config/Kvantum
     sleep 1s
 fi
 if ! [[ -d "${HOME}"/.config/gtk-3.0 ]]; then
+    echo
     printf "mkdir -p "${HOME}"/.config/gtk-3.0"
+    echo
     mkdir -p "${HOME}"/.config/gtk-3.0
     sleep 1s
 fi
 if ! [[ -d "${HOME}"/.config/gtk-4.0 ]]; then
+    echo
     printf "mkdir -p "${HOME}"/.config/gtk-4.0"
+    echo
     mkdir -p "${HOME}"/.config/gtk-4.0
     sleep 1s
 fi
 if ! [[ -d /usr/share/icons/Sweet-cursors ]] &&  \
      [[ -d "${HOME}"/.icons/Sweet-cursors ]]; then
-    printf "sudo ln -s "${HOME}"/.icons/Sweet-cursors /usr/share/icons"
-    sudo ln -s "${HOME}"/.icons/Sweet-cursors /usr/share/icons
+    echo
+    printf "sudo cp -r "${HOME}"/.icons/Sweet-cursors /usr/share/icons"
+    echo
+    sudo cp -r "${HOME}"/.icons/Sweet-cursors /usr/share/icons
     sleep 1s
 fi
 if [[ -f "${HOME}"/.gtkrc-2.0 ]]; then
+    echo
     printf "mv "${HOME}"/.gtkrc-2.0 "${HOME}"/.gtkrc-2.0.old"
+    echo
     mv "${HOME}"/.gtkrc-2.0 "${HOME}"/.gtkrc-2.0.old
     sleep 1s
 fi
 if ! [[ -f /etc/sddm.conf.d/avatars.conf ]]; then
+    echo
     printf "sudo touch /etc/sddm.conf.d/avatars.conf"
+    echo
     sudo touch /etc/sddm.conf.d/avatars.conf
     printf "[Theme]\nEnableAvatars=true\nDisableAvatarsThreshold=7" | sudo tee /etc/sddm.conf.d/avatars.conf
     sleep 1s
 fi
 if ! [[ -f /usr/share/sddm/scripts/Xsetup ]]; then
+    echo
     printf "sudo touch /usr/share/sddm/scripts/Xsetup"
+    echo
     sudo touch /usr/share/sddm/scripts/Xsetup
     printf "#!/bin/sh\n# Xsetup - run as root before the login dialog appears\n" | sudo tee /usr/share/sddm/scripts/Xsetup
     sleep 1s
@@ -85,7 +103,9 @@ sleep 1s
 sudo sed -i "/^Current=.*/a Font='Fira Code'" /etc/sddm.conf.d/kde_settings.conf
 sleep 1s
 
+echo
 echo 'Copying .gtkrc-2.0, gkt-3.0, gtk-4.0, Kvantum config files'
+echo
 cp "${FFPATH}"/.gtkrc-2.0 "${HOME}"/
 cp "${FFPATH}"/settings.ini "${HOME}"/.config/gtk-3.0
 cp "${FFPATH}"/settings.ini "${HOME}"/.config/gtk-4.0
@@ -93,23 +113,31 @@ cp -r "${FFPATH}"/Orchis-dark "${HOME}"/.config/Kvantum
 sleep 1s
 
 if [[ -f "${HOME}"/.bashrc ]]; then
+    echo
     echo 'Backing up .bashrc'
+    echo
     mv "${HOME}"/.bashrc "${HOME}"/.bashrc.old
     sleep 1s
 fi
 if [[ -f "${HOME}"/.bash_aliases ]]; then
+    echo
     echo 'Backing up .bash_aliases'
+    echo
     mv "${HOME}"/.bash_aliases "${HOME}"/.bash_aliases.old
     sleep 1s
 fi
 if [[ -f "${HOME}"/.xinitrc ]]; then
+    echo
     echo 'Backing up .xinitrc'
+    echo
     mv "${HOME}"/.xinitrc "${HOME}"/.xinitrc.old
     sleep 1s
 fi
 
+echo
 printf "Copying config files to a permanent place at: "
 printf "\"${APPSPATH}/archs\""
+echo
 cp -f "${SRCPATH}"/home/.bashrc "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/home/.bash_aliases "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/home/.wezterm.lua "${APPSPATH}"/archs
@@ -176,7 +204,6 @@ exit 0
 #echo "Cursors: Sweet-cursors (https://store.kde.org/p/1393084)"
 #echo
 #echo "Splash Screen: Simple Tux Splash (https://store.kde.org/p/1258784)"
-#echo "Splash Screen: Matrix (https://store.kde.org/p/1230011)"
 #echo
 #echo "Boot Splash Screen: TUX BOOT SPLASH (https://store.kde.org/p/1189328)"
 #echo

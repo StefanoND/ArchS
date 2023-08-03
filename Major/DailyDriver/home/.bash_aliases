@@ -43,18 +43,18 @@ alias bd='cd "$OLDPWD"'
 alias rmd='/bin/rm  --recursive --force --verbose '
 
 # Alias's for multiple directory listing commands
-alias la='lsd -Alh' # show hidden files
-alias ls='lsd -aFh --color=always' # add colors and file type extensions
-alias lx='lsd -lXh' # sort by extension
-alias lk='lsd -lSrh' # sort by size
-alias lc='lsd -ltrh --sort time' # sort by change time
-alias lr='lsd -lRh' # recursive ls
-alias lt='lsd -lrh --date date' # sort by date
-alias ll='lsd -FlS' # long listing format
-alias lff="lsd -l --group-dirs=first" # directories first
-alias ldl="lsd -l --group-dirs=last" # directories last
-alias lf="lsd -l | egrep -v '^d'" # files only
-alias ldir="lsd -l | egrep '^d'" # directories only
+alias la='ls -Alh' # show hidden files
+alias ls='ls -aFh --color=always' # add colors and file type extensions
+alias lx='ls -lXh' # sort by extension
+alias lk='ls -lSrh' # sort by size
+alias lc='ls -ltrh --sort time' # sort by change time
+alias lr='ls -lRh' # recursive ls
+alias lt='ls -lrh --date date' # sort by date
+alias ll='ls -FlS' # long listing format
+alias lff="ls -l --group-dirs=first" # directories first
+alias ldl="ls -l --group-dirs=last" # directories last
+alias lf="ls -l | egrep -v '^d'" # files only
+alias ldir="ls -l | egrep '^d'" # directories only
 
 # alias chmod commands
 alias mx='chmod a+x'
