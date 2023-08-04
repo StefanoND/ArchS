@@ -155,11 +155,11 @@ printf "default arch.conf\ntimeout 3\nconsole-mode max\neditor no\n" > /boot/loa
 printf "title Arch\nlinux /vmlinuz-linux\ninitrd /initramfs-linux.img\n" > /boot/loader/entries/arch.conf
 printf "title Arch (LTS)\nlinux /vmlinuz-linux-lts\ninitrd /initramfs-linux-lts.img\n" > /boot/loader/entries/arch-lts.conf
 
-if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
+if grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
     printf "initrd /amd-ucode.img\n" >> /boot/loader/entries/arch.conf
     printf "initrd /amd-ucode.img\n" >> /boot/loader/entries/arch-lts.conf
 fi
-if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
+if grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
     printf "initrd /intel-ucode.img\n" >> /boot/loader/entries/arch.conf
     printf "initrd /intel-ucode.img\n" >> /boot/loader/entries/arch-lts.conf
 fi
