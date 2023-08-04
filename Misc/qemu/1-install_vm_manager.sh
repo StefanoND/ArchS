@@ -182,6 +182,72 @@ elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
     sleep 1s
 fi
 
+GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
+sleep 1s
+
+grubgpu=""
+sleep 1s
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+    grubgpu=" nouveau.modeset=0"
+    sleep 1s
+elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd; then
+    grubgpu=" amdgpu.aspm=0"
+    sleep 1s
+fi
+
+if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
+    GRUB+=" amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1 kvm_amd.nested=1 kvm_amd.sev=1 kvm.ignore_msrs=1 kvm.report_ignored_msrs=0 video=vesafb:off,efifb:off,simplefb:off$grubgpu pcie_acs_override=downstream,multifunction systemd.unified_cgroup_hierarchy=0\""
+    sleep 1s
+elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
+    GRUB+=" intel_iommu=on iommu=pt kvm.ignore_msrs=1 kvm.report_ignored_msrs=0 video=vesafb:off,efifb:off,simplefb:off$grubgpu pcie_acs_override=downstream,multifunction systemd.unified_cgroup_hierarchy=0\""
+    sleep 1s
+fi
+
+sudo sed -ie "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|g" /etc/default/grub
+sleep 1s
+
+if ! grep "GRUB_TIMEOUT=" /etc/default/grub; then
+    printf "GRUB_TIMEOUT=3\n" | sudo tee -a /etc/default/grub
+    sleep 1s
+else
+    sudo sed -i "s|GRUB_TIMEOUT=.*|GRUB_TIMEOUT=3|g" /etc/default/grub
+    sleep 1s
+fi
+if ! grep "GRUB_HIDDEN_TIMEOUT=" /etc/default/grub; then
+    printf "GRUB_HIDDEN_TIMEOUT=3\n" | sudo tee -a /etc/default/grub
+    sleep 1s
+else
+    sudo sed -i "s|GRUB_HIDDEN_TIMEOUT=.*|GRUB_HIDDEN_TIMEOUT=3|g" /etc/default/grub
+    sleep 1s
+fi
+if ! grep "GRUB_RECORDFAIL_TIMEOUT=" /etc/default/grub; then
+    printf "GRUB_RECORDFAIL_TIMEOUT=3\n" | sudo tee -a /etc/default/grub
+    sleep 1s
+else
+    sudo sed -i "s|GRUB_RECORDFAIL_TIMEOUT=.*|GRUB_RECORDFAIL_TIMEOUT=3|g" /etc/default/grub
+    sleep 1s
+fi
+if ! grep "GRUB_TIMEOUT_STYLE=" /etc/default/grub; then
+    printf "GRUB_TIMEOUT_STYLE=menu\n" | sudo tee -a /etc/default/grub
+    sleep 1s
+else
+    sudo sed -i "s|GRUB_TIMEOUT_STYLE=.*|GRUB_TIMEOUT_STYLE=menu|g" /etc/default/grub
+    sleep 1s
+fi
+if ! grep "GRUB_SAVEDEFAULT=" /etc/default/grub; then
+    printf "GRUB_SAVEDEFAULT=false\n" | sudo tee -a /etc/default/grub
+    sleep 1s
+else
+    sudo sed -i "s|GRUB_SAVEDEFAULT=.*|GRUB_SAVEDEFAULT=false|g" /etc/default/grub
+    sleep 1s
+fi
+
+echo
+echo "Updating GRUB"
+echo
+sudo update-grub
+sleep 1s
+
 echo
 echo 'Syncing system'
 echo
