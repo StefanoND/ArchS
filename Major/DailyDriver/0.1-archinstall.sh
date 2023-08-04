@@ -37,7 +37,9 @@ done
 
 # Desktop Environment
 # Instal Xorg, sddm and plasma
-pacman -S networkmanager dhcpcd neovim git curl pacman-contrib bash-completion xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm wezterm wezterm-shell-integration wezterm-terminfo cups openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip pciutils reflector --noconfirm --needed
+pacman -S networkmanager dhcpcd neofetch dialog wpa_supplicant mtools dosfstools xdg-user-dirs xdg-utils nfs-utils inetutils bind rsync sof-firmware ipset nss-mdns os-prober terminus-font exa bat gparted filelight xclip brightnessctl xf86-video-amdgpu xf86-video-nouveau xf86-video-intel xf86-video-qxl neovim nano git curl pacman-contrib bash-completion xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm wezterm wezterm-shell-integration wezterm-terminfo cups openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip pciutils reflector --noconfirm --needed
+
+
 
 # Set you system time
 ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
@@ -61,12 +63,12 @@ pacman -Syy
 # Add btrfs and setfont to mkinitcpio's binaries
 sed -i 's/BINARIES=()/BINARIES=(btrfs setfont)/g' /etc/mkinitcpio.conf
 
-# Add "btrfs" before "filesystems":
-# HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap consolefont block encrypt filesystems fsck)
-sed -i 's/HOOKS=(.*/HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap consolefont block encrypt filesystems fsck)/g' /etc/mkinitcpio.conf
+# Add "btrfs" before "filesystems" and remove "fsck":
+# HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap consolefont block encrypt filesystems)
+sed -i 's/HOOKS=(.*/HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap consolefont block encrypt filesystems)/g' /etc/mkinitcpio.conf
 
-# Update mkinitcpio
-mkinitcpio -P
+# Compress initramfs image
+sed -i 's/#COMPRESSION="zstd"/COMPRESSION="zstd"/g' /etc/mkinitcpio.conf
 
 # Create swapfile (Change size to your liking)
 # We'll turn it on later
@@ -101,7 +103,8 @@ echo "127.0.1.1 $MYHOSTNAME.localdomain $MYHOSTNAME" >> /etc/hosts
 
 # Change pacman.conf
 sed -i "s/#Color/Color\nILoveCandy/g" /etc/pacman.conf
-sed -i "s/\#[multilib]/[multilib]\nInclude = \/etc\/pacman.d\/mirrorlist/g" /etc/pacman.conf
+sed -i 's/\#\[multilib\]/[multilib]/g' /etc/pacman.conf
+sed -i '/^\[multilib\]/a Include = \/etc\/pacman.d\/mirrorlist' /etc/pacman.conf
 echo '' >> /etc/pacman.conf
 echo '[valveaur]' >> /etc/pacman.conf
 echo 'SigLevel = Optional TrustedOnly' >> /etc/pacman.conf
@@ -147,7 +150,7 @@ systemctl enable acpid
 systemctl enable sddm
 
 # Install systemd-boot
-bootctl install
+bootctl --path=/boot install
 
 # Configure systemd-boot
 printf "default arch.conf\ntimeout 3\nconsole-mode max\neditor no\n" > /boot/loader/loader.conf
@@ -156,16 +159,18 @@ printf "title Arch\nlinux /vmlinuz-linux\ninitrd /initramfs-linux.img\n" > /boot
 printf "title Arch (LTS)\nlinux /vmlinuz-linux-lts\ninitrd /initramfs-linux-lts.img\n" > /boot/loader/entries/arch-lts.conf
 
 if grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
+    pacman -S amd-ucode --noconfirm
     printf "initrd /amd-ucode.img\n" >> /boot/loader/entries/arch.conf
     printf "initrd /amd-ucode.img\n" >> /boot/loader/entries/arch-lts.conf
 fi
 if grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
+    pacman -S intel-ucode --noconfirm
     printf "initrd /intel-ucode.img\n" >> /boot/loader/entries/arch.conf
     printf "initrd /intel-ucode.img\n" >> /boot/loader/entries/arch-lts.conf
 fi
 
-printf "options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw\n" >> /boot/loader/entries/arch.conf
-printf "options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw\n" >> /boot/loader/entries/arch-lts.conf
+printf "options root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw\n" >> /boot/loader/entries/arch.conf
+printf "options root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw\n" >> /boot/loader/entries/arch-lts.conf
 
 # NVIDIA ONLY
 if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
@@ -175,8 +180,8 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
     sed -i 's/#MODULES=()/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)/g' /etc/mkinitcpio.conf
 
     # Add nvidia-drm.modeset=1 at the end of options root=PARTUUID....
-    sed -i "s/options root=PARTUUID=.*/options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw nvidia-drm.modeset=1/g" /boot/loader/entries/arch.conf
-    sed -i "s/options root=PARTUUID=.*/options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw nvidia-drm.modeset=1/g" /boot/loader/entries/arch-lts.conf
+    sed -i "s/options root=UUID=.*/options root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw nvidia-drm.modeset=1/g" /boot/loader/entries/arch.conf
+    sed -i "s/options root=UUID=.*/options root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw nvidia-drm.modeset=1/g" /boot/loader/entries/arch-lts.conf
 
     # Make a hook for pacman so we can update and build the new drivers or we'll get blank screen on load
     # Create hooks folder
@@ -185,8 +190,12 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
     # Add nvidia hook
     printf "[Trigger]\nOperation=Install\nOperation=Upgrade\nOperation=Remove\nType=Package\nTarget=nvidia\n\n[Action]\nDepends=mkinitcpio\nWhen=PostTransaction\nExec=/usr/bin/mkinitcpio -P\n" > /etc/pacman.d/hooks/nvidia.hook
 fi
+
+# Update mkinitcpio
+mkinitcpio -P
+
 # Update bootctl and enable auto-update service
-bootctl update
+bootctl --path=/boot update
 systemctl enable systemd-boot-update.service
 
 # Visudo
