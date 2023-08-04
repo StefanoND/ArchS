@@ -107,12 +107,17 @@ fi
 # chroot into mnt
 arch-chroot /mnt ./ArchS/Major/DailyDriver/0.1-archinstall.sh
 
-# Remove ArchS from /mnt/
+# Remove ArchS from /mnt
 rm -rf /mnt/ArchS
+sleep 1s
+
+# Remove hasnvidia.gpu from /mnt
+rm /mnt/hasnvidia.gpu
 sleep 1s
 
 # Unmount all drives (-R will remove everything mounted to that path)
 umount -R /mnt
+sleep 1s
 
 # Reboot
 shutdown -r now
