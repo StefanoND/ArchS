@@ -215,6 +215,7 @@ usermod -aG wheel $USERNAME
 
 if ! [[ -d /home/$USERNAME/Documents ]]; then
     mkdir -p /home/$USERNAME/Documents
+    chown -R $USERNAME:$GROUPNAME /home/$USERNAME/Documents
 fi
 
 echo
