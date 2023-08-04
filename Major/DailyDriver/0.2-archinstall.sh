@@ -10,6 +10,7 @@ localectl set-x11-keymap $KBLOCALE
 
 # Turn on swap
 sudo swapon /swap/swapfile
+sleep 1s
 
 # Reboot to apply changes
 shutdown -r now

@@ -55,11 +55,13 @@ done
 
 # Sync time
 timedatectl set-ntp true
+sleep 1s
 
 # Format partitions
 mkfs.fat -F 32 /dev/$nvme0n1p1
 mkfs.btrfs -f /dev/$nvme0n1p2
 mkfs.btrfs -f /dev/$nvme0n1p3
+sleep 1s
 
 # Mount the partitions
 mount /dev/$nvme0n1p2 /mnt
@@ -69,10 +71,12 @@ btrfs su cr /mnt/@swap
 btrfs su cr /mnt/@snapshots
 btrfs su cr /mnt/@cache
 btrfs su cr /mnt/@log
+sleep 1s
 umount /mnt
 
 mount /dev/$nvme0n1p3 /mnt
 btrfs su cr /mnt/@home
+sleep 1s
 umount /mnt
 
 # remove "space_cache" if on a VM without disk fully allocated
@@ -89,23 +93,29 @@ mount /dev/$nvme0n1p1 /mnt/boot
 # Prep
 # Install current archlinux keyring and sync packages
 pacman -Sy && pacman -S archlinux-keyring --noconfirm --needed && pacman -Syy
+sleep 1s
 
 # Install base packages (add intel-ucode if you're using an intel CPU or amd-ucode if using amd CPU or none if in a VM w/o passthrough)
 pacstrap -K /mnt base base-devel btrfs-progs efibootmgr linux linux-firmware linux-headers linux-lts linux-lts-headers dkms neovim pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack wireplumber qpwgraph pulsemixer pciutils usbutils
+sleep 1s
 
 # Populate fstab
 genfstab -Up /mnt >> /mnt/etc/fstab
+sleep 1s
 
 # Copy current folder to /mnt
 cp -r ArchS /mnt/
+sleep 1s
 
 if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
     touch /mnt/hasnvidia.gpu
     echo 'y' > /mnt/hasnvidia.gpu
+    sleep 1s
 fi
 
 # chroot into mnt
 arch-chroot /mnt ./ArchS/Major/DailyDriver/0.1-archinstall.sh
+sleep 1s
 
 # Remove ArchS from /mnt
 rm -rf /mnt/ArchS

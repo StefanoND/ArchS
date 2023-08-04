@@ -38,6 +38,7 @@ done
 # Desktop Environment
 # Instal Xorg, sddm and plasma
 pacman -S networkmanager network-manager-applet dhcpcd neofetch dialog wpa_supplicant mtools dosfstools xdg-user-dirs xdg-utils nfs-utils inetutils bind rsync sof-firmware ipset nss-mdns os-prober terminus-font exa bat gparted filelight xclip brightnessctl xf86-video-amdgpu xf86-video-nouveau xf86-video-intel xf86-video-qxl neovim nano git curl pacman-contrib bash-completion xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm sddm-kcm kde-gtk-config wezterm wezterm-shell-integration wezterm-terminfo cups ntp openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip reflector --noconfirm --needed
+sleep 1s
 
 # Set you system time
 ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
@@ -57,6 +58,7 @@ systemctl enable reflector.timer
 
 # Update pacman repo cache
 pacman -Syy
+sleep 1s
 
 # Add btrfs and setfont to mkinitcpio's binaries
 sed -i 's/BINARIES=()/BINARIES=(btrfs setfont)/g' /etc/mkinitcpio.conf
@@ -71,6 +73,7 @@ sed -i 's/#COMPRESSION="zstd"/COMPRESSION="zstd"/g' /etc/mkinitcpio.conf
 # Create swapfile (Change size to your liking)
 # We'll turn it on later
 btrfs filesystem mkswapfile --size $SWAPSIZE --uuid clear /swap/swapfile
+sleep 1s
 
 # Create root password
 echo
@@ -81,16 +84,20 @@ passwd
 # Locale
 sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
 sed -i 's/#en_US ISO-8859-1/en_US ISO-8859-1/g' /etc/locale.gen
+sleep 1s
 
 # Generate locale
 locale-gen
+sleep 1s
 
 # Set the system language and export it
 echo LANG=en_US.UTF-8 > /etc/locale.conf
+sleep 1s
 export LANG=en_US.UTF-8
 
 # Set keyboard layout permanent (optional)
 echo KEYMAP=pt-latin1 > /etc/vconsole.conf
+sleep 1s
 export KEYMAP=pt-latin1
 
 # Set hostname and localhost (change MYHOSTNAME to your liking at the top of this script)
@@ -98,6 +105,7 @@ echo $MYHOSTNAME > /etc/hostname
 echo "127.0.0.1 localhost" >> /etc/hosts
 echo "::1       localhost" >> /etc/hosts
 echo "127.0.1.1 $MYHOSTNAME.localdomain $MYHOSTNAME" >> /etc/hosts
+sleep 1s
 
 # Change pacman.conf
 sed -i "s/#Color/Color\nILoveCandy/g" /etc/pacman.conf
@@ -108,22 +116,27 @@ echo '[valveaur]' >> /etc/pacman.conf
 echo 'SigLevel = Optional TrustedOnly' >> /etc/pacman.conf
 echo 'Server = http://repo.steampowered.com/arch/valveaur' >> /etc/pacman.conf
 echo '' >> /etc/pacman.conf
+sleep 1s
 
 # Update pacman repo cache
 pacman -Syy
+sleep 1s
 
 # Create a new group, rename GROUPNAME to your liking at the top of this script
 groupadd $GROUPNAME
+sleep 1s
 
 # Creates new user, makes 'GROUPNAME' primary group and creates sys,...,storage groups
 # Rename USERNAME to your liking at the top of this script
 useradd -m -g $GROUPNAME -G sys,lp,kvm,network,power,storage -s /bin/bash $USERNAME
+sleep 1s
 
 # Let's do some stuff in the user account before adding password
 sudo -u $USERNAME bash -c 'systemctl --user enable pipewire'
 sudo -u $USERNAME bash -c 'systemctl --user enable pipewire-pulse'
 sudo -u $USERNAME bash -c 'pulsemixer --create-config'
 sudo -u $USERNAME bash -c 'kwriteconfig5 --file kdesurc --group super-user-command --key super-user-command sudo'
+sleep 1s
 
 # Give a password to it, rename USER to the one you set above
 echo
@@ -134,6 +147,7 @@ passwd $USERNAME
 # Bootloader
 # Make sure we have our efivars for installing the bootloader
 mount -t efivarfs efivarfs /sys/firmware/efi/efivars/
+sleep 1s
 
 # Enable services
 systemctl enable dhcpcd@$enp0s0
@@ -149,25 +163,30 @@ systemctl enable ntpd
 systemctl enable sddm
 systemctl enable systemd-timesyncd.service
 systemctl start systemd-timesyncd.service
+sleep 1s
 
 # Install systemd-boot
 bootctl --path=/boot install
+sleep 1s
 
 # Configure systemd-boot
 printf "default arch.conf\ntimeout 3\nconsole-mode max\neditor no\n" > /boot/loader/loader.conf
 
 printf "title Arch\nlinux /vmlinuz-linux\ninitrd /initramfs-linux.img\n" > /boot/loader/entries/arch.conf
 printf "title Arch (LTS)\nlinux /vmlinuz-linux-lts\ninitrd /initramfs-linux-lts.img\n" > /boot/loader/entries/arch-lts.conf
+sleep 1s
 
 if grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
     pacman -S amd-ucode --noconfirm
     printf "initrd /amd-ucode.img\n" >> /boot/loader/entries/arch.conf
     printf "initrd /amd-ucode.img\n" >> /boot/loader/entries/arch-lts.conf
+    sleep 1s
 fi
 if grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
     pacman -S intel-ucode --noconfirm
     printf "initrd /intel-ucode.img\n" >> /boot/loader/entries/arch.conf
     printf "initrd /intel-ucode.img\n" >> /boot/loader/entries/arch-lts.conf
+    sleep 1s
 fi
 
 printf "options root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw\n" >> /boot/loader/entries/arch.conf
@@ -176,9 +195,11 @@ printf "options root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=su
 # NVIDIA ONLY
 if [[ -f /hasnvidia.gpu ]]; then
     pacman -S nvidia-dkms libglvnd nvidia-utils opencl-nvidia lib32-libglvnd lib32-nvidia-utils lib32-opencl-nvidia nvidia-settings --noconfirm --needed
+    sleep 1s
 
     # Enable NVdia modules, must be in that order
     sed -i 's/#MODULES=()/MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)/g' /etc/mkinitcpio.conf
+    sleep 1s
 
     # Add nvidia-drm.modeset=1 at the end of options root=PARTUUID....
     sed -i "s/options root=UUID=.*/options root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw nvidia-drm.modeset=1/g" /boot/loader/entries/arch.conf
@@ -187,13 +208,16 @@ if [[ -f /hasnvidia.gpu ]]; then
     # Make a hook for pacman so we can update and build the new drivers or we'll get blank screen on load
     # Create hooks folder
     mkdir -p /etc/pacman.d/hooks
+    sleep 1s
 
     # Add nvidia hook
     printf "[Trigger]\nOperation=Install\nOperation=Upgrade\nOperation=Remove\nType=Package\nTarget=nvidia\n\n[Action]\nDepends=mkinitcpio\nWhen=PostTransaction\nExec=/usr/bin/mkinitcpio -P\n" > /etc/pacman.d/hooks/nvidia.hook
+    sleep 1s
 fi
 
 # Update mkinitcpio
 mkinitcpio -P
+sleep 1s
 
 # Update bootctl and enable auto-update service
 bootctl --path=/boot update
@@ -209,12 +233,15 @@ echo 'Defaults timestamp_type=global'
 echo 'Defaults passwd_timeout=0'
 read -p "Open sudoers now?" c
 EDITOR=nvim sudo -E visudo
+sleep 1s
 
 # Appending group "Wheel" to $USERNAME
 usermod -aG wheel $USERNAME
+sleep 1s
 
 if ! [[ -d /home/$USERNAME/Documents ]]; then
     mkdir -p /home/$USERNAME/Documents
+    sleep 1s
     chown -R $USERNAME:$GROUPNAME /home/$USERNAME/Documents
 fi
 
