@@ -37,7 +37,7 @@ done
 
 # Desktop Environment
 # Instal Xorg, sddm and plasma
-pacman -S networkmanager network-manager-applet dhcpcd neofetch dialog wpa_supplicant mtools dosfstools xdg-user-dirs xdg-utils nfs-utils inetutils bind rsync sof-firmware ipset nss-mdns os-prober terminus-font exa bat gparted filelight xclip brightnessctl xf86-video-amdgpu xf86-video-nouveau xf86-video-intel xf86-video-qxl neovim nano git curl pacman-contrib bash-completion xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm wezterm wezterm-shell-integration wezterm-terminfo cups ntp openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip reflector --noconfirm --needed
+pacman -S networkmanager network-manager-applet dhcpcd neofetch dialog wpa_supplicant mtools dosfstools xdg-user-dirs xdg-utils nfs-utils inetutils bind rsync sof-firmware ipset nss-mdns os-prober terminus-font exa bat gparted filelight xclip brightnessctl xf86-video-amdgpu xf86-video-nouveau xf86-video-intel xf86-video-qxl neovim nano git curl pacman-contrib bash-completion xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm sddm-kcm kde-gtk-config wezterm wezterm-shell-integration wezterm-terminfo cups ntp openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip reflector --noconfirm --needed
 
 # Set you system time
 ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime

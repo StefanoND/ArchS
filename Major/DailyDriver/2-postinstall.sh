@@ -228,6 +228,8 @@ PKGS=(
     'power-profiles-daemon'
     'xdg-desktop-portal-gtk'
     'xsettingsd'
+    'kwalletmanager'
+    'print-manager'
 
     # i3
     'i3blocks'
@@ -310,6 +312,10 @@ PKGA=(
     'zram-generator'
     'timeshift-bin'
     'preload'
+    'systemd-kcm'
+    'kcm-polkit-kde-git'
+    'kcm-uefi'
+    'garuda-settings-manager-kcm-git'
     'autojump'
     'i3-gaps-rounded-git'
     'spicetify-cli'
