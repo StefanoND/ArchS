@@ -346,6 +346,7 @@ if ! [[ -d "${HOME}"/.config/nix ]]; then
     printf "mkdir -p \"${HOME}/.config/nix\""
     echo
     mkdir -p "${HOME}"/.config/nix
+    sleep 1s
 fi
 
 if ! [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
@@ -353,6 +354,7 @@ if ! [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
     printf "touch \"${HOME}/.config/nix/nix.conf\""
     echo
     touch "${HOME}"/.config/nix/nix.conf
+    sleep 1s
 fi
 
 echo 'experimental-features = nix-command flakes' > "${HOME}"/.config/nix/nix.conf
@@ -363,6 +365,7 @@ if ! [[ -d "${HOME}"/.config/nixpkgs ]]; then
     printf "mkdir -p \"${HOME}/.config/nixpkgs\""
     echo
     mkdir -p "${HOME}"/.config/nixpkgs
+    sleep 1s
 fi
 
 if ! [[ -f "${HOME}"/.config/nixpkgs/config.nix ]]; then
@@ -370,6 +373,7 @@ if ! [[ -f "${HOME}"/.config/nixpkgs/config.nix ]]; then
     printf "touch \"${HOME}/.config/nixpkgs/config.nix\""
     echo
     touch "${HOME}"/.config/nixpkgs/config.nix
+    sleep 1s
 fi
 
 printf "{\n  allowUnfree = true;\n  nix.settings.sandbox = true;\n  nix.settings.auto-optimise-store = true;\n}\n" > "${HOME}"/.config/nixpkgs/config.nix
@@ -377,57 +381,81 @@ sleep 1s
 
 if [[ -f /etc/systemd/zram-generator.conf ]]; then
     sudo mv /etc/systemd/zram-generator.conf /etc/systemd/zram-generator.conf.old
+    sleep 1s
 fi
 
 sudo touch /etc/systemd/zram-generator.conf
+sleep 1s
 sudo bash -c 'echo "[zram0]" >> /etc/systemd/zram-generator.conf'
+sleep 1s
 sudo bash -c 'echo "zram-size = ram / 2" >> /etc/systemd/zram-generator.conf'
+sleep 1s
 sudo systemctl daemon-reload
+sleep 1s
 sudo systemctl start /dev/zram0
+sleep 1s
 
 sudo mkdir -p /usr/local/bin/autojump
+sleep 1s
 sudo ln -s /etc/profile.d/autojump.sh /usr/share/autojump/autojump.sh
+sleep 1s
 sudo chmod +x /usr/share/autojump/autojump.sh
+sleep 1s
 
 if [[ -f "${HOME}"/.config/starship.toml ]]; then
     mv "${HOME}"/.config/starship.toml "${HOME}"/.config/starship.toml.old
+    sleep 1s
 fi
 if ! [[ -d "${HOME}"/Pictures/Wallpapers ]]; then
     mkdir -p "${HOME}"/Pictures/Wallpapers
+    sleep 1s
 fi
 if ! [[ -d "${HOME}"/.config/i3 ]]; then
     mkdir -p "${HOME}"/.config/i3
+    sleep 1s
 fi
 if ! [[ -d "${HOME}"/.config/i3blocks ]]; then
     mkdir -p "${HOME}"/.config/i3blocks
+    sleep 1s
 fi
 
 ln -svf "${SRCPATH}"/home/starship.toml "${HOME}"/.config/starship.toml
+sleep 1s
 
 cp "${SRCPATH}"/wallpapers/* "${HOME}"/Pictures/Wallpapers
+sleep 1s
 
 cd ${APPSPATH}
 echo
 echo "Downloading config files for i3, dunst, picom, ranger and rofi"
 echo
 git clone https://github.com/krstfz/i3wm.git && cd i3wm/i3wm/config
+sleep 1s
 
 sed -i 's/Papirus-Dark\/16x16/Tela-circle-dark\/16/g' dunst/dunstrc
+sleep 1s
 cp -r dunst "${HOME}"/.config/
 
 cp -r i3blocks "${HOME}"/.config/
 
 sed -i 's/fade-in-step = 0.045;/fade-in-step = 0.028;/g' picom/picom.conf
+sleep 1s
 sed -i 's/fade-out-step = 0.05;/fade-out-step = 0.03;/g' picom/picom.conf
+sleep 1s
 cp picom/picom.conf "${HOME}"/.config/
 
 sed -i 's/set preview_images false/set preview_images true/g' "${HOME}"/.config/ranger/rc.conf
+sleep 1s
 sed -i 's/set draw_borders none/set draw_borders true/g' "${HOME}"/.config/ranger/rc.conf
 
 sed -i 's/icon-theme: "Papirus";/icon-theme: "Tela-circle-dark";/g' rofi/config.rasi
+sleep 1s
 sed -i 's/terminal: "kitty";/terminal: "wezterm";/g' rofi/config.rasi
+sleep 1s
 sed -i 's/.*catppuccin-macchiato.rasi.*//g' rofi/config.rasi
+sleep 1s
 printf "@theme \"${HOME}/.config/rofi/themes/catppuccin-macchiato.rasi\"\n" >> rofi/config.rasi
+sleep 1s
 
 cp -r rofi "${HOME}"/.config/
 cp -r spicetify "${HOME}"/.config/
@@ -436,13 +464,16 @@ cp "${SRCPATH}"/i3/config "${HOME}"/.config/i3
 
 if ! [[ -f /usr/share/xsessions/plasma-i3.desktop ]]; then
     sudo touch /usr/share/xsessions/plasma-i3.desktop
+    sleep 1s
 fi
 
 printf "[Desktop Entry]\nType=XSession\nExec=env KDEWM=/usr/bin/i3 /usr/bin/startplasma-x11\nDesktopNames=KDE\nName=Plasma with i3\nComment=Plasma with i3\n" | sudo tee /usr/share/xsessions/plasma-i3.desktop
 sleep 1s
 
-mkdir bleh && cd bleh
+cd "${APPSPATH}"
+#mkdir -p "${APPSPATH}"/bleh && cd ${APPSPATH}/bleh
 git clone --recursive https://github.com/akinomyoga/ble.sh.git
+sleep 1s
 make -C ble.sh
 sleep 1s
 
@@ -453,6 +484,7 @@ echo
 echo "Disabling systemd startup"
 echo
 kwriteconfig5 --file startkderc --group General --key systemdBoot false
+sleep 1s
 
 echo
 echo "Disabling Show Activity Switcher's Meta+Q shortcut"
@@ -474,8 +506,11 @@ echo
 echo "Setting CPU governor to Performance and setting min and max freq"
 echo
 sudo cpupower frequency-set -d 3.7GHz -u 4.2GHz -g performance
+sleep 1s
 sudo sed -i "s|#governor=.*|governor=performance|g" /etc/default/cpupower
+sleep 1s
 sudo sed -i "s|#min_freq=.*|min_freq=3.7GHz|g" /etc/default/cpupower
+sleep 1s
 sudo sed -i "s|#max_freq=.*|max_freq=4.2GHz|g" /etc/default/cpupower
 sleep 1s
 echo
@@ -485,14 +520,12 @@ sudo update-rc.d ondemand disable
 sudo systemctl disable ondemand
 sudo systemctl mask power-profiles-daemon.service
 sudo systemctl enable --now cpupower.service
-
 sleep 1s
 
 echo
 echo "Enabling gnome-keyring service"
 echo
 systemctl --user enable --now gnome-keyring-daemon.service
-
 sleep 1s
 
 if [[ `pacman -Q | grep -i 'virtualbox-host-dkms'` ]] && [[ ${enablevb,,} = y ]]; then
@@ -500,13 +533,15 @@ if [[ `pacman -Q | grep -i 'virtualbox-host-dkms'` ]] && [[ ${enablevb,,} = y ]]
     echo "Modprobing vboxdrv, vboxnetadp and vboxnetflt"
     echo
     sudo usermod -aG vboxusers $(logname)
-    modprobe -a vboxdrv vboxnetadp vboxnetflt
+    sleep 1s
+    sudo modprobe -a vboxdrv vboxnetadp vboxnetflt
     sleep 1s
 
     echo
     echo "Enabling VirtualBox and web services"
     echo
     sudo systemctl enable vboxservice.service
+    sleep 1s
     sudo systemctl enable vboxweb.service
     sleep 1s
 fi
@@ -515,6 +550,7 @@ echo
 echo "Set make to be multi-threaded by default"
 echo
 sudo sed -i "s|\#MAKEFLAGS=.*|MAKEFLAGS=\"-j$(expr $(nproc) \+ 1)\"|g" /etc/makepkg.conf
+sleep 1s
 sudo sed -i "s|COMPRESSXZ=.*|COMPRESSXZ=(xz -c -T $(expr $(nproc) \+ 1) -z -)|g" /etc/makepkg.conf
 sleep 1s
 
@@ -528,6 +564,7 @@ echo
 echo "Decreasing swappiness"
 echo
 sudo sysctl -w vm.swappiness=10
+sleep 1s
 sudo bash -c 'echo "vm.swappiness = 10" > /etc/sysctl.d/99-swappiness.conf'
 
 if ! [[ -f "${HOME}"/.local/share/konsole ]]; then

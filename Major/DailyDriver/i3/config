@@ -202,9 +202,9 @@ bar {
                  separator $rosewater
 
         ###                border  bg      text
-        focused_workspace  $blue   $blue   $text
+        focused_workspace  $pink   $base   $text
         #active_workspace  $yellow $yellow $text
-        inactive_workspace $mmauve $base   $text
+        inactive_workspace $mauve  $base   $text
         urgent_workspace   $peach  $base   $peach
         }
 }
