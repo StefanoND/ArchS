@@ -209,16 +209,23 @@ echo 'Defaults passwd_timeout=0'
 read -p "Open sudoers now?" c
 EDITOR=nvim sudo -E visudo
 
+# Appending group "Wheel" to $USERNAME
 usermod -aG wheel $USERNAME
 
-echo 'Done'
+if ! [[ -d /home/$USERNAME/Documents ]]; then
+    mkdir -p /home/$USERNAME/Documents
+fi
+
 echo
-echo 'Exit chroot'
-echo 'exit'
+printf "Copying /ArchS to /home/$USERNAME/Documents/"
 echo
-echo 'Unmount everything'
-echo 'umount -R /mnt'
+cp -r /ArchS /home/$USERNAME/Documents/
+sleep 1s
+
 echo
-echo 'Reboot'
-echo 'shutdown -r now'
+printf "Giving ownership of \"/home/$USERNAME/Documents/ArchS\" to User: $USERNAME Group: $GROUPNAME"
+echo
+chown -R $USERNAME:$GROUPNAME /home/$USERNAME/Documents/ArchS
+sleep 1s
+
 exit

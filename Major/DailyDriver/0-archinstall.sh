@@ -102,6 +102,10 @@ cp -r ArchS /mnt/
 # chroot into mnt
 arch-chroot /mnt ./ArchS/Major/DailyDriver/0.1-archinstall.sh
 
+# Remove ArchS from /mnt/
+rm -rf /mnt/ArchS
+sleep 1s
+
 # Unmount all drives (-R will remove everything mounted to that path)
 umount -R /mnt
 
