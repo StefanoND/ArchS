@@ -37,9 +37,7 @@ done
 
 # Desktop Environment
 # Instal Xorg, sddm and plasma
-pacman -S networkmanager dhcpcd neofetch dialog wpa_supplicant mtools dosfstools xdg-user-dirs xdg-utils nfs-utils inetutils bind rsync sof-firmware ipset nss-mdns os-prober terminus-font exa bat gparted filelight xclip brightnessctl xf86-video-amdgpu xf86-video-nouveau xf86-video-intel xf86-video-qxl neovim nano git curl pacman-contrib bash-completion xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm wezterm wezterm-shell-integration wezterm-terminfo cups openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip pciutils reflector --noconfirm --needed
-
-
+pacman -S networkmanager dhcpcd neofetch dialog wpa_supplicant mtools dosfstools xdg-user-dirs xdg-utils nfs-utils inetutils bind rsync sof-firmware ipset nss-mdns os-prober terminus-font exa bat gparted filelight xclip brightnessctl xf86-video-amdgpu xf86-video-nouveau xf86-video-intel xf86-video-qxl neovim nano git curl pacman-contrib bash-completion xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm wezterm wezterm-shell-integration wezterm-terminfo cups openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip reflector --noconfirm --needed
 
 # Set you system time
 ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
@@ -173,7 +171,7 @@ printf "options root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=su
 printf "options root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw\n" >> /boot/loader/entries/arch-lts.conf
 
 # NVIDIA ONLY
-if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+if [[ -f /hasnvidia.gpu ]]; then
     pacman -S nvidia-dkms libglvnd nvidia-utils opencl-nvidia lib32-libglvnd lib32-nvidia-utils lib32-opencl-nvidia nvidia-settings --noconfirm --needed
 
     # Enable NVdia modules, must be in that order

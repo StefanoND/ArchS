@@ -91,13 +91,18 @@ mount /dev/$nvme0n1p1 /mnt/boot
 pacman -Sy && pacman -S archlinux-keyring --noconfirm --needed && pacman -Syy
 
 # Install base packages (add intel-ucode if you're using an intel CPU or amd-ucode if using amd CPU or none if in a VM w/o passthrough)
-pacstrap -K /mnt base base-devel btrfs-progs efibootmgr linux linux-firmware linux-headers linux-lts linux-lts-headers dkms neovim pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack wireplumber qpwgraph pulsemixer
+pacstrap -K /mnt base base-devel btrfs-progs efibootmgr linux linux-firmware linux-headers linux-lts linux-lts-headers dkms neovim pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack wireplumber qpwgraph pulsemixer pciutils usbutils
 
 # Populate fstab
 genfstab -Up /mnt >> /mnt/etc/fstab
 
 # Copy current folder to /mnt
 cp -r ArchS /mnt/
+
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+    touch /mnt/hasnvidia.gpu
+    echo 'y' > /mnt/hasnvidia.gpu
+fi
 
 # chroot into mnt
 arch-chroot /mnt ./ArchS/Major/DailyDriver/0.1-archinstall.sh
