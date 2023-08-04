@@ -40,8 +40,9 @@ linkn=0
 enablevb=n
 
 echo
-printf "Check \"${SRCPATH}/aesthetic/downloadstuff.sh\""
-printf "When you're done come back here."
+printf "If you haven't run 1-prep.sh yet, stop this script (CTRL + C) and run it first"
+echo
+printf "When you're done come back here. And press anykey"
 echo
 read ANYTING
 clear

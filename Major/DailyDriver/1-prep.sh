@@ -18,6 +18,16 @@ fi
 
 clear
 
+echo
+echo 'Make a change in sddm, you can change to something else and back to the default one'
+echo "Press any key when you're done"
+echo
+read ANYKEY
+echo
+sleep 1s
+
+clear
+
 SRCPATH="$(cd $(dirname $0) && pwd)"
 FFPATH="${SRCPATH}/aesthetic/ff"
 APPSPATH="${HOME}/.apps"
