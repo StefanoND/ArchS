@@ -113,6 +113,15 @@ sleep 1s
 sudo sed -i "/^Current=.*/a Font='Fira Code'" /etc/sddm.conf.d/kde_settings.conf
 sleep 1s
 
+sudo sed -i 's/Current=.*/Current=sugar-candy/g' /usr/lib/sddm/sddm.conf.d/default.conf
+sleep 1s
+sudo sed -i 's/CursorSize=.*/CursorSize=36/g' /usr/lib/sddm/sddm.conf.d/default.conf
+sleep 1s
+sudo sed -i 's/CursorTheme=.*/CursorTheme=Sweet-cursors/g' /usr/lib/sddm/sddm.conf.d/default.conf
+sleep 1s
+sudo sed -i "s/Font=.*/Font='Fira Code'/g" /usr/lib/sddm/sddm.conf.d/default.conf
+sleep 1s
+
 echo
 echo 'Copying .gtkrc-2.0, gkt-3.0, gtk-4.0, Kvantum config files'
 echo

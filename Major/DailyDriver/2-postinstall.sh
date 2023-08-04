@@ -412,7 +412,7 @@ echo "Downloading config files for i3, dunst, picom, ranger and rofi"
 echo
 git clone https://github.com/krstfz/i3wm.git && cd i3wm/i3wm/config
 
-sed -i 's/Papirus\-Dark/16x16/Tela-circle-dark/16/g' dunst/dunstrc
+sed -i 's/Papirus-Dark\/16x16/Tela-circle-dark\/16/g' dunst/dunstrc
 cp -r dunst "${HOME}"/.config/
 
 cp -r i3blocks "${HOME}"/.config/
@@ -527,7 +527,7 @@ sleep 1s
 echo
 echo "Decreasing swappiness"
 echo
-sysctl -w vm.swappiness=10
+sudo sysctl -w vm.swappiness=10
 sudo bash -c 'echo "vm.swappiness = 10" > /etc/sysctl.d/99-swappiness.conf'
 
 if ! [[ -f "${HOME}"/.local/share/konsole ]]; then
