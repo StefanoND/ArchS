@@ -170,7 +170,14 @@ ln -svf "${APPSPATH}"/archs/.wezterm.lua "${HOME}"/.wezterm.lua
 ln -svf "${APPSPATH}"/archs/.xinitrc "${HOME}"/.xinitrc
 sleep 1s
 
-# sudo ln -s "${FFPATH}"/Sweet-cursors /usr/share/icons
+sudo cp -r "${FFPATH}"/Sweet-cursors /usr/share/icons
+sleep 1s
+
+echo
+echo 'Syncing system'
+echo
+sync
+sleep 1s
 
 echo
 printf "Change all your fonts to Fira Code."

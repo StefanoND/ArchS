@@ -161,6 +161,8 @@ PKGS=(
     'extra-cmake-modules'
     'gnome-keyring'                             # Required by some apps for authentication
     'libgnome-keyring'                          # Required by some apps for authentication
+    'libasyncns'
+    'lib32-libasyncns'
 
     # Packet Manager
     'flatpak'                                   # Flatpak
@@ -233,8 +235,8 @@ PKGS=(
     'print-manager'
 
     # i3
+    'i3status'
     'i3blocks'
-    #'i3status'
     'rofi'
     'nitrogen'
     'wmctrl'
@@ -429,6 +431,9 @@ cd ${APPSPATH}
 echo
 echo "Downloading config files for i3, dunst, picom, ranger and rofi"
 echo
+git clone https://github.com/vivien/i3blocks-contrib.git
+mv i3blocks-contrib scripts
+cp -r scripts "${HOME}"/.config/i3blocks/
 git clone https://github.com/krstfz/i3wm.git && cd i3wm/i3wm/config
 sleep 1s
 
@@ -461,6 +466,7 @@ cp -r rofi "${HOME}"/.config/
 cp -r spicetify "${HOME}"/.config/
 
 cp "${SRCPATH}"/i3/config "${HOME}"/.config/i3
+cp -f "${SRCPATH}"/i3/configblocks "${HOME}"/.config/i3blocks/config
 
 if ! [[ -f /usr/share/xsessions/plasma-i3.desktop ]]; then
     sudo touch /usr/share/xsessions/plasma-i3.desktop
@@ -704,6 +710,12 @@ if ! [[ -f /etc/X11/xorg.conf.d/50-mouse-acceleration.conf ]]; then
     sudo touch /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
 fi
 printf "Section \"InputClass\"\n    Identifier \"My Mouse\"\n    Driver \"libinput\"\n    MatchIsPointer \"yes\"\n    Option \"AccelProfile\" \"-1\"\n    Option \"AccelerationScheme\" \"none\"\n    Option \"AccelSpeed\" \"-1\"\nEndSection" | sudo tee /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
+sleep 1s
+
+echo
+echo 'Syncing system'
+echo
+sync
 sleep 1s
 
 echo
