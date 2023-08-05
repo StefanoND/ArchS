@@ -121,10 +121,6 @@ sleep 1s
 rm -rf /mnt/ArchS
 sleep 1s
 
-# Remove hasnvidia.gpu from /mnt
-rm /mnt/hasnvidia.gpu
-sleep 1s
-
 # Unmount all drives (-R will remove everything mounted to that path)
 umount -R /mnt
 sleep 1s

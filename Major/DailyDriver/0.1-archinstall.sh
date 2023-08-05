@@ -15,7 +15,8 @@ lsblk
 while [[ ${VALIDPARTTWO,,} = n ]]; do
     read -p "Enter the name of the ROOT partition (eg. sda2, nvme0n1p2): " PARTTWO
     nvme0n1p2=$PARTTWO
-    if [[ `lsblk | grep -w $nvme0n1p2` ]]; then
+    if [[ `lsblk |
+    -w $nvme0n1p2` ]]; then
         VALIDPARTTWO=y
     else
         echo
@@ -255,6 +256,10 @@ echo
 printf "Giving ownership of \"/home/$USERNAME/Documents/ArchS\" to User: $USERNAME Group: $GROUPNAME"
 echo
 chown -R $USERNAME:$GROUPNAME /home/$USERNAME/Documents/ArchS
+sleep 1s
+
+# Remove hasnvidia.gpu from /mnt
+rm -f /hasnvidia.gpu
 sleep 1s
 
 exit
