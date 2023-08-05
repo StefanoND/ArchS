@@ -165,10 +165,6 @@ PKGS=(
     'lib32-libasyncns'
     'patch'
 
-    # Kernel
-    'linux419'
-    'linux419-headers'
-
     # Packet Manager
     'flatpak'                                   # Flatpak
     #'libpamac-flatpak-plugin'                   # Flathub plugin
@@ -240,7 +236,7 @@ PKGS=(
     'print-manager'
 
     # i3
-    'i3status'
+    #'i3status'
     'i3blocks'
     'rofi'
     'nitrogen'
@@ -317,13 +313,6 @@ sudo sed -i "s|#FileManager.*|FileManager = ranger|g" /etc/paru.conf
 sleep 1s
 
 PKGA=(
-    'mdevctl'
-    'lib32-nvidia-merged-utils'
-    'lib32-opencl-nvidia-merged'
-    'nvidia-merged-dkms'
-    'nvidia-merged-settings'
-    'nvidia-merged-utils'
-    'opencl-nvidia-merged'
     'zram-generator'
     'timeshift-bin'
     'preload'
