@@ -163,6 +163,11 @@ PKGS=(
     'libgnome-keyring'                          # Required by some apps for authentication
     'libasyncns'
     'lib32-libasyncns'
+    'patch'
+
+    # Kernel
+    'linux419'
+    'linux419-headers'
 
     # Packet Manager
     'flatpak'                                   # Flatpak
@@ -312,6 +317,13 @@ sudo sed -i "s|#FileManager.*|FileManager = ranger|g" /etc/paru.conf
 sleep 1s
 
 PKGA=(
+    'mdevctl'
+    'lib32-nvidia-merged-utils'
+    'lib32-opencl-nvidia-merged'
+    'nvidia-merged-dkms'
+    'nvidia-merged-settings'
+    'nvidia-merged-utils'
+    'opencl-nvidia-merged'
     'zram-generator'
     'timeshift-bin'
     'preload'
@@ -473,7 +485,7 @@ if ! [[ -f /usr/share/xsessions/plasma-i3.desktop ]]; then
     sleep 1s
 fi
 
-printf "[Desktop Entry]\nType=XSession\nExec=env KDEWM=/usr/bin/i3 /usr/bin/startplasma-x11\nDesktopNames=KDE\nName=Plasma with i3\nComment=Plasma with i3\n" | sudo tee /usr/share/xsessions/plasma-i3.desktop
+printf "[Desktop Entry]\nType=XSession\nExec=env KDEWM=/usr/bin/i3 /usr/bin/startplasma-x11\nDesktopNames=KDE\nName=Plasma with i3 (X11)\nComment=Plasma with i3 (X11)\n" | sudo tee /usr/share/xsessions/plasma-i3.desktop
 sleep 1s
 
 cd "${APPSPATH}"
@@ -551,6 +563,14 @@ if [[ `pacman -Q | grep -i 'virtualbox-host-dkms'` ]] && [[ ${enablevb,,} = y ]]
     sudo systemctl enable vboxweb.service
     sleep 1s
 fi
+
+echo
+echo 'Enabling NVidia vGPU services'
+echo
+sudo systemctl enable nvidia-vgpud.service
+sleep 1s
+sudo systemctl enable nvidia-vgpu-mgr.service
+sleep 1s
 
 echo
 echo "Set make to be multi-threaded by default"
