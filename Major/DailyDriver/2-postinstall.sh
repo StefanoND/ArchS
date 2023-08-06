@@ -214,12 +214,6 @@ PKGS=(
     'nftables'
     'swtpm'
 
-    # Virtualbox
-    #'virtualbox-host-dkms'
-    #'virtualbox'
-    #'virtualbox-ext-vnc'
-    #'virtualbox-guest-iso'
-
     # Extras
     'dolphin'
     'dolphin-plugins'
@@ -236,7 +230,6 @@ PKGS=(
     'print-manager'
 
     # i3
-    #'i3status'
     'i3blocks'
     'rofi'
     'nitrogen'
@@ -360,7 +353,7 @@ if ! [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
     sleep 1s
 fi
 
-echo 'experimental-features = nix-command flakes' > "${HOME}"/.config/nix/nix.conf
+echo 'experimental-features = nix-command flakes' >> "${HOME}"/.config/nix/nix.conf
 sleep 1s
 
 if ! [[ -d "${HOME}"/.config/nixpkgs ]]; then
@@ -380,7 +373,40 @@ if ! [[ -f "${HOME}"/.config/nixpkgs/config.nix ]]; then
 fi
 
 printf "{\n  allowUnfree = true;\n  nix.settings.sandbox = true;\n  nix.settings.auto-optimise-store = true;\n}\n" > "${HOME}"/.config/nixpkgs/config.nix
+
+if [[ -f "${HOME}"/.profile ]]; then
+    mv "${HOME}"/.profile "${HOME}"/.profile.old
+    sleep 1s
+fi
+
+touch "${HOME}"/.profile
 sleep 1s
+
+echo '#!/bin/sh' > "${HOME}"/.profile
+echo 'if [ -d $HOME/.nix-profile/etc/profile.d ]; then' >> "${HOME}"/.profile
+echo '  for i in $HOME/.nix-profile/etc/profile.d/*.sh; do' >> "${HOME}"/.profile
+echo '    if [ -r $i ]; then' >> "${HOME}"/.profile
+echo '      . $i' >> "${HOME}"/.profile
+echo '    fi' >> "${HOME}"/.profile
+echo '  done' >> "${HOME}"/.profile
+echo 'fi' >> "${HOME}"/.profile
+echo '' >> "${HOME}"/.profile
+sleep 1s
+
+#echo
+#echo "Upgrading nix environment"
+#echo
+#sudo nix-channel --update && sudo nix-env --install --attr nixpkgs.nix nixpkgs.cacert && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon
+#sleep 1s
+
+nix run home-manager/release-23.05 -- init --switch
+
+sed -i 's/, ... } :/, lib, ... } :/g' "${HOME}"/.config/home-manager/home.nix
+sed -i 's///g' "${HOME}"/.config/home-manager/home.nix
+sed -i '/^\  home.username.*/a \  nixpkgs.config.allowUnfree = true;' "${HOME}"/.config/home-manager/home.nix
+sed -i '/^\  home.username.*/a \  nix.settings.sandbox = true;' "${HOME}"/.config/home-manager/home.nix
+sed -i '/^\  home.username.*/a \  nix.settings.auto-optimise-store = true;' "${HOME}"/.config/home-manager/home.nix
+sed -i '/^\  home.username.*/a \  targets.genericLinux.enable = true;' "${HOME}"/.config/home-manager/home.nix
 
 if [[ -f /etc/systemd/zram-generator.conf ]]; then
     sudo mv /etc/systemd/zram-generator.conf /etc/systemd/zram-generator.conf.old
@@ -536,6 +562,23 @@ systemctl --user enable --now gnome-keyring-daemon.service
 sleep 1s
 
 if [[ `pacman -Q | grep -i 'virtualbox-host-dkms'` ]] && [[ ${enablevb,,} = y ]]; then
+    PKGVB=(
+        # Virtualbox
+        'virtualbox-host-dkms'
+        'virtualbox'
+        'virtualbox-ext-vnc'
+        'virtualbox-guest-iso'
+    )
+
+    for PKG in "${PKGVB[@]}"; do
+        echo
+        echo "INSTALLING: ${PKG}"
+        echo
+        sudo pacman -S "$PKG" --noconfirm --needed
+        echo
+        sleep 1s
+    done
+
     echo
     echo "Modprobing vboxdrv, vboxnetadp and vboxnetflt"
     echo

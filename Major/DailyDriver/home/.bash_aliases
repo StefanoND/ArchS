@@ -115,12 +115,18 @@ alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
 
 alias kssh="kitty +kitten ssh"
 
-# NIX - Alias to upgrade nix instead of manually running all these commmands
+# NIX
 
-alias upgradenix='sudo nix-channel --update && sudo nix-env --install --attr nixpkgs.nix nixpkgs.cacert && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon'
+# Alias to rebuild home-manager
+alias nixhmbuild='home-manager switch'
+
+# Alias to rebuild nix-env (Nix Package Manager)
+alias nixbuild='nix-env -iA nixpkgs.myPackages && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon'
+
+# Alias to upgrade nix instead of manually running all these commmands
+alias nixupgrade='sudo nix-channel --update && sudo nix-env --install --attr nixpkgs.nix nixpkgs.cacert && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon'
 
 # Restart Plasma, only works for KDE 5.10 or higher
-
 alias restartplasma='kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell &'
 
 #######################################################

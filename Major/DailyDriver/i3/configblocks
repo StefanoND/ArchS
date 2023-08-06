@@ -34,7 +34,7 @@ markup="pango"
 
 [memory]
 command=$SCRIPT_DIR/memory/memory
-label=󰍛
+label=󰍛 
 interval=15
 color=#f4dbd6
 #color=#7dc4e4
@@ -42,7 +42,7 @@ color=#f4dbd6
 [cpu_usage]
 command=$SCRIPT_DIR/cpu_usage/cpu_usage
 interval=5
-label=
+label= 
 #color=#8bd5ca
 #min_width=CPU: 100.00%
 #T_WARN=50
@@ -55,7 +55,7 @@ label=
 [jas]
 command=$SCRIPT_DIR/jas/jas
 color=#eed49f
-label=󰃟
+label=󰃟 
 markup="pango"
 interval=once
 signal=10
@@ -64,18 +64,18 @@ signal=10
 [baterkos]
 command=$SCRIPT_DIR/battery/battery
 interval=5
-label=
+label= 
 color=#b7bdf8
 
 #[battery]
 #command=$SCRIPT_DIR/battery/battery
-#label=󰁹
+#label=󰁹 
 #markup=pango
 #interval=once
 
 [volume]
 command=$SCRIPT_DIR/volume/volume
-label=󰕾
+label=󰕾 
 #label=VOL
 interval=5
 signal=10
@@ -84,7 +84,7 @@ color=#f5bde6
 markup=pango
 
 [spotify]
-label=
+label= 
 command=python3 $SCRIPT_DIR/spotify/spotify.py
 color=#c6a0f6
 interval=5
@@ -93,7 +93,7 @@ interval=5
 # This picks any player, with vlc as first, and spotify as last choice
 #command=$SCRIPT_DIR/mediaplayer/mediaplayer
 #instance=spotify
-#label=
+#label= 
 #color=#c6a0f6
 #interval=5
 #signal=10
@@ -101,7 +101,7 @@ interval=5
 # Date Time
 [time]
 command=date '+%H:%M:%S - %A - %d/%m/%y'
-label=󰃰
+label=󰃰 
 interval=1
 #color=#f4dbd6
 color=#cad3f5
