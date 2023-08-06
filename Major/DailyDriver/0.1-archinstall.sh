@@ -265,12 +265,6 @@ echo "Enabling autodefrag"
 echo
 sed -i 's/subvol=\/@/autodefrag,subvol=\/@/g' /etc/fstab
 
-echo
-echo "Enabling btrfs's automatic balance at 10% threshold"
-echo
-sudo bash -c "echo 10 > /sys/fs/btrfs/$(blkid -s UUID -o value /dev/$nvme0n1p2)/allocation/data/bg_reclaim_threshold"
-sudo bash -c "echo 10 > /sys/fs/btrfs/$(blkid -s UUID -o value /dev/$nvme0n1p3)/allocation/data/bg_reclaim_threshold"
-
 # Remove hasnvidia.gpu from /mnt
 rm -f /hasnvidia.gpu
 sleep 1s
