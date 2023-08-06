@@ -15,8 +15,7 @@ lsblk
 while [[ ${VALIDPARTTWO,,} = n ]]; do
     read -p "Enter the name of the ROOT partition (eg. sda2, nvme0n1p2): " PARTTWO
     nvme0n1p2=$PARTTWO
-    if [[ `lsblk |
-    -w $nvme0n1p2` ]]; then
+    if [[ `lsblk | grep -w $nvme0n1p2` ]]; then
         VALIDPARTTWO=y
     else
         echo
@@ -24,6 +23,7 @@ while [[ ${VALIDPARTTWO,,} = n ]]; do
         echo
     fi
 done
+
 while [[ ${VALIDNIC,,} = n ]]; do
     ip link
     read -p "Enter the name of the NIC you want to enable dhcp (eg. enp0s3): " enp0s0
