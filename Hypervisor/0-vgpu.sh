@@ -78,8 +78,12 @@ GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2
 grubgpu=""
 if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
     touch /etc/modprobe.d/blacklist-nvidia-nouveau.conf
-    echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf
-    echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+    echo 'blacklist nouveau' > /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+    echo 'blacklist lbm-nouveau' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+    echo 'options nouveau modeset=0' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+    echo 'alias nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+    echo 'alias lbm-nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+    echo 'options nouveau modeset=0' > /etc/modprobe.d/nouveau-kms.conf
     grubgpu=" nouveau.modeset=0"
     sleep 1s
 fi
@@ -138,11 +142,6 @@ else
     sed -i "s|GRUB_SAVEDEFAULT=.*|GRUB_SAVEDEFAULT=false|g" /etc/default/grub
     sleep 1s
 fi
-
-echo
-echo "Update initramfs"
-echo
-update-initramfs -u
 
 echo
 echo "Updating GRUB"
