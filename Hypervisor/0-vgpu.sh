@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+echo
+echo "TESTING STAGE, DON'T RUN THIS SCRIPT!"
+echo
+exit 0
+
 if ! [ $EUID -ne 0 ]; then
     echo
     echo "Don't run this script as root."

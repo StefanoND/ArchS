@@ -241,6 +241,31 @@ fi
 
 cpath=`pwd`
 
+grubgpu=""
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+    touch /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+    echo 'blacklist nouveau' > /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+    echo 'blacklist lbm-nouveau' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+    echo 'options nouveau modeset=0' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+    echo 'alias nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+    echo 'alias lbm-nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+    echo 'options nouveau modeset=0' > /etc/modprobe.d/nouveau-kms.conf
+
+    sed -i 's/\#cgroup_device_acl = \[/cgroup_device_acl = [/g' "$cpath"/Config/qemu.conf
+    sed -i 's/\#*.*"\/dev\/null", "\/dev\/full", "\/dev\/zero",/\    "\/dev\/null", "\/dev\/full", "\/dev\/zero",/g' "$cpath"/Config/qemu.conf
+    sed -i 's/\#*.*"\/dev\/random", "\/dev\/urandom",/\    "\/dev\/random", "\/dev\/urandom",/g' "$cpath"/Config/qemu.conf
+    sed -i 's/\#*.*"\/dev\/ptmx", "\/dev\/kvm"/\    "\/dev\/ptmx", "\/dev\/kvm",/g' "$cpath"/Config/qemu.conf
+    sed -i '/^.*"\/dev\/ptmx", "\/dev\/kvm",/a \     "\/dev\/nvidiactl", "\/dev/nvidia0", "\/dev\/nvidia-modeset", "\/dev\/dri\/renderD128"' "$cpath"/Config/qemu.conf
+    sed -i '/.*, "\/dev\/dri\/renderD128"/a ]' "$cpath"/Config/qemu.conf
+
+    grubgpu=" nouveau.modeset=0"
+    sleep 1s
+fi
+elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd; then
+    grubgpu=" amdgpu.aspm=0"
+    sleep 1s
+fi
+
 sleep 1s
 if grep -qF "user=\"USERNAME\"" "$cpath"/Config/qemu.conf; then
     echo
@@ -277,10 +302,12 @@ echo "Copying \""$cpath"/Config/qemu.conf\" to \"/etc/libvirt\""
 echo
 sudo cp "$cpath"/Config/qemu.conf /etc/libvirt
 sleep 1s
+
 echo
 echo "Restarting libvirt"
 echo
 sudo systemctl restart libvirtd
+sleep 1s
 
 echo
 echo "Configuring terminal profiles and setting Bash as default shell"
@@ -406,15 +433,6 @@ printf "Section \"InputClass\"\n    Identifier \"My Mouse\"\n    Driver \"libinp
 sleep 1s
 
 GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
-grubgpu=""
-if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
-    grubgpu=" nouveau.modeset=0"
-    sleep 1s
-fi
-elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd; then
-    grubgpu=" amdgpu.aspm=0"
-    sleep 1s
-fi
 
 if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
     GRUB+=" amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1 kvm_amd.nested=1 kvm_amd.sev=1 kvm.ignore_msrs=1 kvm.report_ignored_msrs=0 video=vesafb:off,efifb:off,simplefb:off$grubgpu pcie_acs_override=downstream,multifunction systemd.unified_cgroup_hierarchy=0\""
