@@ -163,6 +163,8 @@ systemctl enable acpid
 systemctl enable ntpd
 systemctl enable sddm
 systemctl enable systemd-timesyncd.service
+systemctl enable btrfs-scrub@-.timer
+systemctl enable btrfs-scrub@home.timer
 systemctl start systemd-timesyncd.service
 sleep 1s
 
@@ -257,6 +259,17 @@ printf "Giving ownership of \"/home/$USERNAME/Documents/ArchS\" to User: $USERNA
 echo
 chown -R $USERNAME:$GROUPNAME /home/$USERNAME/Documents/ArchS
 sleep 1s
+
+echo
+echo "Enabling autodefrag"
+echo
+sed -i 's/subvol=\/@/autodefrag,subvol=\/@/g' /etc/fstab
+
+echo
+echo "Enabling btrfs's automatic balance at 10% threshold"
+echo
+sudo bash -c "echo 10 > /sys/fs/btrfs/$(blkid -s UUID -o value /dev/$nvme0n1p2)/allocation/data/bg_reclaim_threshold"
+sudo bash -c "echo 10 > /sys/fs/btrfs/$(blkid -s UUID -o value /dev/$nvme0n1p3)/allocation/data/bg_reclaim_threshold"
 
 # Remove hasnvidia.gpu from /mnt
 rm -f /hasnvidia.gpu

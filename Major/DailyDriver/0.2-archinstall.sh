@@ -4,6 +4,10 @@
 # localectl list-x11-keymap-layouts
 
 KBLOCALE="pt"
+VALIDPARTTWO=n
+VALIDPARTTHREE=n
+nvme0n1p2=null
+nvme0n1p3=null
 
 # Set your keyboard layout on X11
 localectl set-x11-keymap $KBLOCALE
