@@ -50,7 +50,6 @@
 
 ### Clone this repo
     git clone https://github.com/StefanoND/ArchS.git
-    cd ArchS/Major/DailyDriver
 
 ### Start the script
-    ./0-archinstall.sh
+    ./ArchS/Major/DailyDriver/0-archinstall.sh
