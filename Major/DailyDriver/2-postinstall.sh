@@ -628,45 +628,6 @@ sudo sysctl -w vm.swappiness=10
 sleep 1s
 sudo bash -c 'echo "vm.swappiness = 10" > /etc/sysctl.d/99-swappiness.conf'
 
-if ! [[ -f "${HOME}"/.local/share/konsole ]]; then
-    echo
-    echo "Creating ${HOME}/.local/share/konsole folder"
-    echo
-    mkdir -p "${HOME}"/.local/share/konsole
-    sleep 1s
-fi
-
-echo
-echo "Configuring terminal profiles"
-echo
-touch "${HOME}/.local/share/konsole/$(logname).profile"
-sleep 1s
-
-printf "[Appearance]\nColorScheme=Breeze\n\n[General]\nCommand=/bin/bash\nName=$(logname)\nParent=FALLBACK/\n\n[Scrolling]\nHistoryMode=2\nScrollFullPage=1\n\n[Terminal Features]\nBlinkingCursorEnabled=true\n" | tee "${HOME}"/.local/share/konsole/$(logname).profile
-sleep 1s
-
-if ! [[ -f "${HOME}"/.config/konsolerc ]]; then
-    touch "${HOME}"/.config/konsolerc;
-    sleep 1s
-fi
-
-if grep -qF "DefaultProfile=" "${HOME}"/.config/konsolerc; then
-    sed -i "s|DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "${HOME}"/.config/konsolerc
-    sleep 1s
-elif ! grep -qF "DefaultProfile=" "${HOME}"/.config/konsolerc && ! grep -qF "[Desktop Entry]" "${HOME}"/.config/konsolerc; then
-    sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "${HOME}"/.config/konsolerc
-    sleep 1s
-fi
-
-
-if ! [[ -d "${HOME}"/.config/autostart ]]; then
-    echo
-    echo "Creating "${HOME}"/.config/autostart folder"
-    echo
-    mkdir -p "${HOME}"/.config/autostart
-    sleep 1s
-fi
-
 echo
 echo "Setting up fq_pie queue discipline for TCP congestion control"
 echo
