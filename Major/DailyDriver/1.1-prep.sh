@@ -34,26 +34,38 @@ if ! [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
     sleep 1s
 fi
 
+echo '' >> "${HOME}"/.config/nix/nix.conf
 echo 'experimental-features = nix-command flakes' >> "${HOME}"/.config/nix/nix.conf
+echo '' >> "${HOME}"/.config/nix/nix.conf
+echo 'sandbox = true' >> "${HOME}"/.config/nix/nix.conf
+echo 'auto-optimise-store = true' >> "${HOME}"/.config/nix/nix.conf
+echo '' >> "${HOME}"/.config/nix/nix.conf
 sleep 1s
 
-if ! [[ -d "${HOME}"/.config/nixpkgs ]]; then
-    echo
-    printf "mkdir -p \"${HOME}/.config/nixpkgs\""
-    echo
-    mkdir -p "${HOME}"/.config/nixpkgs
+sudo systemctl restart nix-daemon
+sleep 1s
+
+if ! [[ "${HOME}"/.local/state/home-manager/profiles ]]; then
+    mkdir -p "${HOME}"/.local/state/home-manager/profiles
+    sleep 1s
+fi
+if ! [[ /nix/var/nix/profiles/per-user/$(logname) ]]; then
+    sudo mkdir -p /nix/var/nix/profiles/per-user/$(logname)
     sleep 1s
 fi
 
-if ! [[ -f "${HOME}"/.config/nixpkgs/config.nix ]]; then
-    echo
-    printf "touch \"${HOME}/.config/nixpkgs/config.nix\""
-    echo
-    touch "${HOME}"/.config/nixpkgs/config.nix
-    sleep 1s
-fi
+nix run home-manager/release-23.05 -- init --switch
+sleep 1s
 
-printf "{\n  allowUnfree = true;\n  nix.settings.sandbox = true;\n  nix.settings.auto-optimise-store = true;\n}\n" > "${HOME}"/.config/nixpkgs/config.nix
+home-manager switch
+sleep 1s
+
+#sed -i 's/, ... } :/, lib, ... } :/g' "${HOME}"/.config/home-manager/home.nix
+#sed -i 's///g' "${HOME}"/.config/home-manager/home.nix
+sed -i 's/\  home.packages = \[/\  home.packages = with pkgs; [/g' "${HOME}"/.config/home-manager/home.nix
+sed -i '/^\  home.homeDirectory.*/a \  nixpkgs.config.allowUnfree = true;' "${HOME}"/.config/home-manager/home.nix
+sed -i '/^\  home.homeDirectory.*/a \  targets.genericLinux.enable = true;' "${HOME}"/.config/home-manager/home.nix
+sed -i '/^\  home.homeDirectory.*/a \ ' "${HOME}"/.config/home-manager/home.nix
 
 if [[ -f "${HOME}"/.profile ]]; then
     mv "${HOME}"/.profile "${HOME}"/.profile.old
@@ -77,15 +89,16 @@ sleep 1s
 
 chmod +x "${HOME}"/.profile
 
-if ! [[ "${HOME}"/.local/state/home-manager/profiles ]]; then
-    mkdir -p "${HOME}"/.local/state/home-manager/profiles
-fi
-if ! [[ "${HOME}"/Projects/$(logname) ]]; then
-    mkdir -p "${HOME}"/Projects/$(logname)
-fi
-if ! [[ /nix/var/nix/profiles/per-user/$(logname) ]]; then
-    sudo mkdir -p /nix/var/nix/profiles/per-user/$(logname)
-fi
+echo
+echo 'Restarting nix-daemon'
+echo
+sudo systemctl restart nix-daemon
+
+echo
+echo 'Creating new generation'
+echo
+home-manager switch
+sleep 1s
 
 echo
 echo 'Syncing system'

@@ -33,6 +33,147 @@ sleep 2s
 clear
 sleep 1s
 
+# Pacman
+PKGS=(
+    # Tools
+    'rustup'                                    # Rust toolchain
+    'mingw-w64'                                 # MinGW Cross-compiler pack (binutils, crt, gcc, headers and winpthreads)
+    'libconfig'                                 # C/C++ Configuration file library
+    'gdb'                                       # GNU Debugger
+    'lldb'                                      # High performance debugger
+    'clang'
+    'lib32-clang'
+    'llvm'
+    'llvm-libs'
+    'lib32-llvm'
+    'lib32-llvm-libs'
+    'make'
+    'cmake'
+    'extra-cmake-modules'
+    'gnome-keyring'                             # Required by some apps for authentication
+    'libgnome-keyring'                          # Required by some apps for authentication
+    'libasyncns'
+    'lib32-libasyncns'
+    'patch'
+
+    # Packet Manager
+    'flatpak'                                   # Flatpak
+    #'libpamac-flatpak-plugin'                   # Flathub plugin
+
+    # Fonts
+    'ttf-fira-code'                             # My personal favorite font for programming
+    'noto-fonts-extra'                          # Additional variants of noto fonts
+    'noto-fonts-cjk'                            # Chinese Japanese Korean (CJK) characters support
+    'noto-fonts-emoji'                          # Support for emojis
+    'gnu-free-fonts'                            # Free family of scalable outline fonts
+    'powerline-fonts'                           # Patched fonts for powerline Powerlevel10k
+    'ttf-nerd-fonts-symbols'                    #
+    'ttf-nerd-fonts-symbols-common'             #
+    'ttf-nerd-fonts-symbols-mono'               #
+    'ttf-ubuntu-font-family'                    # Ubuntu font
+    'ttf-jetbrains-mono'                        # Jetbrains' monospace
+
+    # Compression utilities
+    'tar'
+    'gzip'
+    'bzip3'
+    'unzip'
+    'p7zip'
+    'unrar'
+    'zip'
+
+    # Misc
+    'cpupower'                                  # CPU tuning utility
+    'ranger'                                    # File manager
+    'python-pyqt5'                              #
+    'ntfs-3g'                                   # NTFS support
+    'starship'
+    'htop'
+
+    # QEMU
+    'qemu-desktop'
+    'libvirt'
+    'virt-manager'
+    'virt-viewer'
+    'edk2-ovmf'
+    'bridge-utils'
+    'netctl'
+    'dnsmasq'
+    'vde2'
+    'openbsd-netcat'
+    'ebtables'
+    'nftables'
+    'swtpm'
+
+    # Extras
+    'dolphin'
+    'dolphin-plugins'
+    'baloo-widgets'
+    'ffmpegthumbs'
+    'kde-inotify-survey'
+    'kdegraphics-thumbnailers'
+    'kdenetwork-filesharing'
+    'print-manager'
+    'power-profiles-daemon'
+    'xdg-desktop-portal-gtk'
+    'xsettingsd'
+    'kwalletmanager'
+
+    # i3
+    'i3blocks'
+    'rofi'
+    'nitrogen'
+    'wmctrl'
+    'picom'
+
+    # i3 Depdendencies
+    'sysstat'
+    'acpi'
+    'alsa-utils'
+)
+
+# Paru
+PKGA=(
+    'zram-generator'
+    'timeshift-bin'
+    'preload'
+    'systemd-kcm'
+    'kcm-polkit-kde-git'
+    'kcm-uefi'
+    'garuda-settings-manager-kcm-git'
+    'autojump'
+    'i3-gaps-rounded-git'
+    'spicetify-cli'
+    'pamac-aur'
+    'libpamac-aur'
+    'pamac-tray-icon-plasma'
+    'ttf-meslo-nerd-font-powerlevel10k'         # Meslo Nerd font patched for
+)
+
+# Still not ready for daily-use
+# # Nix home-manager
+# PKGHM=(
+#     'kate'
+#     'qemu_full'
+#     'qemu-utils'
+#     'libvirt'
+#     'virt-manager'
+#     'virt-viewer'
+#     'bridge-utils'
+#     'OVMFFull'
+#     'vde2'
+# #    'ebtables' # Not needed. iptables have it
+#     'iptables'
+#     'nftables'
+#     'swtpm'
+#     'firefox-esr'
+#     ''
+#     ''
+#     ''
+#     ''
+# #    ''
+# )
+
 APPSPATH="${HOME}/.apps"
 SRCPATH="$(cd $(dirname $0) && pwd)"
 sourcen=0
@@ -143,104 +284,7 @@ echo
 sudo pacman -S meson --asdep --noconfirm --needed
 sleep 1s
 
-PKGS=(
-    # Tools
-    'rustup'                                    # Rust toolchain
-    'mingw-w64'                                 # MinGW Cross-compiler pack (binutils, crt, gcc, headers and winpthreads)
-    'libconfig'                                 # C/C++ Configuration file library
-    'gdb'                                       # GNU Debugger
-    'lldb'                                      # High performance debugger
-    'clang'
-    'lib32-clang'
-    'llvm'
-    'llvm-libs'
-    'lib32-llvm'
-    'lib32-llvm-libs'
-    'make'
-    'cmake'
-    'extra-cmake-modules'
-    'gnome-keyring'                             # Required by some apps for authentication
-    'libgnome-keyring'                          # Required by some apps for authentication
-    'libasyncns'
-    'lib32-libasyncns'
-    'patch'
-
-    # Packet Manager
-    'flatpak'                                   # Flatpak
-    #'libpamac-flatpak-plugin'                   # Flathub plugin
-
-    # Fonts
-    'ttf-fira-code'                             # My personal favorite font for programming
-    'noto-fonts-extra'                          # Additional variants of noto fonts
-    'noto-fonts-cjk'                            # Chinese Japanese Korean (CJK) characters support
-    'noto-fonts-emoji'                          # Support for emojis
-    'gnu-free-fonts'                            # Free family of scalable outline fonts
-    'powerline-fonts'                           # Patched fonts for powerline Powerlevel10k
-    'ttf-nerd-fonts-symbols'                    #
-    'ttf-nerd-fonts-symbols-common'             #
-    'ttf-nerd-fonts-symbols-mono'               #
-    'ttf-ubuntu-font-family'                    # Ubuntu font
-    'ttf-jetbrains-mono'                        # Jetbrains' monospace
-
-    # Compression utilities
-    'tar'
-    'gzip'
-    'bzip3'
-    'unzip'
-    'p7zip'
-    'unrar'
-    'zip'
-
-    # Misc
-    'cpupower'                                  # CPU tuning utility
-    'ranger'                                    # File manager
-    'python-pyqt5'                              #
-    'ntfs-3g'                                   # NTFS support
-    'starship'
-    'htop'
-
-    # QEMU
-    'qemu-desktop'
-    'libvirt'
-    'virt-manager'
-    'virt-viewer'
-    'edk2-ovmf'
-    'bridge-utils'
-    'netctl'
-    'dnsmasq'
-    'vde2'
-    'openbsd-netcat'
-    'ebtables'
-    'nftables'
-    'swtpm'
-
-    # Extras
-    'dolphin'
-    'dolphin-plugins'
-    'baloo-widgets'
-    'ffmpegthumbs'
-    'kde-inotify-survey'
-    'kdegraphics-thumbnailers'
-    'kdenetwork-filesharing'
-    'print-manager'
-    'power-profiles-daemon'
-    'xdg-desktop-portal-gtk'
-    'xsettingsd'
-    'kwalletmanager'
-
-    # i3
-    'i3blocks'
-    'rofi'
-    'nitrogen'
-    'wmctrl'
-    'picom'
-
-    # i3 Depdendencies
-    'sysstat'
-    'acpi'
-    'alsa-utils'
-)
-
+# Pacman
 for PKG in "${PKGS[@]}"; do
     echo
     echo "INSTALLING: ${PKG}"
@@ -249,6 +293,23 @@ for PKG in "${PKGS[@]}"; do
     echo
     sleep 1s
 done
+
+# # Nix home-manager
+# for PKG in "${PKGHM[@]}"; do
+#     echo
+#     echo "INSTALLING: ${PKG}"
+#     echo
+#     #sudo pacman -S "$PKG" --noconfirm --needed
+#     sed -i "/^.*home.packages = with pkgs; \[.*/a \    $PKG" "${HOME}"/.config/home-manager/home.nix
+#     echo
+#     sleep 1s
+# done
+#
+# echo
+# echo 'Creating a new generation of home-manager with our config'
+# echo
+# home-manager switch
+# sleep 1s
 
 echo
 echo "Adding flathub"
@@ -304,23 +365,7 @@ sleep 1s
 sudo sed -i "s|#FileManager.*|FileManager = ranger|g" /etc/paru.conf
 sleep 1s
 
-PKGA=(
-    'zram-generator'
-    'timeshift-bin'
-    'preload'
-    'systemd-kcm'
-    'kcm-polkit-kde-git'
-    'kcm-uefi'
-    'garuda-settings-manager-kcm-git'
-    'autojump'
-    'i3-gaps-rounded-git'
-    'spicetify-cli'
-    'pamac-aur'
-    'libpamac-aur'
-    'pamac-tray-icon-plasma'
-    'ttf-meslo-nerd-font-powerlevel10k'         # Meslo Nerd font patched for
-)
-
+# Paru
 for PKG in "${PKGA[@]}"; do
     echo
     echo "INSTALLING: ${PKG}"
@@ -329,41 +374,6 @@ for PKG in "${PKGA[@]}"; do
     echo
     sleep 1s
 done
-
-cd "${HOME}"/Projects/$(logname)
-nix flake init
-
-nix-channel --add https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz home-manager
-
-nix-channel --update
-
-#echo
-#echo "Installing Nix Package Manager"
-#echo
-#sh <(curl -L https://nixos.org/nix/install) --daemon
-#sleep 1s
-#
-#
-#
-#echo
-#echo "Upgrading nix environment"
-#echo
-#sudo nix-channel --update && sudo nix-env --install --attr nixpkgs.nix nixpkgs.cacert && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon
-#sleep 1s
-#
-#echo
-#echo 'Installing home-manager'
-#echo
-#nix run home-manager/release-23.05 -- init --switch
-#sleep 1s
-#
-#sed -i 's/, ... } :/, lib, ... } :/g' "${HOME}"/.config/home-manager/home.nix
-#sed -i 's///g' "${HOME}"/.config/home-manager/home.nix
-#sed -i '/^\  home.homeDirectory.*/a \  nix.settings.sandbox = true;' "${HOME}"/.config/home-manager/home.nix
-#sed -i '/^\  home.homeDirectory.*/a \  nix.settings.auto-optimise-store = true;' "${HOME}"/.config/home-manager/home.nix
-#sed -i '/^\  home.homeDirectory.*/a \  nixpkgs.config.allowUnfree = true;' "${HOME}"/.config/home-manager/home.nix
-#sed -i '/^\  home.homeDirectory.*/a \  targets.genericLinux.enable = true;' "${HOME}"/.config/home-manager/home.nix
-#sed -i '/^\  home.homeDirectory.*/a \ ' "${HOME}"/.config/home-manager/home.nix
 
 if [[ -f /etc/systemd/zram-generator.conf ]]; then
     sudo mv /etc/systemd/zram-generator.conf /etc/systemd/zram-generator.conf.old

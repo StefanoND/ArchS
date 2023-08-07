@@ -111,23 +111,21 @@ alias sha1='openssl sha1'
 
 alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
 
-# KITTY - alias to be able to use kitty features when connecting to remote servers(e.g use tmux on remote server)
-
-alias kssh="kitty +kitten ssh"
-
 # NIX
 
 # Alias to rebuild home-manager
-alias nhmswitch='home-manager switch --flake ~/.config/home-manager/#USERNAME'
+alias hmswitch='home-manager switch'
 
-# Alias to update flae inputs
+# Alias to rebuild home-manager
+alias hmbuild='home-manager build'
+
+# Alias to update flake inputs
 alias flakeupdate='nix flake update $HOME/.config/home-amanager/'
-
-# Alias to rebuild nix-env (Nix Package Manager)
-alias nenvbuild='nix-env -iA nixpkgs.myPackages && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon'
 
 # Alias to upgrade nix instead of manually running all these commmands
 alias nixupgrade='sudo nix-channel --update && sudo nix-env --install --attr nixpkgs.nix nixpkgs.cacert && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon'
+
+# PLASMA
 
 # Restart Plasma, only works for KDE 5.10 or higher
 alias restartplasma='kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell &'
