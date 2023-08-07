@@ -227,7 +227,6 @@ PKGS=(
     'xdg-desktop-portal-gtk'
     'xsettingsd'
     'kwalletmanager'
-    'print-manager'
 
     # i3
     'i3blocks'
@@ -419,11 +418,11 @@ done
 #sed -i '/^\  home.homeDirectory.*/a \  nixpkgs.config.allowUnfree = true;' "${HOME}"/.config/home-manager/home.nix
 #sed -i '/^\  home.homeDirectory.*/a \  targets.genericLinux.enable = true;' "${HOME}"/.config/home-manager/home.nix
 #sed -i '/^\  home.homeDirectory.*/a \ ' "${HOME}"/.config/home-manager/home.nix
-#
-#if [[ -f /etc/systemd/zram-generator.conf ]]; then
-#    sudo mv /etc/systemd/zram-generator.conf /etc/systemd/zram-generator.conf.old
-#    sleep 1s
-#fi
+
+if [[ -f /etc/systemd/zram-generator.conf ]]; then
+    sudo mv /etc/systemd/zram-generator.conf /etc/systemd/zram-generator.conf.old
+    sleep 1s
+fi
 
 sudo touch /etc/systemd/zram-generator.conf
 sleep 1s
