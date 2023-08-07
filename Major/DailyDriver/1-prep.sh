@@ -153,6 +153,8 @@ if [[ -f "${HOME}"/.xinitrc ]]; then
     sleep 1s
 fi
 
+sed -i "s/#USERNAME/#$(logname)/g" "${SRCPATH}"/home/.bash_aliases
+
 echo
 printf "Copying config files to a permanent place at: "
 printf "\"${APPSPATH}/archs\""

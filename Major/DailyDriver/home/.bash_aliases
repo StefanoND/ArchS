@@ -118,10 +118,10 @@ alias kssh="kitty +kitten ssh"
 # NIX
 
 # Alias to rebuild home-manager
-alias nixhmbuild='home-manager switch'
+alias nhmswitch='home-manager switch --flake ~/.config/home-manager/#USERNAME'
 
 # Alias to rebuild nix-env (Nix Package Manager)
-alias nixbuild='nix-env -iA nixpkgs.myPackages && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon'
+alias nenvbuild='nix-env -iA nixpkgs.myPackages && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon'
 
 # Alias to upgrade nix instead of manually running all these commmands
 alias nixupgrade='sudo nix-channel --update && sudo nix-env --install --attr nixpkgs.nix nixpkgs.cacert && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon'

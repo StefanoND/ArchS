@@ -331,87 +331,99 @@ for PKG in "${PKGA[@]}"; do
     sleep 1s
 done
 
-echo
-echo "Installing Nix Package Manager"
-echo
-sh <(curl -L https://nixos.org/nix/install) --daemon
-sleep 1s
-
-if ! [[ -d "${HOME}"/.config/nix ]]; then
-    echo
-    printf "mkdir -p \"${HOME}/.config/nix\""
-    echo
-    mkdir -p "${HOME}"/.config/nix
-    sleep 1s
-fi
-
-if ! [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
-    echo
-    printf "touch \"${HOME}/.config/nix/nix.conf\""
-    echo
-    touch "${HOME}"/.config/nix/nix.conf
-    sleep 1s
-fi
-
-echo 'experimental-features = nix-command flakes' >> "${HOME}"/.config/nix/nix.conf
-sleep 1s
-
-if ! [[ -d "${HOME}"/.config/nixpkgs ]]; then
-    echo
-    printf "mkdir -p \"${HOME}/.config/nixpkgs\""
-    echo
-    mkdir -p "${HOME}"/.config/nixpkgs
-    sleep 1s
-fi
-
-if ! [[ -f "${HOME}"/.config/nixpkgs/config.nix ]]; then
-    echo
-    printf "touch \"${HOME}/.config/nixpkgs/config.nix\""
-    echo
-    touch "${HOME}"/.config/nixpkgs/config.nix
-    sleep 1s
-fi
-
-printf "{\n  allowUnfree = true;\n  nix.settings.sandbox = true;\n  nix.settings.auto-optimise-store = true;\n}\n" > "${HOME}"/.config/nixpkgs/config.nix
-
-if [[ -f "${HOME}"/.profile ]]; then
-    mv "${HOME}"/.profile "${HOME}"/.profile.old
-    sleep 1s
-fi
-
-touch "${HOME}"/.profile
-sleep 1s
-
-echo '#!/bin/sh' > "${HOME}"/.profile
-echo 'if [ -d $HOME/.nix-profile/etc/profile.d ]; then' >> "${HOME}"/.profile
-echo '  for i in $HOME/.nix-profile/etc/profile.d/*.sh; do' >> "${HOME}"/.profile
-echo '    if [ -r $i ]; then' >> "${HOME}"/.profile
-echo '      . $i' >> "${HOME}"/.profile
-echo '    fi' >> "${HOME}"/.profile
-echo '  done' >> "${HOME}"/.profile
-echo 'fi' >> "${HOME}"/.profile
-echo '' >> "${HOME}"/.profile
-sleep 1s
-
+#echo
+#echo "Installing Nix Package Manager"
+#echo
+#sh <(curl -L https://nixos.org/nix/install) --daemon
+#sleep 1s
+#
+#if ! [[ -d "${HOME}"/.config/nix ]]; then
+#    echo
+#    printf "mkdir -p \"${HOME}/.config/nix\""
+#    echo
+#    mkdir -p "${HOME}"/.config/nix
+#    sleep 1s
+#fi
+#
+#if ! [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
+#    echo
+#    printf "touch \"${HOME}/.config/nix/nix.conf\""
+#    echo
+#    touch "${HOME}"/.config/nix/nix.conf
+#    sleep 1s
+#fi
+#
+#echo 'experimental-features = nix-command flakes' >> "${HOME}"/.config/nix/nix.conf
+#sleep 1s
+#
+#if ! [[ -d "${HOME}"/.config/nixpkgs ]]; then
+#    echo
+#    printf "mkdir -p \"${HOME}/.config/nixpkgs\""
+#    echo
+#    mkdir -p "${HOME}"/.config/nixpkgs
+#    sleep 1s
+#fi
+#
+#if ! [[ -f "${HOME}"/.config/nixpkgs/config.nix ]]; then
+#    echo
+#    printf "touch \"${HOME}/.config/nixpkgs/config.nix\""
+#    echo
+#    touch "${HOME}"/.config/nixpkgs/config.nix
+#    sleep 1s
+#fi
+#
+#printf "{\n  allowUnfree = true;\n  nix.settings.sandbox = true;\n  nix.settings.auto-optimise-store = true;\n}\n" > "${HOME}"/.config/nixpkgs/config.nix
+#
+#if [[ -f "${HOME}"/.profile ]]; then
+#    mv "${HOME}"/.profile "${HOME}"/.profile.old
+#    sleep 1s
+#fi
+#
+#touch "${HOME}"/.profile
+#sleep 1s
+#
+#echo '#!/bin/sh' > "${HOME}"/.profile
+#echo 'if [ -d $HOME/.nix-profile/etc/profile.d ]; then' >> "${HOME}"/.profile
+#echo '  for i in $HOME/.nix-profile/etc/profile.d/*.sh; do' >> "${HOME}"/.profile
+#echo '    if [ -r $i ]; then' >> "${HOME}"/.profile
+#echo '      . $i' >> "${HOME}"/.profile
+#echo '    fi' >> "${HOME}"/.profile
+#echo '  done' >> "${HOME}"/.profile
+#echo 'fi' >> "${HOME}"/.profile
+#echo '' >> "${HOME}"/.profile
+#sleep 1s
+#
 #echo
 #echo "Upgrading nix environment"
 #echo
 #sudo nix-channel --update && sudo nix-env --install --attr nixpkgs.nix nixpkgs.cacert && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon
 #sleep 1s
-
-nix run home-manager/release-23.05 -- init --switch
-
-sed -i 's/, ... } :/, lib, ... } :/g' "${HOME}"/.config/home-manager/home.nix
-sed -i 's///g' "${HOME}"/.config/home-manager/home.nix
-sed -i '/^\  home.username.*/a \  nixpkgs.config.allowUnfree = true;' "${HOME}"/.config/home-manager/home.nix
-sed -i '/^\  home.username.*/a \  nix.settings.sandbox = true;' "${HOME}"/.config/home-manager/home.nix
-sed -i '/^\  home.username.*/a \  nix.settings.auto-optimise-store = true;' "${HOME}"/.config/home-manager/home.nix
-sed -i '/^\  home.username.*/a \  targets.genericLinux.enable = true;' "${HOME}"/.config/home-manager/home.nix
-
-if [[ -f /etc/systemd/zram-generator.conf ]]; then
-    sudo mv /etc/systemd/zram-generator.conf /etc/systemd/zram-generator.conf.old
-    sleep 1s
-fi
+#
+#if ! [[ "${HOME}"/.local/state/home-manager/profiles ]]; then
+#    mkdir -p "${HOME}"/.local/state/home-manager/profiles
+#fi
+#if ! [[ /nix/var/nix/profiles/per-user/archuser ]]; then
+#    sudo mkdir -p /nix/var/nix/profiles/per-user/archuser
+#fi
+#
+#echo
+#echo 'Installing home-manager'
+#echo
+#nix run home-manager/release-23.05 -- init --switch
+#sleep 1s
+#
+#sed -i 's/, ... } :/, lib, ... } :/g' "${HOME}"/.config/home-manager/home.nix
+#sed -i 's///g' "${HOME}"/.config/home-manager/home.nix
+#sed -i '/^\  home.homeDirectory.*/a \  nix.settings.sandbox = true;' "${HOME}"/.config/home-manager/home.nix
+#sed -i '/^\  home.homeDirectory.*/a \  nix.settings.auto-optimise-store = true;' "${HOME}"/.config/home-manager/home.nix
+#sed -i '/^\  home.homeDirectory.*/a \  nixpkgs.config.allowUnfree = true;' "${HOME}"/.config/home-manager/home.nix
+#sed -i '/^\  home.homeDirectory.*/a \  targets.genericLinux.enable = true;' "${HOME}"/.config/home-manager/home.nix
+#sed -i '/^\  home.homeDirectory.*/a \ ' "${HOME}"/.config/home-manager/home.nix
+#
+#if [[ -f /etc/systemd/zram-generator.conf ]]; then
+#    sudo mv /etc/systemd/zram-generator.conf /etc/systemd/zram-generator.conf.old
+#    sleep 1s
+#fi
 
 sudo touch /etc/systemd/zram-generator.conf
 sleep 1s
@@ -597,14 +609,6 @@ if [[ `pacman -Q | grep -i 'virtualbox-host-dkms'` ]] && [[ ${enablevb,,} = y ]]
 fi
 
 echo
-echo 'Enabling NVidia vGPU services'
-echo
-sudo systemctl enable nvidia-vgpud.service
-sleep 1s
-sudo systemctl enable nvidia-vgpu-mgr.service
-sleep 1s
-
-echo
 echo "Set make to be multi-threaded by default"
 echo
 sudo sed -i "s|\#MAKEFLAGS=.*|MAKEFLAGS=\"-j$(expr $(nproc) \+ 1)\"|g" /etc/makepkg.conf
@@ -763,6 +767,11 @@ if ! [[ -f /etc/X11/xorg.conf.d/50-mouse-acceleration.conf ]]; then
 fi
 printf "Section \"InputClass\"\n    Identifier \"My Mouse\"\n    Driver \"libinput\"\n    MatchIsPointer \"yes\"\n    Option \"AccelProfile\" \"-1\"\n    Option \"AccelerationScheme\" \"none\"\n    Option \"AccelSpeed\" \"-1\"\nEndSection" | sudo tee /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
 sleep 1s
+
+echo
+echo "Updating initramfs/initrd"
+echo
+sudo mkinitcpio -P
 
 echo
 echo 'Syncing system'
