@@ -150,8 +150,8 @@ if [ -f $HOME/.bash_aliases ]; then
     source $HOME/.bash_aliases
 fi
 
-if [ -f $HOME/ble.sh/out/ble.sh ]; then
-    source $HOME/ble.sh/out/ble.sh
+if [ -f $HOME/.apps/ble.sh/out/ble.sh ]; then
+    source $HOME/.apps/ble.sh/out/ble.sh
 fi
 
 #######################################################
