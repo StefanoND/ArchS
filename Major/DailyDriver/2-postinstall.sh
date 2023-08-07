@@ -211,29 +211,6 @@ read VBENABLE
 enablevb=$VBENABLE
 sleep 1s
 
-pactl list sources
-echo
-echo "What is the Source number that has your microphone?"
-echo
-read SRCNR
-sourcen=$SRCNR
-
-sed -i "s/##444444/bindsym XF86AudioMicMute exec pactl set-source-mute $sourcen 0 toggle/g" "${SRCPATH}"/i3/config
-
-clear
-sleep 1s
-
-pactl list sinks
-echo
-echo "What is the Source number that has your speakers/headphones?"
-echo
-read SNKR
-linkn=$SNKR
-
-sed -i "s/##111111/bindsym XF86AudioRaiseVolume exec pactl set-sink-volume $linkn +5/g" "${SRCPATH}"/i3/config
-sed -i "s/##222222/bindsym XF86AudioLowerVolume exec pactl set-sink-volume $linkn -5/g" "${SRCPATH}"/i3/config
-sed -i "s/##333333/bindsym XF86AudioMute exec pactl set-sink-mute $linkn toggle/g" "${SRCPATH}"/i3/config
-
 clear
 sleep 1s
 
@@ -264,10 +241,19 @@ if [[ `pacman -Q | grep -i 'iptables'` ]] && \
     echo
     echo
     echo
-    echo "Replacing iptables with iptables-nft"
-    echo "Press Y when it asks to remove iptables"
+    echo 'Replacing iptables with iptables-nft'
+    echo 'Press Y when it asks to remove iptables'
     echo
     sudo pacman -S iptables-nft --needed
+    sleep 1s
+elif ! [[ `pacman -Q | grep -i 'iptables'` ]] && \
+ ! [[ `pacman -Q | grep -i 'iptables-nft'` ]]; then
+    echo
+    echo
+    echo
+    echo 'Installing iptables-nft'
+    echo
+    sudo pacman -S iptables-nft --noconfirm --needed
     sleep 1s
 fi
 
