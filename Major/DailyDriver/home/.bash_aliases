@@ -120,6 +120,9 @@ alias kssh="kitty +kitten ssh"
 # Alias to rebuild home-manager
 alias nhmswitch='home-manager switch --flake ~/.config/home-manager/#USERNAME'
 
+# Alias to update flae inputs
+alias flakeupdate='nix flake update $HOME/.config/home-amanager/'
+
 # Alias to rebuild nix-env (Nix Package Manager)
 alias nenvbuild='nix-env -iA nixpkgs.myPackages && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon'
 

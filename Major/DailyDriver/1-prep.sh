@@ -240,6 +240,16 @@ sleep 1s
 
 chmod +x "${HOME}"/.profile
 
+if ! [[ "${HOME}"/.local/state/home-manager/profiles ]]; then
+    mkdir -p "${HOME}"/.local/state/home-manager/profiles
+fi
+if ! [[ "${HOME}"/Projects/$(logname) ]]; then
+    mkdir -p "${HOME}"/Projects/$(logname)
+fi
+if ! [[ /nix/var/nix/profiles/per-user/$(logname) ]]; then
+    sudo mkdir -p /nix/var/nix/profiles/per-user/$(logname)
+fi
+
 echo
 echo 'Syncing system'
 echo

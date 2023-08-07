@@ -330,6 +330,13 @@ for PKG in "${PKGA[@]}"; do
     sleep 1s
 done
 
+cd "${HOME}"/Projects/$(logname)
+nix flake init
+
+nix-channel --add https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz home-manager
+
+nix-channel --update
+
 #echo
 #echo "Installing Nix Package Manager"
 #echo
@@ -343,13 +350,6 @@ done
 #echo
 #sudo nix-channel --update && sudo nix-env --install --attr nixpkgs.nix nixpkgs.cacert && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon
 #sleep 1s
-#
-#if ! [[ "${HOME}"/.local/state/home-manager/profiles ]]; then
-#    mkdir -p "${HOME}"/.local/state/home-manager/profiles
-#fi
-#if ! [[ /nix/var/nix/profiles/per-user/archuser ]]; then
-#    sudo mkdir -p /nix/var/nix/profiles/per-user/archuser
-#fi
 #
 #echo
 #echo 'Installing home-manager'
