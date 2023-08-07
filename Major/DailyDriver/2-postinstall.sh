@@ -336,61 +336,7 @@ done
 #sh <(curl -L https://nixos.org/nix/install) --daemon
 #sleep 1s
 #
-#if ! [[ -d "${HOME}"/.config/nix ]]; then
-#    echo
-#    printf "mkdir -p \"${HOME}/.config/nix\""
-#    echo
-#    mkdir -p "${HOME}"/.config/nix
-#    sleep 1s
-#fi
 #
-#if ! [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
-#    echo
-#    printf "touch \"${HOME}/.config/nix/nix.conf\""
-#    echo
-#    touch "${HOME}"/.config/nix/nix.conf
-#    sleep 1s
-#fi
-#
-#echo 'experimental-features = nix-command flakes' >> "${HOME}"/.config/nix/nix.conf
-#sleep 1s
-#
-#if ! [[ -d "${HOME}"/.config/nixpkgs ]]; then
-#    echo
-#    printf "mkdir -p \"${HOME}/.config/nixpkgs\""
-#    echo
-#    mkdir -p "${HOME}"/.config/nixpkgs
-#    sleep 1s
-#fi
-#
-#if ! [[ -f "${HOME}"/.config/nixpkgs/config.nix ]]; then
-#    echo
-#    printf "touch \"${HOME}/.config/nixpkgs/config.nix\""
-#    echo
-#    touch "${HOME}"/.config/nixpkgs/config.nix
-#    sleep 1s
-#fi
-#
-#printf "{\n  allowUnfree = true;\n  nix.settings.sandbox = true;\n  nix.settings.auto-optimise-store = true;\n}\n" > "${HOME}"/.config/nixpkgs/config.nix
-#
-#if [[ -f "${HOME}"/.profile ]]; then
-#    mv "${HOME}"/.profile "${HOME}"/.profile.old
-#    sleep 1s
-#fi
-#
-#touch "${HOME}"/.profile
-#sleep 1s
-#
-#echo '#!/bin/sh' > "${HOME}"/.profile
-#echo 'if [ -d $HOME/.nix-profile/etc/profile.d ]; then' >> "${HOME}"/.profile
-#echo '  for i in $HOME/.nix-profile/etc/profile.d/*.sh; do' >> "${HOME}"/.profile
-#echo '    if [ -r $i ]; then' >> "${HOME}"/.profile
-#echo '      . $i' >> "${HOME}"/.profile
-#echo '    fi' >> "${HOME}"/.profile
-#echo '  done' >> "${HOME}"/.profile
-#echo 'fi' >> "${HOME}"/.profile
-#echo '' >> "${HOME}"/.profile
-#sleep 1s
 #
 #echo
 #echo "Upgrading nix environment"
