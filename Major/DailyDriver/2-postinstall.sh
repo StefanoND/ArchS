@@ -204,7 +204,7 @@ clear
 sleep 1s
 
 echo
-echo "Do you want to modprobe and enable vbox services?"
+echo "Do you want to install VirtualBox?"
 echo "Y - Yes | Anything else - no"
 echo
 read VBENABLE

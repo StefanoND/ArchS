@@ -65,8 +65,8 @@ sleep 1s
 sed -i 's/BINARIES=()/BINARIES=(btrfs setfont)/g' /etc/mkinitcpio.conf
 
 # Add "btrfs" before "filesystems" and remove "fsck":
-# HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap consolefont block encrypt filesystems)
-sed -i 's/HOOKS=(.*/HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap consolefont block encrypt filesystems)/g' /etc/mkinitcpio.conf
+# HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap consolefont block filesystems)
+sed -i 's/HOOKS=(.*/HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap consolefont block filesystems)/g' /etc/mkinitcpio.conf
 
 # Compress initramfs image
 sed -i 's/#COMPRESSION="zstd"/COMPRESSION="zstd"/g' /etc/mkinitcpio.conf

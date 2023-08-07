@@ -114,16 +114,16 @@ alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
 # NIX
 
 # Alias to rebuild home-manager
-alias hmswitch='home-manager switch'
+#alias hmswitch='home-manager switch'
 
 # Alias to rebuild home-manager
-alias hmbuild='home-manager build'
+#alias hmbuild='home-manager build'
 
 # Alias to update flake inputs
-alias flakeupdate='nix flake update $HOME/.config/home-amanager/'
+#alias flakeupdate='nix flake update $HOME/.config/home-amanager/'
 
 # Alias to upgrade nix instead of manually running all these commmands
-alias nixupgrade='sudo nix-channel --update && sudo nix-env --install --attr nixpkgs.nix nixpkgs.cacert && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon'
+#alias nixupgrade='sudo nix-channel --update && sudo nix-env --install --attr nixpkgs.nix nixpkgs.cacert && sudo systemctl daemon-reload && sudo systemctl restart nix-daemon'
 
 # PLASMA
 

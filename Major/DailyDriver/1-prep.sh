@@ -175,10 +175,10 @@ sleep 1s
 sudo cp -r "${FFPATH}"/Sweet-cursors /usr/share/icons
 sleep 1s
 
-echo
-echo "Installinx Nix Package Manager"
-echo
-sh <(curl -L https://nixos.org/nix/install) --daemon
+#echo
+#echo "Installinx Nix Package Manager"
+#echo
+#sh <(curl -L https://nixos.org/nix/install) --daemon
 
 cd "${SRCPATH}"
 exec bash ./1.1-prep.sh
