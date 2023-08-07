@@ -405,7 +405,8 @@ if ! [[ -d "${HOME}"/.config/i3blocks ]]; then
     sleep 1s
 fi
 
-ln -svf "${SRCPATH}"/home/starship.toml "${HOME}"/.config/starship.toml
+cp -f "${SRCPATH}"/home/starship.toml "${APPSPATH}"/archs
+ln -svf "${APPSPATH}"/archs/starship.toml "${HOME}"/.config/starship.toml
 sleep 1s
 
 cp "${SRCPATH}"/wallpapers/* "${HOME}"/Pictures/Wallpapers
