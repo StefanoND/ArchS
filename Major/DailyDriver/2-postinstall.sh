@@ -131,6 +131,12 @@ PKGA=(
     'ttf-meslo-nerd-font-powerlevel10k'         # Meslo Nerd font patched for
 )
 
+# Pacman
+PKGFP=(
+    'flathub com.github.tchx84.Flatseal'
+    'flathub org.gnu.emacs'
+)
+
 # Still not ready for daily-use
 # # Nix home-manager
 # PKGHM=(
@@ -234,6 +240,26 @@ for PKG in "${PKGS[@]}"; do
     sleep 1s
 done
 
+# Flatpak
+for PKG in "${PKGFP[@]}"; do
+    echo
+    echo "INSTALLING: ${PKG}"
+    echo
+    flatpak install "$PKG" -y
+    echo
+    sleep 1s
+done
+
+# Paru
+for PKG in "${PKGA[@]}"; do
+    echo
+    echo "INSTALLING: ${PKG}"
+    echo
+    paru -S "$PKG" --noconfirm --needed --sudoloop
+    echo
+    sleep 1s
+done
+
 # # Nix home-manager
 # for PKG in "${PKGHM[@]}"; do
 #     echo
@@ -250,16 +276,6 @@ done
 # echo
 # home-manager switch
 # sleep 1s
-
-# Paru
-for PKG in "${PKGA[@]}"; do
-    echo
-    echo "INSTALLING: ${PKG}"
-    echo
-    paru -S "$PKG" --noconfirm --needed --sudoloop
-    echo
-    sleep 1s
-done
 
 if [[ -f /etc/systemd/zram-generator.conf ]]; then
     sudo mv /etc/systemd/zram-generator.conf /etc/systemd/zram-generator.conf.old
