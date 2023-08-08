@@ -270,6 +270,6 @@ sed -i 's/subvol=\/@/autodefrag,subvol=\/@/g' /etc/fstab
 
 # Remove hasnvidia.gpu from /mnt
 rm -f /hasnvidia.gpu
-sleep 1s
+sleep 2s
 
-exit
+exit 0
