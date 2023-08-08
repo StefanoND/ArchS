@@ -539,10 +539,6 @@ sudo bash -c 'echo "[zram0]" >> /etc/systemd/zram-generator.conf'
 sleep 1s
 sudo bash -c 'echo "zram-size = ram / 2" >> /etc/systemd/zram-generator.conf'
 sleep 1s
-sudo systemctl daemon-reload
-sleep 1s
-sudo systemctl start /dev/zram0
-sleep 1s
 
 sudo mkdir -p /usr/local/bin/autojump
 sleep 1s
@@ -712,70 +708,6 @@ sudo sed -i "s|#max_freq=.*|max_freq=4.2GHz|g" /etc/default/cpupower
 sleep 1s
 
 echo
-echo "Enabling cpupower service"
-echo
-sudo update-rc.d ondemand disable
-sudo systemctl disable ondemand
-sudo systemctl mask power-profiles-daemon.service
-sudo systemctl enable --now cpupower.service
-sleep 1s
-
-echo
-echo "Enabling gnome-keyring service"
-echo
-systemctl --user enable --now gnome-keyring-daemon.service
-sleep 1s
-
-echo
-echo "Enabling gamemode service"
-echo
-systemctl --user enable --now gamemoded.service
-sleep 1s
-sudo chmod +x /usr/bin/gamemoderun
-sleep 1s
-
-echo
-echo "Enabling opentrabletdriver service"
-echo
-systemctl --user enable --now opentabletdriver.service
-sleep 1s
-
-if [[ `pacman -Q | grep -i 'virtualbox-host-dkms'` ]] && [[ ${enablevb,,} = y ]]; then
-    PKGVB=(
-        # Virtualbox
-        'virtualbox-host-dkms'
-        'virtualbox'
-        'virtualbox-ext-vnc'
-        'virtualbox-guest-iso'
-    )
-
-    for PKG in "${PKGVB[@]}"; do
-        echo
-        echo "INSTALLING: ${PKG}"
-        echo
-        sudo pacman -S "$PKG" --noconfirm --needed
-        echo
-        sleep 1s
-    done
-
-    echo
-    echo "Modprobing vboxdrv, vboxnetadp and vboxnetflt"
-    echo
-    sudo usermod -aG vboxusers $(logname)
-    sleep 1s
-    sudo modprobe -a vboxdrv vboxnetadp vboxnetflt
-    sleep 1s
-
-    echo
-    echo "Enabling VirtualBox and web services"
-    echo
-    sudo systemctl enable vboxservice.service
-    sleep 1s
-    sudo systemctl enable vboxweb.service
-    sleep 1s
-fi
-
-echo
 echo "Set make to be multi-threaded by default"
 echo
 sudo sed -i "s|\#MAKEFLAGS=.*|MAKEFLAGS=\"-j$(expr $(nproc) \+ 1)\"|g" /etc/makepkg.conf
@@ -907,6 +839,207 @@ if ! [[ -f /etc/X11/xorg.conf.d/50-mouse-acceleration.conf ]]; then
 fi
 printf "Section \"InputClass\"\n    Identifier \"My Mouse\"\n    Driver \"libinput\"\n    MatchIsPointer \"yes\"\n    Option \"AccelProfile\" \"-1\"\n    Option \"AccelerationScheme\" \"none\"\n    Option \"AccelSpeed\" \"-1\"\nEndSection" | sudo tee /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
 sleep 1s
+
+echo
+echo "Disabling built-in kernel modules of tablet so OpenTablerDriver can work"
+echo
+if ! test -e /etc/modprobe.d/blacklist.conf; then
+    sudo touch /etc/modprobe.d/blacklist.conf
+    printf "blacklist wacom\nblacklist hid_uclogic" | sudo tee /etc/modprobe.d/blacklist.conf
+    sleep 1s
+else
+    printf "\nblacklist wacom\nblacklist hid_uclogic" | sudo tee -a /etc/modprobe.d/blacklist.conf
+    sleep 1s
+fi
+
+echo
+echo "Stopping Wacom kernel module (if present)"
+echo
+sudo rmmod wacom
+sleep 1s
+
+echo
+echo "Stopping non-Wacom kernel module (if present)"
+echo
+sudo rmmod hid_uclogic
+sleep 1s
+
+echo
+echo "Improving font rendering"
+echo
+if test -e /etc/fonts/local.conf; then
+    sudo mv /etc/fonts/local.conf /etc/fonts/local.conf.old
+    sleep 1s
+fi
+
+sudo touch /etc/fonts/local.conf
+sleep 1s
+
+curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/local.conf -o - | sudo tee /etc/fonts/local.conf
+sleep 1s
+
+if test -e /home/$(logname)/.Xresources; then
+    sudo mv /home/$(logname)/.Xresources /home/$(logname)/.Xresources.bak;
+    sleep 1s
+fi
+
+touch /home/$(logname)/.Xresources
+sleep 1s
+
+printf "Xft.antialias: 1\nXft.hinting: 1\nXft.rgba: rgb\nXft.hintstyle: hintslight\nXft.lcdfilter: lcddefault" | tee /home/$(logname)/.Xresources
+sleep 1s
+
+xrdb -merge /home/$(logname)/.Xresources
+sleep 1s
+if ! test -e /etc/fonts/conf.d/10-sub-pixel-rgb.conf; then
+    sudo ln -s /usr/share/fontconfig/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
+    sleep 1s
+fi
+
+if ! test -e /etc/fonts/conf.d/10-hinting-slight.conf; then
+    sudo ln -s /usr/share/fontconfig/conf.avail/10-hinting-slight.conf /etc/fonts/conf.d
+    sleep 1s
+fi
+
+if ! test -e /etc/fonts/conf.d/11-lcdfilter-default.conf; then
+    sudo ln -s /usr/share/fontconfig/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
+    sleep 1s
+fi
+
+if ! test -e /home/$(logname)/.config/fontconfig; then
+    mkdir -p /home/$(logname)/.config/fontconfig
+    sleep 1s
+fi
+
+if test -e /home/$(logname)/.config/fontconfig/fonts.conf; then
+    mv /home/$(logname)/.config/fontconfig/fonts.conf /home/$(logname)/.config/fontconfig/fonts.conf.bak;
+    sleep 1s
+fi
+
+touch /home/$(logname)/.config/fontconfig/fonts.conf
+sleep 1s
+curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/fonts.conf -o - | sudo tee /home/$(logname)/.config/fontconfig/fonts.conf
+sleep 1s
+sudo sed -i "s|#export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|g" /etc/profile.d/freetype2.sh
+sleep 1s
+sudo fc-cache -fv
+sleep 1s
+
+echo
+echo "Enabling CUPs service"
+echo
+
+cd /usr/bin
+./cupsenable
+sleep 1s
+
+echo
+echo "Creating udev rule for AntiMicroX to avoid problems with wayland"
+echo
+sleep 1s
+if test -e /usr/lib/udev/rules.d/60-antimicrox-uinput.rules; then
+    sudo mv /usr/lib/udev/rules.d/60-antimicrox-uinput.rules /usr/lib/udev/rules.d/60-antimicrox-uinput.rules.old
+    sleep 1s
+fi
+
+sudo touch /usr/lib/udev/rules.d/60-antimicrox-uinput.rules
+sleep 1s
+
+curl https://raw.githubusercontent.com/AntiMicroX/antimicrox/master/other/60-antimicrox-uinput.rules -o - | sudo tee /usr/lib/udev/rules.d/60-antimicrox-uinput.rules
+sleep 1s
+
+if [[ `pacman -Q | grep -i 'virtualbox-host-dkms'` ]] && [[ ${enablevb,,} = y ]]; then
+    PKGVB=(
+        # Virtualbox
+        'virtualbox-host-dkms'
+        'virtualbox'
+        'virtualbox-ext-vnc'
+        'virtualbox-guest-iso'
+    )
+
+    for PKG in "${PKGVB[@]}"; do
+        echo
+        echo "INSTALLING: ${PKG}"
+        echo
+        sudo pacman -S "$PKG" --noconfirm --needed
+        echo
+        sleep 1s
+    done
+
+    echo
+    echo "Modprobing vboxdrv, vboxnetadp and vboxnetflt"
+    echo
+    sudo usermod -aG vboxusers $(logname)
+    sleep 1s
+    sudo modprobe -a vboxdrv vboxnetadp vboxnetflt
+    sleep 1s
+
+    echo
+    echo 'Reloading daemon'
+    echo
+    sudo systemctl daemon-reload
+    sleep 1s
+
+    echo
+    echo "Enabling VirtualBox and web services"
+    echo
+    sudo systemctl enable vboxservice.service
+    sleep 1s
+    sudo systemctl enable vboxweb.service
+    sleep 1s
+fi
+
+echo
+echo 'Reloading daemon'
+echo
+sudo systemctl daemon-reload
+sleep 1s
+
+echo
+echo 'Enabling zram'
+echo
+sudo systemctl start /dev/zram0
+sleep 1s
+
+echo
+echo "Enabling cpupower service"
+echo
+sudo update-rc.d ondemand disable
+sudo systemctl disable ondemand
+sudo systemctl mask power-profiles-daemon.service
+sudo systemctl enable --now cpupower.service
+sleep 1s
+
+echo
+echo "Enabling gnome-keyring service"
+echo
+systemctl --user enable --now gnome-keyring-daemon.service
+sleep 1s
+
+echo
+echo "Enabling gamemode service"
+echo
+systemctl --user enable --now gamemoded.service
+sleep 1s
+sudo chmod +x /usr/bin/gamemoderun
+sleep 1s
+
+echo
+echo "Enabling opentrabletdriver service"
+echo
+systemctl --user enable --now opentabletdriver.service
+sleep 1s
+
+# SSH
+echo
+echo 'Enaling sshd service'
+echo
+sudo systemctl enable --now sshd.service
+# CUPS service
+echo
+echo 'Enabling cups service'
+echo
+sudo systemctl enable --now cups.service
 
 echo
 echo "Updating initramfs/initrd"
