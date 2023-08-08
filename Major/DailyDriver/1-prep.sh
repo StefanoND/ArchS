@@ -162,7 +162,7 @@ if [[ -f "${HOME}"/.xinitrc ]]; then
     sleep 1s
 fi
 
-sed -i "s/\#ExecStart=USERPATH\/hotkeys.sh/ExecStart=\/home\/$(logname)\/archs\/hotkeys.sh/g" "${SRCPATH}"/conf/systemd/hotkeys.service
+sed -i "s/\#ExecStart=USERPATH\/hotkeys.sh/ExecStart=\/home\/$(logname)\/.apps\/archs\/hotkeys.sh/g" "${SRCPATH}"/conf/systemd/hotkeys.service
 sleep 1s
 
 if [[ `echo $XDG_SESSION_TYPE | grep -iq x11` ]]; then
@@ -193,6 +193,14 @@ sleep 1s
 sudo cp -r "${FFPATH}"/Sweet-cursors /usr/share/icons
 sleep 1s
 
+echo
+echo 'Reloading daemon'
+echo
+sudo systemctl daemon-reload
+
+echo
+echo 'Enabling hotkeys service'
+echo
 systemctl --user enable --now hotkeys.service
 sleep 1s
 

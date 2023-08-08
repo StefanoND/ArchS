@@ -94,6 +94,7 @@ PKGS=(
     'xsettingsd'
     'kwalletmanager'
     'sxhkd'
+    'kate'
 
     # i3
     #'i3blocks'
@@ -947,6 +948,21 @@ sleep 1s
 
 curl https://raw.githubusercontent.com/AntiMicroX/antimicrox/master/other/60-antimicrox-uinput.rules -o - | sudo tee /usr/lib/udev/rules.d/60-antimicrox-uinput.rules
 sleep 1s
+
+if ! grep -iq "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1" /etc/environment; then
+    echo
+    echo "Enabling Globalization Invariant"
+    echo
+    printf "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1\n" | sudo tee -a /etc/environment
+    sleep 1s
+fi
+if ! grep -iq "DOTNET_CLI_TELEMETRY_OPTOUT=1" /etc/environment; then
+    echo
+    echo "Disabling DotNet telemetry"
+    echo
+    printf "DOTNET_CLI_TELEMETRY_OPTOUT=1\n" | sudo tee -a /etc/environment
+    sleep 1s
+fi
 
 if [[ `pacman -Q | grep -i 'virtualbox-host-dkms'` ]] && [[ ${enablevb,,} = y ]]; then
     PKGVB=(
