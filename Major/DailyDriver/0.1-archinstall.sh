@@ -38,7 +38,7 @@ done
 
 # Desktop Environment
 # Instal Xorg, sddm and plasma
-pacman -S networkmanager network-manager-applet dhcpcd neofetch dialog wpa_supplicant ibus mtools dosfstools xdg-user-dirs xdg-utils nfs-utils inetutils bind rsync sof-firmware ipset nss-mdns os-prober terminus-font exa bat gparted filelight xclip brightnessctl xf86-video-amdgpu xf86-video-nouveau xf86-video-intel xf86-video-qxl neovim nano git curl pacman-contrib bash-completion xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock xorg-xwayland libxcb egl-wayland plasma plasma-wayland-session sddm sddm-kcm kde-gtk-config wezterm wezterm-shell-integration wezterm-terminfo cups ntp openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip reflector --noconfirm --needed
+pacman -S networkmanager network-manager-applet dhcpcd neofetch dialog wpa_supplicant ibus mtools dosfstools xdg-user-dirs xdg-utils nfs-utils inetutils bind rsync sof-firmware ipset nss-mdns os-prober terminus-font exa bat gparted filelight xclip brightnessctl xf86-video-amdgpu xf86-video-nouveau xf86-video-intel xf86-video-qxl neovim nano git curl pacman-contrib bash-completion xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock xorg-xwayland libxcb plasma plasma-wayland-session plasma-wayland-protocols sddm sddm-kcm kde-gtk-config wezterm wezterm-shell-integration wezterm-terminfo cups ntp openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip reflector --noconfirm --needed
 sleep 1s
 
 # Set you system time
@@ -197,7 +197,7 @@ printf "options root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=su
 
 # NVIDIA ONLY
 if [[ -f /hasnvidia.gpu ]]; then
-    pacman -S nvidia-dkms libglvnd nvidia-utils opencl-nvidia lib32-libglvnd lib32-nvidia-utils lib32-opencl-nvidia nvidia-settings --noconfirm --needed
+    pacman -S nvidia-dkms libglvnd nvidia-utils opencl-nvidia lib32-libglvnd lib32-nvidia-utils lib32-opencl-nvidia nvidia-settings egl-wayland --noconfirm --needed
     sleep 1s
 
     # Enable NVdia modules, must be in that order
