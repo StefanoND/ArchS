@@ -16,7 +16,7 @@ if ! groups|grep wheel>/dev/null;then
     exit 1
 fi
 
-clear
+#clear
 
 # if ! [[ -d "${HOME}"/.config/nix ]]; then
 #     echo

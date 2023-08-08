@@ -144,6 +144,8 @@ PKGA=(
     'kcm-uefi'
     'garuda-settings-manager-kcm-git'
     'autojump'
+    'kwin-polonium'
+    'kwin-effect-rounded-corners-git'
 #    'i3-gaps-rounded-git'
     'spicetify-cli'
     'pamac-aur'

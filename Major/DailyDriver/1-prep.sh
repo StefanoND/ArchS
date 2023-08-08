@@ -129,7 +129,6 @@ cp "${FFPATH}"/.gtkrc-2.0 "${HOME}"/
 cp "${FFPATH}"/settings.ini "${HOME}"/.config/gtk-3.0
 cp "${FFPATH}"/settings.ini "${HOME}"/.config/gtk-4.0
 cp -r "${FFPATH}"/Orchis-dark "${HOME}"/.config/Kvantum
-cp
 sleep 1s
 
 if [[ -f "${HOME}"/.bashrc ]]; then
