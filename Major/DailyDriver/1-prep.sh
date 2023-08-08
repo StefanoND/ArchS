@@ -155,7 +155,10 @@ if [[ -f "${HOME}"/.xinitrc ]]; then
 fi
 
 sed -i "s/\#USERNAME/#$(logname)/g" "${SRCPATH}"/conf/home/.bash_aliases
+sleep 1s
+
 sed -i "s/\#ExecStart=USERPATH\/hotkeys.sh/ExecStart=${APPSPATH}\/archs\/hotkeys.sh/g" "${SRCPATH}"/conf/systemd/hotkeys.service
+sleep 1s
 
 echo
 printf "Copying config files to a permanent place at: "
@@ -174,9 +177,13 @@ ln -svf "${APPSPATH}"/archs/.bashrc "${HOME}"/.bashrc
 ln -svf "${APPSPATH}"/archs/.bash_aliases "${HOME}"/.bash_aliases
 ln -svf "${APPSPATH}"/archs/.wezterm.lua "${HOME}"/.wezterm.lua
 ln -svf "${APPSPATH}"/archs/.xinitrc "${HOME}"/.xinitrc
+ln -svf "${APPSPATH}"/archs/hotkeys.service /etc/systemd/user/
 sleep 1s
 
 sudo cp -r "${FFPATH}"/Sweet-cursors /usr/share/icons
+sleep 1s
+
+systemctl --user enable --now hotkeys.service
 sleep 1s
 
 #echo

@@ -118,6 +118,7 @@ PKGS=(
     'xdg-desktop-portal-gtk'
     'xsettingsd'
     'kwalletmanager'
+    'sxhkd'
 
     # i3
     #'i3blocks'
@@ -396,14 +397,20 @@ fi
 if ! [[ -d "${HOME}"/.config/swhkd ]]; then
     mkdir -p "${HOME}"/.config/swhkd
 fi
+if ! [[ -d "${HOME}"/.config/sxhkd ]]; then
+    mkdir -p "${HOME}"/.config/sxhkd
+fi
 
-sudo mv /etc/swhkd/swhkdrc ~/.config/swhkd/
+sudo mv /etc/swhkd/swhkdrc /etc/swhkd/swhkdrc.old
 sleep 1s
 
-sudo chown $(logname):$(logname) .config/swhkd/swhkdrc
+cp -f "${SRCPATH}"/conf/home/swhkdrc "${HOME}"/.config/swhkd
 sleep 1s
 
-sudo ln -svf ~/.config/swhkd/swhkdrc /etc/swhkd
+cp -f "${SRCPATH}"/conf/home/sxhkdrc "${HOME}"/.config/sxhkd
+sleep 1s
+
+sudo ln -svf "${HOME}"/.config/swhkd/swhkdrc /etc/swhkd
 sleep 1s
 # if ! [[ -d "${HOME}"/.config/i3 ]]; then
 #     mkdir -p "${HOME}"/.config/i3
