@@ -38,7 +38,7 @@ done
 
 # Desktop Environment
 # Instal Xorg, sddm and plasma
-pacman -S networkmanager network-manager-applet dhcpcd neofetch dialog wpa_supplicant mtools dosfstools xdg-user-dirs xdg-utils nfs-utils inetutils bind rsync sof-firmware ipset nss-mdns os-prober terminus-font exa bat gparted filelight xclip brightnessctl xf86-video-amdgpu xf86-video-nouveau xf86-video-intel xf86-video-qxl neovim nano git curl pacman-contrib bash-completion xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock plasma sddm sddm-kcm kde-gtk-config wezterm wezterm-shell-integration wezterm-terminfo cups ntp openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip reflector --noconfirm --needed
+pacman -S networkmanager network-manager-applet dhcpcd neofetch dialog wpa_supplicant ibus mtools dosfstools xdg-user-dirs xdg-utils nfs-utils inetutils bind rsync sof-firmware ipset nss-mdns os-prober terminus-font exa bat gparted filelight xclip brightnessctl xf86-video-amdgpu xf86-video-nouveau xf86-video-intel xf86-video-qxl neovim nano git curl pacman-contrib bash-completion xorg-server xorg-apps xorg-xinit xorg-twm xorg-xclock xorg-xwayland libxcb egl-wayland plasma plasma-wayland-session sddm sddm-kcm kde-gtk-config wezterm wezterm-shell-integration wezterm-terminfo cups ntp openssh firewalld acpi acpi_call acpid avahi bluez bluez-utils hplip reflector --noconfirm --needed
 sleep 1s
 
 # Set you system time
@@ -247,6 +247,13 @@ if ! [[ -d /home/$USERNAME/Documents ]]; then
     sleep 1s
     chown -R $USERNAME:$GROUPNAME /home/$USERNAME/Documents
 fi
+
+echo 'QT_QPA_PLATFORM="xcb;wayland"' >> /etc/environemnt
+echo 'GTK_IM_MODULE=ibus' >> /etc/environemnt
+echo 'QT_IM_MODULE=ibus' >> /etc/environemnt
+echo 'XMODIFIERS=@im=ibus' >> /etc/environemnt
+#echo '' >> /etc/environemnt
+
 
 echo
 printf "Copying /ArchS to /home/$USERNAME/Documents/"

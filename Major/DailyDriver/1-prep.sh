@@ -29,7 +29,7 @@ sleep 1s
 clear
 
 SRCPATH="$(cd $(dirname $0) && pwd)"
-FFPATH="${SRCPATH}/aesthetic/ff"
+FFPATH="${SRCPATH}/conf/aesthetic/ff"
 APPSPATH="${HOME}/.apps"
 
 if ! [[ -d "${APPSPATH}" ]]; then
@@ -129,6 +129,7 @@ cp "${FFPATH}"/.gtkrc-2.0 "${HOME}"/
 cp "${FFPATH}"/settings.ini "${HOME}"/.config/gtk-3.0
 cp "${FFPATH}"/settings.ini "${HOME}"/.config/gtk-4.0
 cp -r "${FFPATH}"/Orchis-dark "${HOME}"/.config/Kvantum
+cp
 sleep 1s
 
 if [[ -f "${HOME}"/.bashrc ]]; then
@@ -153,16 +154,19 @@ if [[ -f "${HOME}"/.xinitrc ]]; then
     sleep 1s
 fi
 
-sed -i "s/#USERNAME/#$(logname)/g" "${SRCPATH}"/home/.bash_aliases
+sed -i "s/\#USERNAME/#$(logname)/g" "${SRCPATH}"/conf/home/.bash_aliases
+sed -i "s/\#ExecStart=USERPATH\/hotkeys.sh/ExecStart=${APPSPATH}\/archs\/hotkeys.sh/g" "${SRCPATH}"/conf/systemd/hotkeys.service
 
 echo
 printf "Copying config files to a permanent place at: "
 printf "\"${APPSPATH}/archs\""
 echo
-cp -f "${SRCPATH}"/home/.bashrc "${APPSPATH}"/archs
-cp -f "${SRCPATH}"/home/.bash_aliases "${APPSPATH}"/archs
-cp -f "${SRCPATH}"/home/.wezterm.lua "${APPSPATH}"/archs
-cp -f "${SRCPATH}"/home/.xinitrc "${APPSPATH}"/archs
+cp -f "${SRCPATH}"/conf/home/.bashrc "${APPSPATH}"/archs
+cp -f "${SRCPATH}"/conf/home/.bash_aliases "${APPSPATH}"/archs
+cp -f "${SRCPATH}"/conf/home/.wezterm.lua "${APPSPATH}"/archs
+cp -f "${SRCPATH}"/conf/home/.xinitrc "${APPSPATH}"/archs
+cp -f "${SRCPATH}"/conf/systemd/hotkeys.service "${APPSPATH}"/archs
+cp -f "${SRCPATH}"/conf/systemd/hotkeys.sh "${APPSPATH}"/archs
 sleep 1s
 
 printf "Symlinking config files to ${HOME}"

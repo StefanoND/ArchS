@@ -120,20 +120,21 @@ PKGS=(
     'kwalletmanager'
 
     # i3
-    'i3blocks'
+    #'i3blocks'
     'rofi'
-    'nitrogen'
-    'wmctrl'
-    'picom'
+    #'nitrogen'
+    #'wmctrl'
+    #'picom'
 
     # i3 Depdendencies
-    'sysstat'
-    'acpi'
-    'alsa-utils'
+    #'sysstat'
+    #'acpi'
+    #'alsa-utils'
 )
 
 # Paru
 PKGA=(
+    'ibus-autostart-kimpanel'
     'zram-generator'
     'timeshift-bin'
     'preload'
@@ -142,7 +143,7 @@ PKGA=(
     'kcm-uefi'
     'garuda-settings-manager-kcm-git'
     'autojump'
-    'i3-gaps-rounded-git'
+#    'i3-gaps-rounded-git'
     'spicetify-cli'
     'pamac-aur'
     'libpamac-aur'
@@ -392,70 +393,103 @@ if ! [[ -d "${HOME}"/Pictures/Wallpapers ]]; then
     mkdir -p "${HOME}"/Pictures/Wallpapers
     sleep 1s
 fi
-if ! [[ -d "${HOME}"/.config/i3 ]]; then
-    mkdir -p "${HOME}"/.config/i3
-    sleep 1s
-fi
-if ! [[ -d "${HOME}"/.config/i3blocks ]]; then
-    mkdir -p "${HOME}"/.config/i3blocks
-    sleep 1s
+if ! [[ -d "${HOME}"/.config/swhkd ]]; then
+    mkdir -p "${HOME}"/.config/swhkd
 fi
 
-cp -f "${SRCPATH}"/home/starship.toml "${APPSPATH}"/archs
+sudo mv /etc/swhkd/swhkdrc ~/.config/swhkd/
+sleep 1s
+
+sudo chown $(logname):$(logname) .config/swhkd/swhkdrc
+sleep 1s
+
+sudo ln -svf ~/.config/swhkd/swhkdrc /etc/swhkd
+sleep 1s
+# if ! [[ -d "${HOME}"/.config/i3 ]]; then
+#     mkdir -p "${HOME}"/.config/i3
+#     sleep 1s
+# fi
+# if ! [[ -d "${HOME}"/.config/i3blocks ]]; then
+#     mkdir -p "${HOME}"/.config/i3blocks
+#     sleep 1s
+# fi
+
+cp -f "${SRCPATH}"/conf/home/starship.toml "${APPSPATH}"/archs
 ln -svf "${APPSPATH}"/archs/starship.toml "${HOME}"/.config/starship.toml
 sleep 1s
 
 cp "${SRCPATH}"/wallpapers/* "${HOME}"/Pictures/Wallpapers
 sleep 1s
 
-cd ${APPSPATH}
-echo
-echo "Downloading config files for i3, dunst, picom, ranger and rofi"
-echo
-git clone https://github.com/vivien/i3blocks-contrib.git
-mv i3blocks-contrib scripts
-cp -r scripts "${HOME}"/.config/i3blocks/
-git clone https://github.com/krstfz/i3wm.git && cd i3wm/i3wm/config
+# cd ${APPSPATH}
+# echo
+# echo "Downloading config files for i3, dunst, picom, ranger and rofi"
+# echo
+# git clone https://github.com/krstfz/i3wm.git && cd i3wm/i3wm/config
+# sleep 1s
+#
+# sed -i 's/Papirus-Dark\/16x16/Tela-circle-dark\/16/g' dunst/dunstrc
+# sleep 1s
+# cp -r dunst "${HOME}"/.config/
+#
+# cp -r i3blocks "${HOME}"/.config/
+#
+# sed -i 's/fade-in-step = 0.045;/fade-in-step = 0.028;/g' picom/picom.conf
+# sleep 1s
+# sed -i 's/fade-out-step = 0.05;/fade-out-step = 0.03;/g' picom/picom.conf
+# sleep 1s
+# cp picom/picom.conf "${HOME}"/.config/
+#
+# sed -i 's/set preview_images false/set preview_images true/g' "${HOME}"/.config/ranger/rc.conf
+# sleep 1s
+# sed -i 's/set draw_borders none/set draw_borders true/g' "${HOME}"/.config/ranger/rc.conf
+# sleep 1s
+#
+# sed -i 's/icon-theme: "Papirus";/icon-theme: "Tela-circle-dark";/g' rofi/config.rasi
+# sleep 1s
+# sed -i 's/terminal: "kitty";/terminal: "wezterm";/g' rofi/config.rasi
+# sleep 1s
+# sed -i 's/.*catppuccin-macchiato.rasi.*//g' rofi/config.rasi
+# sleep 1s
+# printf "@theme \"${HOME}/.config/rofi/themes/catppuccin-macchiato.rasi\"\n" >> rofi/config.rasi
+# sleep 1s
+#
+# cp -r rofi "${HOME}"/.config/
+# cp -r spicetify "${HOME}"/.config/
+
+
+if ! [[ -d "${HOME}"/.config/rofi ]]; then
+    mkdir -p "${HOME}"/.config/rofi
+fi
+
+if ! [[ -d "${HOME}"/.local/share/rofi/themes ]]; then
+    mkdir -p "${HOME}"/.local/share/rofi/themes
+fi
+
+cp -r "${SRCPATH}"/conf/rofi "${APPSPATH}"
 sleep 1s
 
-sed -i 's/Papirus-Dark\/16x16/Tela-circle-dark\/16/g' dunst/dunstrc
+ln -svf "${APPSPATH}"/rofi/config.rasi "${HOME}"/.config/rofi
 sleep 1s
-cp -r dunst "${HOME}"/.config/
 
-cp -r i3blocks "${HOME}"/.config/
-
-sed -i 's/fade-in-step = 0.045;/fade-in-step = 0.028;/g' picom/picom.conf
+ln -svf "${APPSPATH}"/rofi/catppuccin-mocha.rasi "${HOME}"/.local/share/rofi/themes
 sleep 1s
-sed -i 's/fade-out-step = 0.05;/fade-out-step = 0.03;/g' picom/picom.conf
-sleep 1s
-cp picom/picom.conf "${HOME}"/.config/
 
 sed -i 's/set preview_images false/set preview_images true/g' "${HOME}"/.config/ranger/rc.conf
 sleep 1s
 sed -i 's/set draw_borders none/set draw_borders true/g' "${HOME}"/.config/ranger/rc.conf
-
-sed -i 's/icon-theme: "Papirus";/icon-theme: "Tela-circle-dark";/g' rofi/config.rasi
-sleep 1s
-sed -i 's/terminal: "kitty";/terminal: "wezterm";/g' rofi/config.rasi
-sleep 1s
-sed -i 's/.*catppuccin-macchiato.rasi.*//g' rofi/config.rasi
-sleep 1s
-printf "@theme \"${HOME}/.config/rofi/themes/catppuccin-macchiato.rasi\"\n" >> rofi/config.rasi
 sleep 1s
 
-cp -r rofi "${HOME}"/.config/
-cp -r spicetify "${HOME}"/.config/
-
-cp "${SRCPATH}"/i3/config "${HOME}"/.config/i3
-cp -f "${SRCPATH}"/i3/configblocks "${HOME}"/.config/i3blocks/config
-
-if ! [[ -f /usr/share/xsessions/plasma-i3.desktop ]]; then
-    sudo touch /usr/share/xsessions/plasma-i3.desktop
-    sleep 1s
-fi
-
-printf "[Desktop Entry]\nType=XSession\nExec=env KDEWM=/usr/bin/i3 /usr/bin/startplasma-x11\nDesktopNames=KDE\nName=Plasma with i3 (X11)\nComment=Plasma with i3 (X11)\n" | sudo tee /usr/share/xsessions/plasma-i3.desktop
-sleep 1s
+# cp "${SRCPATH}"/i3/config "${HOME}"/.config/i3
+# cp -f "${SRCPATH}"/i3/configblocks "${HOME}"/.config/i3blocks/config
+#
+# if ! [[ -f /usr/share/xsessions/plasma-i3.desktop ]]; then
+#     sudo touch /usr/share/xsessions/plasma-i3.desktop
+#     sleep 1s
+# fi
+#
+# printf "[Desktop Entry]\nType=XSession\nExec=env KDEWM=/usr/bin/i3 /usr/bin/startplasma-x11\nDesktopNames=KDE\nName=Plasma with i3 (X11)\nComment=Plasma with i3 (X11)\n" | sudo tee /usr/share/xsessions/plasma-i3.desktop
+# sleep 1s
 
 cd "${APPSPATH}"
 #mkdir -p "${APPSPATH}"/bleh && cd ${APPSPATH}/bleh
@@ -466,12 +500,12 @@ sleep 1s
 
 cd "${SRCPATH}"
 
-# Disable systemd startup
-echo
-echo "Disabling systemd startup"
-echo
-kwriteconfig5 --file startkderc --group General --key systemdBoot false
-sleep 1s
+# # Disable systemd startup
+# echo
+# echo "Disabling systemd startup"
+# echo
+# kwriteconfig5 --file startkderc --group General --key systemdBoot false
+# sleep 1s
 
 echo
 echo "Disabling Show Activity Switcher's Meta+Q shortcut"

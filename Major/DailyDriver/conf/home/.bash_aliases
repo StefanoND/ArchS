@@ -130,6 +130,21 @@ alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
 # Restart Plasma, only works for KDE 5.10 or higher
 alias restartplasma='kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell &'
 
+# Restart sxhkd
+alias restartsxhkd='killandnotify "sxhkd" && notify "sxhkd reloaded" && sxhkd &'
+
+# Restart swhkd
+alias restartswhkd='killandnotify "swhkd" && notify "swhkd reloaded" && pkexec swhkd &'
+
+# Restart kwin
+alias restartkwin='kwin_x11 --replace &'
+
+# Restart kwin and plasma
+alias restartdesktop='restartkwin restartplasma'
+
+# Firefox
+alias firefox='org.mozilla.firefox --ProfileManager'
+
 #######################################################
 # POST ADDED ALIAS'S
 #######################################################
