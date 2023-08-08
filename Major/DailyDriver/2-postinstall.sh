@@ -89,6 +89,7 @@ PKGS=(
     'ntfs-3g'                                   # NTFS support
     'starship'
     'htop'
+    'npm'
 
     # QEMU
     'qemu-desktop'
@@ -146,6 +147,7 @@ PKGA=(
     'autojump'
     'kwin-polonium'
     'kwin-effect-rounded-corners-git'
+    'swhkd-git'
 #    'i3-gaps-rounded-git'
     'spicetify-cli'
     'pamac-aur'
@@ -519,7 +521,7 @@ mkdir bismuth/build && cd bismuth/build
 npm install typescript && npm audit fix --force
 cmake ..
 make
-make install
+sudo make install
 
 cd "${SRCPATH}"
 
