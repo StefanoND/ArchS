@@ -502,10 +502,24 @@ sleep 1s
 
 cd "${APPSPATH}"
 #mkdir -p "${APPSPATH}"/bleh && cd ${APPSPATH}/bleh
+echo
+echo 'Installing ble'
+echo
 git clone --recursive https://github.com/akinomyoga/ble.sh.git
 sleep 1s
 make -C ble.sh
 sleep 1s
+
+
+echo
+echo 'Installing Bismuth (Tiling Manager)'
+echo
+git clone https://github.com/Elfahor/bismuth.git
+mkdir bismuth/build && cd bismuth/build
+npm install typescript && npm audit fix --force
+cmake ..
+make
+make install
 
 cd "${SRCPATH}"
 
