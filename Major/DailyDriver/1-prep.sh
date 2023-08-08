@@ -104,9 +104,14 @@ if ! [[ -f /usr/share/sddm/scripts/Xsetup ]]; then
     sleep 1s
 fi
 
+echo
 printf "setxkbmap $KBLOCALE\n" | sudo tee -a /usr/share/sddm/scripts/Xsetup
+echo
 sleep 1s
 
+echo
+echo 'Applying theme to /etc/sddm.conf.d/kde_settings.conf'
+echo
 sudo sed -i '/^Current=.*/a CursorSize=36' /etc/sddm.conf.d/kde_settings.conf
 sleep 1s
 sudo sed -i '/^Current=.*/a CursorTheme=Sweet-cursors' /etc/sddm.conf.d/kde_settings.conf
@@ -114,6 +119,9 @@ sleep 1s
 sudo sed -i "/^Current=.*/a Font='Fira Code'" /etc/sddm.conf.d/kde_settings.conf
 sleep 1s
 
+echo
+echo 'Applying theme to /usr/lib/sddm/sddm.conf.d/default.conf'
+echo
 sudo sed -i 's/Current=.*/Current=sugar-candy/g' /usr/lib/sddm/sddm.conf.d/default.conf
 sleep 1s
 sudo sed -i 's/CursorSize=.*/CursorSize=36/g' /usr/lib/sddm/sddm.conf.d/default.conf
@@ -154,7 +162,7 @@ if [[ -f "${HOME}"/.xinitrc ]]; then
     sleep 1s
 fi
 
-sed -i "s/\#ExecStart=USERPATH\/hotkeys.sh/ExecStart=${APPSPATH}\/archs\/hotkeys.sh/g" "${SRCPATH}"/conf/systemd/hotkeys.service
+sed -i "s/\#ExecStart=USERPATH\/hotkeys.sh/ExecStart=\/home\/$(logname)\/archs\/hotkeys.sh/g" "${SRCPATH}"/conf/systemd/hotkeys.service
 sleep 1s
 
 echo
