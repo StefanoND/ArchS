@@ -203,7 +203,7 @@ sleep 1s
 
 clear
 
-if ! [[ -f "${APPSPATH}" ]]; then
+if ! [[ -d "${APPSPATH}" ]]; then
     echo
     printf "Creating ${APPSPATH} path"
     echo

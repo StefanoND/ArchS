@@ -12,7 +12,7 @@ nvme0n1p3=null
 APPSPATH="${HOME}/.apps"
 SRCPATH="$(cd $(dirname $0) && pwd)"
 
-if ! [[ -f "${APPSPATH}" ]]; then
+if ! [[ -d "${APPSPATH}" ]]; then
     echo
     printf "Creating ${APPSPATH} path"
     echo
