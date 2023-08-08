@@ -52,9 +52,15 @@ if [[ `pacman -Q | grep -i 'iptables'` ]] && \
     echo
     echo
     echo
+    echo
+    echo
+    echo
     echo 'Replacing iptables with iptables-nft'
     echo 'Press Y when it asks to remove iptables'
     echo
+    echo
+    echo
+    sleep 2s
     sudo pacman -S iptables-nft --needed
     sleep 1s
 elif ! [[ `pacman -Q | grep -i 'iptables'` ]] && \
