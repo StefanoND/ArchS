@@ -29,18 +29,12 @@ sleep 1s
 PKGX=(
     'docker'                                        #
     'docker-buildx'                                 #
-    'filelight'                                     # Show disk usage analyzer
-    'gparted'                                       # Partitions Manager
-    'neofetch'                                      # System Information tool
-    'print-manager'
-    'hplip'                                         # Driver for HP Deskjet (All-in-One) printers
     'skanlite'                                      # Image Scanning App (If you have a scanner or aio printer/scanner)
     'wine-staging'                                  # Compatibility Layer for running Windows programs (Staging Branch)
     'winetricks'                                    # Work around problems and install apps under Wine
     'wine-mono'                                     # Wine's built-in replacement for Microsoft's .NET Framework
     'wine-gecko'                                    # Wine's built-in replacement for Microsoft's Internet Explorer
     'dos2unix'                                      # Converting DOS stuff to unix
-    'npm'                                           # Package manager for Javascript
     'lutris'                                        # Lutris
     'steam'                                         # Steam
     'distrobox'                                     #
@@ -56,20 +50,6 @@ for PKG in "${PKGX[@]}"; do
     sleep 1s
 done
 
-echo
-echo "Enabling npm's tab completion"
-echo
-sudo npm install --global all-the-package-names
-
-sleep 1s
-
-echo
-echo "Updating npm to latest version"
-echo
-sudo npm install -g npm@latest
-
-sleep 1s
-
 # AUR
 PKGY=(
     'ttf-ms-fonts'
@@ -78,7 +58,6 @@ PKGY=(
     'vscodium-bin-marketplace'                      # VS Codium market place
     'vscodium-bin-features'                         # Unblock some features blocked for non-MS's VSCode
     'deckboard-appimage'                            # Streamdeck alternative
-    'hplip-plugin'                                  # Plugin for HP Deskjet (All-in-One) printers
     'protonup-qt'                                   # ProtonUp-Qt
     'eam-git'                                       # Epic Games' Marketplace for Linux
     'heroic-games-launcher-bin'                     # Epic Games and GOG launcher
@@ -99,75 +78,6 @@ for PKG in "${PKGY[@]}"; do
     echo "INSTALLING: ${PKG}"
     echo
     paru -S "$PKG" --noconfirm --needed --sudoloop
-    echo
-    sleep 1s
-done
-
-if lspci | grep -iq renesas; then
-    echo
-    echo "Found hardware that requires \"Renesas' USB 3.0 chipset firmware\""
-    echo
-    echo "Installing \"upd72020x-fw\""
-    echo
-    paru -S upd72020x-fw --noconfirm --needed --sudoloop
-    sleep 1s
-fi
-
-if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
-    echo
-    echo "NVidia GPU found, downloading packages for it"
-    echo
-    PKGG=(
-        'gwe'                                           # System Util for controlling NVidia GPUs
-#        ''                                              #
-    )
-
-    for PKG in "${PKGG[@]}"; do
-        echo
-        echo "INSTALLING: ${PKG}"
-        echo
-        paru -S "$PKG" --noconfirm --needed --sudoloop
-        echo
-        sleep 1s
-    done
-fi
-
-# FLATPAK
-PKGZ=(
-    'com.github.tchx84.Flatseal'                    # Flatpak permission manager
-    'org.mozilla.firefox'                           # Firefox Browser
-    'net.mullvad.MullvadBrowser'                    # Mullvad Browser
-    'com.github.micahflee.torbrowser-launcher'      # Tor Browser
-    'com.discordapp.Discord'                        # Discord
-    'io.github.mimbrero.WhatsAppDesktop'            # Whatsapp
-    'org.signal.Signal'                             # Signal
-    'network.loki.Session'                          # Session
-    'net.agalwood.Motrix'                           # Download Manager
-    'org.libreoffice.LibreOffice'                   # FLOSS office suite ("replaces" MS Word, PowerPoint and Excel)
-    'md.obsidian.Obsidian'                          # A knowledge base that works on local Markdown files
-    'org.kde.okteta'                                # Hex Editor
-    'org.kde.kleopatra'                             # Certificate Manager and Unified Crypto GUI
-    'org.qbittorrent.qBittorrent'                   # Torrent app
-    'io.mpv.Mpv'                                    # Media player
-    'info.smplayer.SMPlayer'                        # SMPlayer
-    'org.gimp.GIMP'                                 # GNU Image Manipulator
-    'org.kde.krita'                                 # Digital Painting Software
-    'org.inkscape.Inkscape'                         # Vector Graphics Editor
-    'org.blender.Blender'                           # 3D Modelling Software
-    'fr.handbrake.ghb'                              # Transcoder
-    'io.github.Qalculate.qalculate-qt'              # Calculator
-    'com.spotify.Client'                            # Spotify
-    'com.obsproject.Studio'                         # Streaming software
-    'io.github.antimicrox.antimicrox'               # Graphical program used to map gamepad keys to keyboard, mouse, scripts and macros
-    'nl.hjdskes.gcolor3'                            # Color Picker
-#    ''         # 
-)
-
-for PKG in "${PKGZ[@]}"; do
-    echo
-    echo "INSTALLING: ${PKG}"
-    echo
-    flatpak install flathub "$PKG" -y --or-update
     echo
     sleep 1s
 done
@@ -201,7 +111,7 @@ echo "Running GIMP"
 echo
 org.gimp.GIMP &
 sleep 5s
-killall gimp-2.10
+killall -9 gimp-2.10
 
 echo
 echo "Installing PhotoGIMP"

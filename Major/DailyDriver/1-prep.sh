@@ -165,6 +165,11 @@ fi
 sed -i "s/\#ExecStart=USERPATH\/hotkeys.sh/ExecStart=\/home\/$(logname)\/archs\/hotkeys.sh/g" "${SRCPATH}"/conf/systemd/hotkeys.service
 sleep 1s
 
+if [[ `echo $XDG_SESSION_TYPE | grep -iq x11` ]]; then
+    sed -i 's/config.enable_wayland = true/config.enable_wayland = false/g' "${SRCPATH}"/conf/home/.wezterm.lua
+    sleep 1s
+fi
+
 echo
 printf "Copying config files to a permanent place at: "
 printf "\"${APPSPATH}/archs\""

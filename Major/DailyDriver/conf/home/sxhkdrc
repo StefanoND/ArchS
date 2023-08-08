@@ -1,5 +1,5 @@
 # Wezterm
-F12
+super + Return
   tdrop -amt -w 1728 -h 944 -y 0 -x 96 wezterm
 
 # Restart sxhkd

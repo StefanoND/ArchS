@@ -63,7 +63,7 @@ PKGS=(
     'ntfs-3g'                                   # NTFS support
     'starship'
     'htop'
-    'npm'
+    'npm'                                       # Package manager for Javascript
 
     # QEMU
     'qemu-desktop'
@@ -102,14 +102,72 @@ PKGS=(
     #'wmctrl'
     #'picom'
 
+    # 3D/Hardware Acceleration/Gaming related/dependencies
+    'vkd3d'                                     #
+    'lib32-vkd3d'                               #
+    'lib32-sqlite'                              # Lutris Dependency
+    'vulkan-headers'                            # Vulkan Header Files
+    'vulkan-validation-layers'                  # Vulkan Validation Layers
+    'vulkan-tools'                              # Vulkan Utilities and Tools
+    'opencl-headers'                            #
+    'opencl-clhpp'                              #
+    'libvdpau-va-gl'                            # Hardware Acceleration
+    'gstreamer'                                 # Hardware Acceleration
+    'gstreamer-vaapi'                           # Hardware Acceleration
+    'lib32-libappindicator-gtk2'                # Tray Icon Support for Steam
+
     # i3 Depdendencies
     #'sysstat'
     #'acpi'
     #'alsa-utils'
+    'giflib'                                    # Wine Dependency Hell
+    'lib32-giflib'                              # Wine Dependency Hell
+    'libpng'                                    # Wine Dependency Hell
+    'lib32-libpng'                              # Wine Dependency Hell
+    'libldap'                                   # Wine Dependency Hell
+    'lib32-libldap'                             # Wine Dependency Hell
+    'gnutls'                                    # Wine Dependency Hell
+    'lib32-gnutls'                              # Wine Dependency Hell
+    'mpg123'                                    # Wine Dependency Hell
+    'lib32-mpg123'                              # Wine Dependency Hell
+    'openal'                                    # Wine Dependency Hell
+    'lib32-openal'                              # Wine Dependency Hell
+    'v4l-utils'                                 # Wine Dependency Hell
+    'lib32-v4l-utils'                           # Wine Dependency Hell
+    'libpulse'                                  # Wine Dependency Hell
+    'lib32-libpulse'                            # Wine Dependency Hell
+    'alsa-plugins'                              # Wine Dependency Hell
+    'lib32-alsa-plugins'                        # Wine Dependency Hell
+    'alsa-lib'                                  # Wine Dependency Hell
+    'lib32-alsa-lib'                            # Wine Dependency Hell
+    'libjpeg-turbo'                             # Wine Dependency Hell
+    'lib32-libjpeg-turbo'                       # Wine Dependency Hell
+    'libxcomposite'                             # Wine Dependency Hell
+    'lib32-libxcomposite'                       # Wine Dependency Hell
+    'libxinerama'                               # Wine Dependency Hell
+    'lib32-libxinerama'                         # Wine Dependency Hell
+    'ncurses'                                   # Wine Dependency Hell
+    'lib32-ncurses'                             # Wine Dependency Hell
+    'opencl-icd-loader'                         # Wine Dependency Hell
+    'lib32-opencl-icd-loader'                   # Wine Dependency Hell
+    'libxslt'                                   # Wine Dependency Hell
+    'lib32-libxslt'                             # Wine Dependency Hell
+    'libva'                                     # Wine Dependency Hell
+    'lib32-libva'                               # Wine Dependency Hell
+    'gtk3'                                      # Wine Dependency Hell
+    'lib32-gtk3'                                # Wine Dependency Hell
+    'gst-plugins-base-libs'                     # Wine Dependency Hell
+    'lib32-gst-plugins-base-libs'               # Wine Dependency Hell
+    'vulkan-icd-loader'                         # Wine Dependency Hell
+    'lib32-vulkan-icd-loader'                   # Wine Dependency Hell
+    'cups'                                      # Wine Dependency Hell
+    'samba'                                     # Wine Dependency Hell
+    'dosbox'                                    # Wine Dependency Hell
 )
 
 # Paru
 PKGA=(
+    'hplip-plugin'                                  # Plugin for HP Deskjet (All-in-One) printers
     'ibus-autostart-kimpanel'
     'zram-generator'
     'timeshift-bin'
@@ -129,12 +187,47 @@ PKGA=(
     'libpamac-aur'
     'pamac-tray-icon-plasma'
     'ttf-meslo-nerd-font-powerlevel10k'         # Meslo Nerd font patched for
+    'opentabletdriver'                          # Tablet Driver ("-git" version not working)
+    'gamemode-git'                              # Optimizations for games
+    'lib32-gamemode-git'                        # 32-bit library for gamemode
+    'lib32-glslang'                             # OpenGL and OGL ES front end and validator
+    'mingw-w64-glslang'                         # OpenGL and OGL ES front end and validator
+    'ttf-ms-fonts'                              # Core TTF fonts from Microsoft
+    'ttf-vista-fonts'                           # TTF fonts from vista and office
+    'adobe-base-14-fonts'                       # Adobe base 14 fonts (Courier, Helvetica, Times, Symbol, etc)
+    'xboxdrv'                                   # Gamepad driver for Linux (Controller Support)
+    'tdrop'
 )
 
 # Pacman
 PKGFP=(
-    'com.github.tchx84.Flatseal'
-    'org.gnu.emacs'
+    'com.github.tchx84.Flatseal'                    # Flatpak permission manager
+    'org.gnu.emacs'                                 # "Family of text editors"
+    'org.mozilla.firefox'                           # Firefox Browser
+    'net.mullvad.MullvadBrowser'                    # Mullvad Browser
+    'com.github.micahflee.torbrowser-launcher'      # Tor Browser
+    'com.discordapp.Discord'                        # Discord
+    'io.github.mimbrero.WhatsAppDesktop'            # Whatsapp
+    'org.signal.Signal'                             # Signal
+    'network.loki.Session'                          # Session
+    'org.libreoffice.LibreOffice'                   # FLOSS office suite ("replaces" MS Word, PowerPoint and Excel)
+    'md.obsidian.Obsidian'                          # A knowledge base that works on local Markdown files
+    'org.kde.okteta'                                # Hex Editor
+    'org.kde.kleopatra'                             # Certificate Manager and Unified Crypto GUI
+    'org.qbittorrent.qBittorrent'                   # Torrent app
+    'io.mpv.Mpv'                                    # Media player
+    'info.smplayer.SMPlayer'                        # SMPlayer
+    'org.gimp.GIMP'                                 # GNU Image Manipulator
+    'org.kde.krita'                                 # Digital Painting Software
+    'org.inkscape.Inkscape'                         # Vector Graphics Editor
+    'org.blender.Blender'                           # 3D Modelling Software
+    'fr.handbrake.ghb'                              # Transcoder
+    'io.github.Qalculate.qalculate-qt'              # Calculator
+    'com.spotify.Client'                            # Spotify
+    'com.obsproject.Studio'                         # Streaming software
+    'io.github.antimicrox.antimicrox'               # Graphical program used to map gamepad keys to keyboard, mouse, scripts and macros
+    'nl.hjdskes.gcolor3'                            # Color Picker
+#    ''         #
 )
 
 # Still not ready for daily-use
@@ -259,6 +352,164 @@ for PKG in "${PKGA[@]}"; do
     echo
     sleep 1s
 done
+
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+    echo
+    echo "NVidia GPU found"
+    echo
+    sleep 1s
+
+    if pacman -Q | grep -iq libva-vdpau-driver; then
+        echo
+        echo "Removing libva-vdpau-driver since it conflicts with nvidia's"
+        echo
+        sudo pacman -Rdd libva-vdpau-driver --noconfirm
+        sleep 1s
+    fi
+
+    echo
+    echo "Installing NVidia's Proprietary Vulkan Drivers"
+    echo
+    sudo pacman -S nvidia-utils lib32-nvidia-utils opencl-nvidia libva-nvidia-driver gwe --noconfirm --needed
+    sleep 1s
+
+    if ! [[ `pacman -Q | grep -i 'nvidia-dkms'` ]]; then
+        echo
+        echo "Installing NVidia dkms"
+        echo
+        sudo pacman -S nvidia-dkms --noconfirm --needed
+        sleep 1s
+    fi
+
+    printf "LIBVA_DRIVER_NAME=nvidia\n" | sudo tee -a /etc/environment
+    sleep 1s
+
+    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json" | sudo tee -a /etc/environment
+    sleep 1s
+
+    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d" | sudo tee -a /etc/environment
+    sleep 1s
+
+    export LIBVA_DRIVER_NAME=nvidia
+    sleep 1s
+
+    export VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d
+    sleep 1s
+
+    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
+    sleep 1s
+fi
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd; then
+    echo
+    echo "AMD GPU found"
+    echo
+    sleep 1s
+    echo
+    echo "Installing AMD's Open-Source Vulkan Drivers"
+    echo
+    sudo pacman -S vulkan-radeon lib32-vulkan-radeon amdvlk lib32-amdvlk opencl-mesa --noconfirm --needed
+    sleep 1s
+    echo
+    echo "Installing AMD's Proprietary Vulkan Drivers"
+    echo
+    paru -S amdgpu-pro-installer amd-vulkan-prefixes --noconfirm --needed --sudoloop
+    sleep 1s
+fi
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq intel; then
+    echo
+    echo "Intel GPU found"
+    echo
+    sleep 1s
+    echo
+    echo "Installing Intel's Proprietary Vulkan Drivers"
+    echo
+    sudo pacman -S vulkan-intel lib32-vulkan-intel opencl-mesa --noconfirm --needed
+    sleep 1s
+
+    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json" | sudo tee -a /etc/environment
+    sleep 1s
+
+    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nv_vulkan_wrapper.json" | sudo tee -a /etc/environment
+    sleep 1s
+
+    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d" | sudo tee -a /etc/environment
+    sleep 1s
+
+    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json
+    sleep 1s
+
+    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nv_vulkan_wrapper.json
+    sleep 1s
+
+    export VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d
+    sleep 1s
+
+fi
+
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio; then
+    echo
+    echo "VirtIO vGPU found"
+    echo
+    sleep 1s
+    sudo pacman -S vulkan-virtio lib32-vulkan-virtio --noconfirm --needed
+    sleep 1s
+
+    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.i686.json" | sudo tee -a /etc/environment
+    sleep 1s
+
+    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.x86_64.json" | sudo tee -a /etc/environment
+    sleep 1s
+
+    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d" | sudo tee -a /etc/environment
+    sleep 1s
+
+    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.i686.json
+    sleep 1s
+
+    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.x86_64.json
+    sleep 1s
+
+    export VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d
+    sleep 1s
+fi
+if ! [[ `lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio` ]] &&
+   ! [[ `lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia` ]] &&
+   ! [[ `lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd` ]] &&
+   ! [[ `lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq intel` ]]; then
+    echo
+    echo "No GPU found"
+    echo
+    sudo pacman -S vulkan-swrast lib32-vulkan-swrast --noconfirm --needed
+    sleep 1s
+
+    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.i686.json" | sudo tee -a /etc/environment
+    sleep 1s
+
+    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json" | sudo tee -a /etc/environment
+    sleep 1s
+
+    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d" | sudo tee -a /etc/environment
+    sleep 1s
+
+    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.i686.json
+    sleep 1s
+
+    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
+    sleep 1s
+
+    export VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d
+    sleep 1s
+fi
+
+if lspci | grep -iq renesas; then
+    echo
+    echo "Found hardware that requires \"Renesas' USB 3.0 chipset firmware\""
+    echo
+    echo "Installing \"upd72020x-fw\""
+    echo
+    paru -S upd72020x-fw --noconfirm --needed --sudoloop
+    sleep 1s
+fi
 
 # # Nix home-manager
 # for PKG in "${PKGHM[@]}"; do
@@ -448,16 +699,6 @@ echo
 sed -i 's/manage activities=Meta+Q,Meta+Q,Show Activity Switcher/manage activities=none,Meta+Q,Show Activity Switcher/g' $HOME/.config/kglobalshortcutsrc
 sleep 1s
 
-if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
-    if ! [[ `pacman -Q | grep -i 'nvidia-dkms'` ]]; then
-        echo
-        echo "Installing NVidia dkms"
-        echo
-        sudo pacman -S nvidia-dkms --noconfirm --needed
-        sleep 1s
-    fi
-fi
-
 echo
 echo "Setting CPU governor to Performance and setting min and max freq"
 echo
@@ -469,6 +710,7 @@ sudo sed -i "s|#min_freq=.*|min_freq=3.7GHz|g" /etc/default/cpupower
 sleep 1s
 sudo sed -i "s|#max_freq=.*|max_freq=4.2GHz|g" /etc/default/cpupower
 sleep 1s
+
 echo
 echo "Enabling cpupower service"
 echo
@@ -482,6 +724,20 @@ echo
 echo "Enabling gnome-keyring service"
 echo
 systemctl --user enable --now gnome-keyring-daemon.service
+sleep 1s
+
+echo
+echo "Enabling gamemode service"
+echo
+systemctl --user enable --now gamemoded.service
+sleep 1s
+sudo chmod +x /usr/bin/gamemoderun
+sleep 1s
+
+echo
+echo "Enabling opentrabletdriver service"
+echo
+systemctl --user enable --now opentabletdriver.service
 sleep 1s
 
 if [[ `pacman -Q | grep -i 'virtualbox-host-dkms'` ]] && [[ ${enablevb,,} = y ]]; then
@@ -573,6 +829,18 @@ echo
 sudo sysctl -w kernel.dmesg_restrict=1
 sleep 1s
 
+echo
+echo "Enabling npm's tab completion"
+echo
+sudo npm install --global all-the-package-names
+sleep 1s
+
+echo
+echo "Updating npm to latest version"
+echo
+sudo npm install -g npm@latest
+sleep 1s
+
 #if [[ -f /etc/pulse/daemon.conf ]]; then
 #    echo
 #    echo "Making a backup of \"/etc/pulse/daemon.conf\" to \"/etc/pulse/daemon.conf.old\""
@@ -652,9 +920,11 @@ sync
 sleep 1s
 
 echo
-echo "Done..."
+echo 'Done...'
 echo
-echo "Press Y to reboot now or N if you plan to manually reboot later."
+echo "Don't forget to check https://github.com/StefanoND/ArchS/blob/main/Misc/vulkandrivers.sh for dealing with loading Vulkan Drivers"
+echo
+echo 'Press Y to reboot now or N if you plan to manually reboot later.'
 echo
 read REBOOT
 if [ ${REBOOT,,} = y ]; then
