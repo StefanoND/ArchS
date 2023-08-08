@@ -221,6 +221,21 @@ sleep 1s
 sudo bash -c "echo 10 > /sys/fs/btrfs/$(blkid -s UUID -o value /dev/$nvme0n1p3)/allocation/data/bg_reclaim_threshold"
 sleep 1s
 
+if ! [[ -f "${HOME}"/.config/kxkbrc ]]; then
+    touch "${HOME}"/.config/kxkbrc
+fi
+
+echo '' >> "${HOME}"/.config/kxkbrc
+sleep 1s
+echo '[Layout]' >> "${HOME}"/.config/kxkbrc
+sleep 1s
+printf "LayoutList=$KBLOCALE" >> "${HOME}"/.config/kxkbrc
+sleep 1s
+echo 'Use=true' >> "${HOME}"/.config/kxkbrc
+sleep 1s
+echo '' >> "${HOME}"/.config/kxkbrc
+sleep 1s
+
 echo
 echo 'Syncing system'
 echo

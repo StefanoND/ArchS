@@ -191,7 +191,7 @@ ln -svf "${APPSPATH}"/archs/.bashrc "${HOME}"/.bashrc
 ln -svf "${APPSPATH}"/archs/.bash_aliases "${HOME}"/.bash_aliases
 ln -svf "${APPSPATH}"/archs/.wezterm.lua "${HOME}"/.wezterm.lua
 ln -svf "${APPSPATH}"/archs/.xinitrc "${HOME}"/.xinitrc
-ln -svf "${APPSPATH}"/archs/hotkeys.sh.desktop "${HOME}".config/autostart/
+cp "${APPSPATH}"/archs/hotkeys.sh.desktop "${HOME}".config/autostart/
 sleep 1s
 
 sudo cp -r "${FFPATH}"/Sweet-cursors /usr/share/icons
