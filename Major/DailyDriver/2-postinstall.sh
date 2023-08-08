@@ -133,8 +133,8 @@ PKGA=(
 
 # Pacman
 PKGFP=(
-    'flathub com.github.tchx84.Flatseal'
-    'flathub org.gnu.emacs'
+    'com.github.tchx84.Flatseal'
+    'org.gnu.emacs'
 )
 
 # Still not ready for daily-use
@@ -245,7 +245,7 @@ for PKG in "${PKGFP[@]}"; do
     echo
     echo "INSTALLING: ${PKG}"
     echo
-    flatpak install "$PKG" -y
+    flatpak install flathub "$PKG" -y
     echo
     sleep 1s
 done
