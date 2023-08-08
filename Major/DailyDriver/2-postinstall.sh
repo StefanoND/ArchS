@@ -384,10 +384,10 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
     printf "LIBVA_DRIVER_NAME=nvidia\n" | sudo tee -a /etc/environment
     sleep 1s
 
-    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json" | sudo tee -a /etc/environment
+    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json\n" | sudo tee -a /etc/environment
     sleep 1s
 
-    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d" | sudo tee -a /etc/environment
+    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n" | sudo tee -a /etc/environment
     sleep 1s
 
     export LIBVA_DRIVER_NAME=nvidia
@@ -426,13 +426,13 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq intel; then
     sudo pacman -S vulkan-intel lib32-vulkan-intel opencl-mesa --noconfirm --needed
     sleep 1s
 
-    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json" | sudo tee -a /etc/environment
+    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json\n" | sudo tee -a /etc/environment
     sleep 1s
 
-    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nv_vulkan_wrapper.json" | sudo tee -a /etc/environment
+    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nv_vulkan_wrapper.json\n" | sudo tee -a /etc/environment
     sleep 1s
 
-    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d" | sudo tee -a /etc/environment
+    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n" | sudo tee -a /etc/environment
     sleep 1s
 
     export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json
@@ -454,13 +454,13 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio; then
     sudo pacman -S vulkan-virtio lib32-vulkan-virtio --noconfirm --needed
     sleep 1s
 
-    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.i686.json" | sudo tee -a /etc/environment
+    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.i686.json\n" | sudo tee -a /etc/environment
     sleep 1s
 
-    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.x86_64.json" | sudo tee -a /etc/environment
+    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.x86_64.json\n" | sudo tee -a /etc/environment
     sleep 1s
 
-    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d" | sudo tee -a /etc/environment
+    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n" | sudo tee -a /etc/environment
     sleep 1s
 
     export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.i686.json
@@ -482,13 +482,13 @@ if ! [[ `lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio` ]] &&
     sudo pacman -S vulkan-swrast lib32-vulkan-swrast --noconfirm --needed
     sleep 1s
 
-    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.i686.json" | sudo tee -a /etc/environment
+    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.i686.json\n" | sudo tee -a /etc/environment
     sleep 1s
 
-    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json" | sudo tee -a /etc/environment
+    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json\n" | sudo tee -a /etc/environment
     sleep 1s
 
-    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d" | sudo tee -a /etc/environment
+    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n" | sudo tee -a /etc/environment
     sleep 1s
 
     export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.i686.json

@@ -244,11 +244,11 @@ if ! [[ -d /home/$USERNAME/Documents ]]; then
     chown -R $USERNAME:$GROUPNAME /home/$USERNAME/Documents
 fi
 
-echo 'QT_QPA_PLATFORM="xcb;wayland"' >> /etc/environemnt
-echo 'GTK_IM_MODULE=ibus' >> /etc/environemnt
-echo 'QT_IM_MODULE=ibus' >> /etc/environemnt
-echo 'XMODIFIERS=@im=ibus' >> /etc/environemnt
-#echo '' >> /etc/environemnt
+echo 'QT_QPA_PLATFORM="xcb;wayland"' >> /etc/environment
+echo 'GTK_IM_MODULE=ibus' >> /etc/environment
+echo 'QT_IM_MODULE=ibus' >> /etc/environment
+echo 'XMODIFIERS=@im=ibus' >> /etc/environment
+#echo '' >> /etc/environment
 
 
 echo
