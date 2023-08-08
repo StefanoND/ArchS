@@ -121,6 +121,16 @@ echo
 flatpak remote-add flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 sleep 1s
 
+printf "XKB_DEFAULT_LAYOUT=$KBLOCALE\n" | sudo tee -a /etc/environment
+sleep 1s
+printf "XKB_DEFAULT_OPTIONS=compose:ralt,ctrl:nocaps\n" | sudo tee -a /etc/environment
+sleep 1s
+
+export XKB_DEFAULT_LAYOUT=$KBLOCALE
+sleep 1s
+export XKB_DEFAULT_OPTIONS=compose:ralt,ctrl:nocaps
+sleep 1s
+
 echo
 echo "Config Ranger"
 echo

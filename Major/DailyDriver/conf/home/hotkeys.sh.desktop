@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=/home/111111/.apps/archs/hotkeys.sh
+Icon=dialog-scripts
+Name=hotkeys.sh
+Type=Application
+X-KDE-AutostartScript=true

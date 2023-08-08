@@ -162,12 +162,16 @@ if [[ -f "${HOME}"/.xinitrc ]]; then
     sleep 1s
 fi
 
-sed -i "s/\#ExecStart=USERPATH\/hotkeys.sh/ExecStart=\/home\/$(logname)\/.apps\/archs\/hotkeys.sh/g" "${SRCPATH}"/conf/systemd/hotkeys.service
+sed -i "s/111111/$(logname)/g" "${SRCPATH}"/conf/systemd/hotkeys.sh.desktop
 sleep 1s
 
 if [[ `echo $XDG_SESSION_TYPE | grep -iq x11` ]]; then
     sed -i 's/config.enable_wayland = true/config.enable_wayland = false/g' "${SRCPATH}"/conf/home/.wezterm.lua
     sleep 1s
+fi
+
+if ! [[ -d "${HOME}".config/autostart ]]; then
+    mkdir -p "${HOME}".config/autostart
 fi
 
 echo
@@ -178,8 +182,8 @@ cp -f "${SRCPATH}"/conf/home/.bashrc "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.bash_aliases "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.wezterm.lua "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.xinitrc "${APPSPATH}"/archs
-cp -f "${SRCPATH}"/conf/systemd/hotkeys.service "${APPSPATH}"/archs
-cp -f "${SRCPATH}"/conf/systemd/hotkeys.sh "${APPSPATH}"/archs
+cp -f "${SRCPATH}"/conf/home/hotkeys.sh "${APPSPATH}"/archs
+cp -f "${SRCPATH}"/conf/home/hotkeys.sh.desktop "${APPSPATH}"/archs
 sleep 1s
 
 printf "Symlinking config files to ${HOME}"
@@ -187,7 +191,7 @@ ln -svf "${APPSPATH}"/archs/.bashrc "${HOME}"/.bashrc
 ln -svf "${APPSPATH}"/archs/.bash_aliases "${HOME}"/.bash_aliases
 ln -svf "${APPSPATH}"/archs/.wezterm.lua "${HOME}"/.wezterm.lua
 ln -svf "${APPSPATH}"/archs/.xinitrc "${HOME}"/.xinitrc
-sudo cp -f "${APPSPATH}"/archs/hotkeys.service /etc/systemd/user/
+ln -svf "${APPSPATH}"/archs/hotkeys.sh.desktop "${HOME}".config/autostart/
 sleep 1s
 
 sudo cp -r "${FFPATH}"/Sweet-cursors /usr/share/icons
