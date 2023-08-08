@@ -28,6 +28,7 @@ sleep 1s
 
 clear
 
+KBLOCALE="pt"
 SRCPATH="$(cd $(dirname $0) && pwd)"
 FFPATH="${SRCPATH}/conf/aesthetic/ff"
 APPSPATH="${HOME}/.apps"
@@ -103,7 +104,7 @@ if ! [[ -f /usr/share/sddm/scripts/Xsetup ]]; then
     sleep 1s
 fi
 
-printf "setxkbmap pt\n" | sudo tee -a /usr/share/sddm/scripts/Xsetup
+printf "setxkbmap $KBLOCALE\n" | sudo tee -a /usr/share/sddm/scripts/Xsetup
 sleep 1s
 
 sudo sed -i '/^Current=.*/a CursorSize=36' /etc/sddm.conf.d/kde_settings.conf
@@ -153,9 +154,6 @@ if [[ -f "${HOME}"/.xinitrc ]]; then
     sleep 1s
 fi
 
-sed -i "s/\#USERNAME/#$(logname)/g" "${SRCPATH}"/conf/home/.bash_aliases
-sleep 1s
-
 sed -i "s/\#ExecStart=USERPATH\/hotkeys.sh/ExecStart=${APPSPATH}\/archs\/hotkeys.sh/g" "${SRCPATH}"/conf/systemd/hotkeys.service
 sleep 1s
 
@@ -176,7 +174,7 @@ ln -svf "${APPSPATH}"/archs/.bashrc "${HOME}"/.bashrc
 ln -svf "${APPSPATH}"/archs/.bash_aliases "${HOME}"/.bash_aliases
 ln -svf "${APPSPATH}"/archs/.wezterm.lua "${HOME}"/.wezterm.lua
 ln -svf "${APPSPATH}"/archs/.xinitrc "${HOME}"/.xinitrc
-ln -svf "${APPSPATH}"/archs/hotkeys.service /etc/systemd/user/
+sudo ln -svf "${APPSPATH}"/archs/hotkeys.service /etc/systemd/user/
 sleep 1s
 
 sudo cp -r "${FFPATH}"/Sweet-cursors /usr/share/icons

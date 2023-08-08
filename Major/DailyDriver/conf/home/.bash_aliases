@@ -148,6 +148,9 @@ alias restartdesktop='restartkwin restartplasma'
 # Firefox
 alias firefox='org.mozilla.firefox --ProfileManager'
 
+# Update system instead of manually typing
+alias updatesystem='sudo pacman -Syy && sudo powerpill -Su && paru -Su && flatpak update -y'
+
 #######################################################
 # POST ADDED ALIAS'S
 #######################################################

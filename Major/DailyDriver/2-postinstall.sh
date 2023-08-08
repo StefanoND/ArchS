@@ -35,31 +35,6 @@ sleep 1s
 
 # Pacman
 PKGS=(
-    # Tools
-    'rustup'                                    # Rust toolchain
-    'mingw-w64'                                 # MinGW Cross-compiler pack (binutils, crt, gcc, headers and winpthreads)
-    'libconfig'                                 # C/C++ Configuration file library
-    'gdb'                                       # GNU Debugger
-    'lldb'                                      # High performance debugger
-    'clang'
-    'lib32-clang'
-    'llvm'
-    'llvm-libs'
-    'lib32-llvm'
-    'lib32-llvm-libs'
-    'make'
-    'cmake'
-    'extra-cmake-modules'
-    'gnome-keyring'                             # Required by some apps for authentication
-    'libgnome-keyring'                          # Required by some apps for authentication
-    'libasyncns'
-    'lib32-libasyncns'
-    'patch'
-
-    # Packet Manager
-    'flatpak'                                   # Flatpak
-    #'libpamac-flatpak-plugin'                   # Flathub plugin
-
     # Fonts
     'ttf-fira-code'                             # My personal favorite font for programming
     'noto-fonts-extra'                          # Additional variants of noto fonts
@@ -84,7 +59,6 @@ PKGS=(
 
     # Misc
     'cpupower'                                  # CPU tuning utility
-    'ranger'                                    # File manager
     'python-pyqt5'                              #
     'ntfs-3g'                                   # NTFS support
     'starship'
@@ -148,6 +122,7 @@ PKGA=(
     'kwin-polonium'
     'kwin-effect-rounded-corners-git'
     'swhkd-git'
+    'powerpill'
 #    'i3-gaps-rounded-git'
     'spicetify-cli'
     'pamac-aur'
@@ -242,39 +217,12 @@ echo
 sudo pacman -Syyu --noconfirm --needed
 sleep 2s
 
-if [[ `pacman -Q | grep -i 'iptables'` ]] && \
- ! [[ `pacman -Q | grep -i 'iptables-nft'` ]]; then
-    echo
-    echo
-    echo
-    echo 'Replacing iptables with iptables-nft'
-    echo 'Press Y when it asks to remove iptables'
-    echo
-    sudo pacman -S iptables-nft --needed
-    sleep 1s
-elif ! [[ `pacman -Q | grep -i 'iptables'` ]] && \
- ! [[ `pacman -Q | grep -i 'iptables-nft'` ]]; then
-    echo
-    echo
-    echo
-    echo 'Installing iptables-nft'
-    echo
-    sudo pacman -S iptables-nft --noconfirm --needed
-    sleep 1s
-fi
-
 echo
 echo
 echo
 echo "Grab a coffee, it'll take some time"
 echo
 sleep 2s
-
-echo
-echo "Installing meson as dependency"
-echo
-sudo pacman -S meson --asdep --noconfirm --needed
-sleep 1s
 
 # Pacman
 for PKG in "${PKGS[@]}"; do
@@ -302,60 +250,6 @@ done
 # echo
 # home-manager switch
 # sleep 1s
-
-echo
-echo "Adding flathub"
-echo
-flatpak remote-add flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-sleep 1s
-
-echo
-echo "Config Ranger"
-echo
-ranger --copy-config=all
-export RANGER_LOAD_DEFAULT_RC=false
-printf "RANGER_LOAD_DEFAULT_RC=false\n" | sudo tee -a /etc/environment
-sleep 1s
-
-echo
-echo "Installing stable version of Rustup"
-echo
-rustup install stable
-sleep 1s
-
-echo
-echo "Adding i686 architecture support for Rustup"
-echo
-rustup target install i686-unknown-linux-gnu
-sleep 1s
-
-echo
-echo "Setting stable as our default Rustup toolchain"
-echo
-rustup default stable
-sleep 1s
-
-echo
-echo "Setting Cargo to run commands in parallel"
-echo
-cargo install async-cmd
-sleep 1s
-
-echo
-echo "Installing Paru"
-echo
-cd "${APPSPATH}" && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg --noconfirm --needed -si
-sleep 1s
-
-cd "${SRCPATH}"
-
-echo
-echo "Setting ranger as paru's File Manager"
-echo
-sudo sed -i "s|\#\[bin]|[bin]|g" /etc/paru.conf
-sleep 1s
-sudo sed -i "s|#FileManager.*|FileManager = ranger|g" /etc/paru.conf
-sleep 1s
 
 # Paru
 for PKG in "${PKGA[@]}"; do

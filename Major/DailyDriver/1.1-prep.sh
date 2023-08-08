@@ -165,5 +165,3 @@ exit 0
 #echo
 #echo "Window Management->Task Switcher: Thumbnail Switcher (https://store.kde.org/p/2010367)"
 #echo
-
-exit 0
