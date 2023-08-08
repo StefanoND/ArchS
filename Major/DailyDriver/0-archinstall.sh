@@ -111,16 +111,32 @@ fi
 
 # chroot into mnt
 arch-chroot /mnt ./ArchS/Major/DailyDriver/0.1-archinstall.sh
-sleep 1s
+sleep 2s
 
 # Remove ArchS from /mnt
+echo
+echo 'Removing /mnt/ArchS'
+echo
 rm -rf /mnt/ArchS
-sleep 1s
+sleep 2s
 
 # Unmount all drives (-R will remove everything mounted to that path)
-umount -R /mnt
-sleep 1s
+echo
+echo 'Unmounting all drives'
+echo
+umount -R /mnt/sys
+sleep 2s
 
-# Reboot
-shutdown -r now
+umount -R /mnt
+sleep 2s
+
+echo
+echo "Done..."
+echo
+echo "Press Y to reboot now or N if you plan to manually reboot later."
+echo
+read REBOOT
+if [ ${REBOOT,,} = y ]; then
+    shutdown -r now
+fi
 exit 0
