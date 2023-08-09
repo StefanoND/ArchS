@@ -93,7 +93,7 @@ PKGS=(
     'xdg-desktop-portal-gtk'
     'xsettingsd'
     'kwalletmanager'
-    'sxhkd'
+#    'sxhkd'
     'kate'
 
     # i3
@@ -559,9 +559,9 @@ fi
 if ! [[ -d "${HOME}"/.config/swhkd ]]; then
     mkdir -p "${HOME}"/.config/swhkd
 fi
-if ! [[ -d "${HOME}"/.config/sxhkd ]]; then
-    mkdir -p "${HOME}"/.config/sxhkd
-fi
+# if ! [[ -d "${HOME}"/.config/sxhkd ]]; then
+#     mkdir -p "${HOME}"/.config/sxhkd
+# fi
 
 sudo mv /etc/swhkd/swhkdrc /etc/swhkd/swhkdrc.old
 sleep 1s
@@ -569,8 +569,8 @@ sleep 1s
 cp -f "${SRCPATH}"/conf/home/swhkdrc "${HOME}"/.config/swhkd
 sleep 1s
 
-cp -f "${SRCPATH}"/conf/home/sxhkdrc "${HOME}"/.config/sxhkd
-sleep 1s
+#cp -f "${SRCPATH}"/conf/home/sxhkdrc "${HOME}"/.config/sxhkd
+#sleep 1s
 
 sudo ln -svf "${HOME}"/.config/swhkd/swhkdrc /etc/swhkd
 sleep 1s

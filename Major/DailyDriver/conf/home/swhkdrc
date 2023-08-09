@@ -4,4 +4,4 @@ super + Return
 
 # Restart sxhkd
 super + shift + r
-  bash -ic restartsxhkd
+  bash -ic restartswhkd
