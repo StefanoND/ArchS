@@ -5,3 +5,7 @@ super + Return
 # Restart sxhkd
 super + shift + r
   bash -ic restartswhkd
+
+# Rofi
+super + d
+  rofi -show drun

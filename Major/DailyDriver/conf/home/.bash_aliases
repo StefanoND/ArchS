@@ -137,7 +137,7 @@ alias restartplasma='kquitapp5 plasmashell || killall plasmashell && kstart5 pla
 alias restartsxhkd='killandnotify "sxhkd" && notify "sxhkd reloaded" && sxhkd &'
 
 # Restart swhkd
-alias restartswhkd='killandnotify "swhks" && killandnotify "swhkd" &&  notify "swhks reloaded" && notify "swhkd reloaded" && swhks & pkexec swhkd &'
+alias restartswhkd='killall -9 swhks && sudo killall -9 swhkd &&  notify "swhks reloaded" && notify "swhkd reloaded" && swhks & pkexec swhkd &'
 
 # Restart kwin
 alias restartkwin='kwin_x11 --replace &'
