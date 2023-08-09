@@ -254,6 +254,10 @@ sleep 1s
 echo '' >> "${HOME}"/.config/kxkbrc
 sleep 1s
 
+echo '$include /etc/inputrc' >> "${HOME}"/.inputrc
+echo 'set completion-ignore-case On' >> "${HOME}"/.inputrc
+echo '' >> "${HOME}"/.inputrc
+
 echo
 echo 'Syncing system'
 echo
