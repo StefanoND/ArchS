@@ -21,7 +21,7 @@ if ! [[ -d "${APPSPATH}" ]]; then
 fi
 
 echo
-echo 'Enabling Chaotic AUR'
+echo 'Enabling Chaotic AUR Repo'
 echo
 sudo pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 sudo pacman-key --lsign-key 3056513887B78AEB
@@ -30,20 +30,28 @@ sleep 1s
 sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
 sleep 1s
 
-sudo bash -c "echo '' >> /etc/pacman.conf"
 sudo bash -c "echo '[chaotic-aur]' >> /etc/pacman.conf"
 sudo bash -c "echo 'Include = /etc/pacman.d/chaotic-mirrorlist' >> /etc/pacman.conf"
 sudo bash -c "echo '' >> /etc/pacman.conf"
 sleep 1s
 
 echo
-echo 'Enabling Valve AUR'
+echo 'Enabling Valve AUR Repo'
 echo
 sudo bash -c "echo '[valveaur]' >> /etc/pacman.conf"
 sudo bash -c "echo 'SigLevel = Optional TrustedOnly' >> /etc/pacman.conf"
 sudo bash -c "echo 'Server = http://repo.steampowered.com/arch/valveaur' >> /etc/pacman.conf"
 sudo bash -c "echo '' >> /etc/pacman.conf"
 sleep 1s
+
+# echo
+# echo 'Enabling Garuda Repo'
+# echo
+# sudo bash -c "echo '[garuda]' >> /etc/pacman.conf"
+# sudo bash -c "echo 'SigLevel = Required DatabaseOptional' >> /etc/pacman.conf"
+# sudo bash -c "echo 'Include = /etc/pacman.d/chaotic-mirrorlist' >> /etc/pacman.conf"
+# sudo bash -c "echo '' >> /etc/pacman.conf"
+# sleep 1s
 
 sudo pacman -Syy
 

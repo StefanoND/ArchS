@@ -95,6 +95,7 @@ PKGS=(
     'kwalletmanager'
 #    'sxhkd'
     'kate'
+#    'garuda-settings-manager-kcm'
 
     # i3
     #'i3blocks'
@@ -176,7 +177,7 @@ PKGA=(
     'systemd-kcm'
     'kcm-polkit-kde-git'
     'kcm-uefi'
-    'garuda-settings-manager-kcm-git'
+    'archlinux-tweak-tool-git'
     'autojump'
     'kwin-polonium'
     'kwin-effect-rounded-corners-git'
