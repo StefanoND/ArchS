@@ -183,7 +183,6 @@ PKGA=(
     'swhkd-git'
     'powerpill'
 #    'i3-gaps-rounded-git'
-    'spicetify-cli'
     'pamac-aur'
     'libpamac-aur'
     'pamac-tray-icon-plasma'
@@ -589,42 +588,6 @@ sleep 1s
 
 cp "${SRCPATH}"/wallpapers/* "${HOME}"/Pictures/Wallpapers
 sleep 1s
-
-# cd ${APPSPATH}
-# echo
-# echo "Downloading config files for i3, dunst, picom, ranger and rofi"
-# echo
-# git clone https://github.com/krstfz/i3wm.git && cd i3wm/i3wm/config
-# sleep 1s
-#
-# sed -i 's/Papirus-Dark\/16x16/Tela-circle-dark\/16/g' dunst/dunstrc
-# sleep 1s
-# cp -r dunst "${HOME}"/.config/
-#
-# cp -r i3blocks "${HOME}"/.config/
-#
-# sed -i 's/fade-in-step = 0.045;/fade-in-step = 0.028;/g' picom/picom.conf
-# sleep 1s
-# sed -i 's/fade-out-step = 0.05;/fade-out-step = 0.03;/g' picom/picom.conf
-# sleep 1s
-# cp picom/picom.conf "${HOME}"/.config/
-#
-# sed -i 's/set preview_images false/set preview_images true/g' "${HOME}"/.config/ranger/rc.conf
-# sleep 1s
-# sed -i 's/set draw_borders none/set draw_borders true/g' "${HOME}"/.config/ranger/rc.conf
-# sleep 1s
-#
-# sed -i 's/icon-theme: "Papirus";/icon-theme: "Tela-circle-dark";/g' rofi/config.rasi
-# sleep 1s
-# sed -i 's/terminal: "kitty";/terminal: "wezterm";/g' rofi/config.rasi
-# sleep 1s
-# sed -i 's/.*catppuccin-macchiato.rasi.*//g' rofi/config.rasi
-# sleep 1s
-# printf "@theme \"${HOME}/.config/rofi/themes/catppuccin-macchiato.rasi\"\n" >> rofi/config.rasi
-# sleep 1s
-#
-# cp -r rofi "${HOME}"/.config/
-# cp -r spicetify "${HOME}"/.config/
 
 
 if ! [[ -d "${HOME}"/.config/rofi ]]; then
