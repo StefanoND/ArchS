@@ -110,6 +110,7 @@ sleep 1s
 
 # Change pacman.conf
 sed -i "s/#Color/Color\nILoveCandy/g" /etc/pacman.conf
+sed -i "s/#ParallelDownloads = 5/ParallelDownloads = 15/g" /etc/pacman.conf
 sed -i 's/\#\[multilib\]/[multilib]/g' /etc/pacman.conf
 sed -i '/^\[multilib\]/a Include = \/etc\/pacman.d\/mirrorlist' /etc/pacman.conf
 echo '' >> /etc/pacman.conf
