@@ -472,7 +472,7 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio; then
     export VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d
     sleep 1s
 fi
-if ! [[ `pacman -Q | grep -iq vulkan-virtio` ]] && ! [[ `pacman -Q | grep -iq nvidia` ]] && ! [[ `pacman -Q | grep -iq vulkan-radeon` ]] && ! [[ `pacman -Q | grep -iq vulkan-intel` ]]; then
+if ! pacman -Q | grep -iq vulkan-virtio && ! pacman -Q | grep -iq nvidia && ! pacman -Q | grep -iq vulkan-radeon && ! pacman -Q | grep -iq vulkan-intel; then
     echo
     echo "No GPU found"
     echo
@@ -919,7 +919,7 @@ if ! grep -iq "DOTNET_CLI_TELEMETRY_OPTOUT=1" /etc/environment; then
     sleep 1s
 fi
 
-if [[ `pacman -Q | grep -i 'virtualbox-host-dkms'` ]] && [[ ${enablevb,,} = y ]]; then
+if pacman -Q | grep -i 'virtualbox-host-dkms' && [[ ${enablevb,,} = y ]]; then
     PKGVB=(
         # Virtualbox
         'virtualbox-host-dkms'

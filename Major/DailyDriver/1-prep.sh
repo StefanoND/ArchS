@@ -72,8 +72,7 @@ if ! [[ -d "${HOME}"/.config/gtk-4.0 ]]; then
     mkdir -p "${HOME}"/.config/gtk-4.0
     sleep 1s
 fi
-if ! [[ -d /usr/share/icons/Sweet-cursors ]] &&  \
-     [[ -d "${HOME}"/.icons/Sweet-cursors ]]; then
+if ! [[ -d /usr/share/icons/Sweet-cursors ]] && [[ -d "${HOME}"/.icons/Sweet-cursors ]]; then
     echo
     printf "sudo cp -r "${HOME}"/.icons/Sweet-cursors /usr/share/icons"
     echo

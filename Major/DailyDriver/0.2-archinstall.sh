@@ -46,8 +46,7 @@ fi
 
 sudo pacman -Syy
 
-if [[ `pacman -Q | grep -i 'iptables'` ]] && \
- ! [[ `pacman -Q | grep -i 'iptables-nft'` ]]; then
+if pacman -Q | grep -i 'iptables' && ! pacman -Q | grep -i 'iptables-nft'; then
     echo
     echo
     echo
@@ -62,8 +61,7 @@ if [[ `pacman -Q | grep -i 'iptables'` ]] && \
     sleep 2s
     sudo pacman -S iptables-nft --needed
     sleep 1s
-elif ! [[ `pacman -Q | grep -i 'iptables'` ]] && \
- ! [[ `pacman -Q | grep -i 'iptables-nft'` ]]; then
+elif ! pacman -Q | grep -i 'iptables' && ! pacman -Q | grep -i 'iptables-nft'; then
     echo
     echo
     echo
