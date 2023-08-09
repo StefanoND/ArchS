@@ -604,11 +604,6 @@ sleep 1s
 ln -svf "${APPSPATH}"/rofi/catppuccin-mocha.rasi "${HOME}"/.local/share/rofi/themes
 sleep 1s
 
-sed -i 's/set preview_images false/set preview_images true/g' "${HOME}"/.config/ranger/rc.conf
-sleep 1s
-sed -i 's/set draw_borders none/set draw_borders true/g' "${HOME}"/.config/ranger/rc.conf
-sleep 1s
-
 # cp "${SRCPATH}"/i3/config "${HOME}"/.config/i3
 # cp -f "${SRCPATH}"/i3/configblocks "${HOME}"/.config/i3blocks/config
 #

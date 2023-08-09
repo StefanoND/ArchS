@@ -12,6 +12,30 @@ nvme0n1p3=null
 APPSPATH="${HOME}/.apps"
 SRCPATH="$(cd $(dirname $0) && pwd)"
 
+lsblk
+while [[ ${VALIDPARTTWO,,} = n ]]; do
+    read -p "Enter the name of the ROOT partition (eg. sda2, nvme0n1p2): " PARTTWO
+    nvme0n1p2=$PARTTWO
+    if [[ `lsblk | grep -w $nvme0n1p2` ]]; then
+        VALIDPARTTWO=y
+    else
+        echo
+        printf "Could not find /dev/$nvme0n1p2, try again"
+        echo
+    fi
+done
+while [[ ${VALIDPARTTHREE,,} = n ]]; do
+    read -p "Enter the name of the HOME partition (eg. sda3, nvme0n1p3): " PARTTHREE
+    nvme0n1p3=$PARTTHREE
+    if [[ `lsblk | grep -w $nvme0n1p3` ]]; then
+        VALIDPARTTHREE=y
+    else
+        echo
+        printf "Could not find /dev/$nvme0n1p3, try again"
+        echo
+    fi
+done
+
 if ! [[ -d "${APPSPATH}" ]]; then
     echo
     printf "Creating ${APPSPATH} path"
@@ -19,6 +43,47 @@ if ! [[ -d "${APPSPATH}" ]]; then
     mkdir -p "${APPSPATH}"
     sleep 1s
 fi
+
+sudo pacman -Syy
+
+if [[ `pacman -Q | grep -i 'iptables'` ]] && \
+ ! [[ `pacman -Q | grep -i 'iptables-nft'` ]]; then
+    echo
+    echo
+    echo
+    echo
+    echo
+    echo
+    echo 'Replacing iptables with iptables-nft'
+    echo 'Press Y when it asks to remove iptables'
+    echo
+    echo
+    echo
+    sleep 2s
+    sudo pacman -S iptables-nft --needed
+    sleep 1s
+elif ! [[ `pacman -Q | grep -i 'iptables'` ]] && \
+ ! [[ `pacman -Q | grep -i 'iptables-nft'` ]]; then
+    echo
+    echo
+    echo
+    echo 'Installing iptables-nft'
+    echo
+    sudo pacman -S iptables-nft --noconfirm --needed
+    sleep 1s
+fi
+
+echo
+echo 'Installing flatpak'
+echo
+sudo pacman -S flatpak --noconfirm --needed
+sleep 1s
+
+echo
+echo "Adding flathub"
+echo
+flatpak remote-add flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
+sleep 1s
 
 echo
 echo 'Enabling Chaotic AUR Repo'
@@ -53,35 +118,6 @@ sleep 1s
 # sudo bash -c "echo '' >> /etc/pacman.conf"
 # sleep 1s
 
-sudo pacman -Syy
-
-if [[ `pacman -Q | grep -i 'iptables'` ]] && \
- ! [[ `pacman -Q | grep -i 'iptables-nft'` ]]; then
-    echo
-    echo
-    echo
-    echo
-    echo
-    echo
-    echo 'Replacing iptables with iptables-nft'
-    echo 'Press Y when it asks to remove iptables'
-    echo
-    echo
-    echo
-    sleep 2s
-    sudo pacman -S iptables-nft --needed
-    sleep 1s
-elif ! [[ `pacman -Q | grep -i 'iptables'` ]] && \
- ! [[ `pacman -Q | grep -i 'iptables-nft'` ]]; then
-    echo
-    echo
-    echo
-    echo 'Installing iptables-nft'
-    echo
-    sudo pacman -S iptables-nft --noconfirm --needed
-    sleep 1s
-fi
-
 echo
 echo "Installing meson as dependency"
 echo
@@ -111,7 +147,6 @@ PKGS=(
     'lib32-libasyncns'
     'patch'
     'ranger'
-    'flatpak'
 )
 
 for PKG in "${PKGS[@]}"; do
@@ -122,12 +157,6 @@ for PKG in "${PKGS[@]}"; do
     echo
     sleep 1s
 done
-
-echo
-echo "Adding flathub"
-echo
-flatpak remote-add flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-sleep 1s
 
 printf "XKB_DEFAULT_LAYOUT=$KBLOCALE\n" | sudo tee -a /etc/environment
 sleep 1s
@@ -145,6 +174,11 @@ echo
 ranger --copy-config=all
 export RANGER_LOAD_DEFAULT_RC=false
 printf "RANGER_LOAD_DEFAULT_RC=false\n" | sudo tee -a /etc/environment
+sleep 1s
+
+sed -i 's/set preview_images false/set preview_images true/g' "${HOME}"/.config/ranger/rc.conf
+sleep 1s
+sed -i 's/set draw_borders none/set draw_borders true/g' "${HOME}"/.config/ranger/rc.conf
 sleep 1s
 
 echo
@@ -196,30 +230,6 @@ localectl set-x11-keymap $KBLOCALE
 # Turn on swap
 sudo swapon /swap/swapfile
 sleep 1s
-
-lsblk
-while [[ ${VALIDPARTTWO,,} = n ]]; do
-    read -p "Enter the name of the ROOT partition (eg. sda2, nvme0n1p2): " PARTTWO
-    nvme0n1p2=$PARTTWO
-    if [[ `lsblk | grep -w $nvme0n1p2` ]]; then
-        VALIDPARTTWO=y
-    else
-        echo
-        printf "Could not find /dev/$nvme0n1p2, try again"
-        echo
-    fi
-done
-while [[ ${VALIDPARTTHREE,,} = n ]]; do
-    read -p "Enter the name of the HOME partition (eg. sda3, nvme0n1p3): " PARTTHREE
-    nvme0n1p3=$PARTTHREE
-    if [[ `lsblk | grep -w $nvme0n1p3` ]]; then
-        VALIDPARTTHREE=y
-    else
-        echo
-        printf "Could not find /dev/$nvme0n1p3, try again"
-        echo
-    fi
-done
 
 echo
 echo "Enabling btrfs's automatic balance at 10% threshold"
