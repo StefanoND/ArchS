@@ -202,12 +202,6 @@ echo 'Reloading daemon'
 echo
 sudo systemctl daemon-reload
 
-echo
-echo 'Enabling hotkeys service'
-echo
-systemctl --user enable --now hotkeys.service
-sleep 1s
-
 #echo
 #echo "Installinx Nix Package Manager"
 #echo

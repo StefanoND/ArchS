@@ -109,6 +109,8 @@ sleep 1s
 echo
 printf "Change all your fonts to Fira Code."
 echo
+printf "Change application style to kvantum-dark"
+echo
 printf "Open kvantum manager and choose Orchis-dark in \"Change/Delete Theme\" section"
 echo
 printf "in \"Configure Active Theme\" section in \"Sizes & Delays\" change \"Tooltip delay\" to 150 ms and save"
