@@ -162,7 +162,7 @@ if [[ -f "${HOME}"/.xinitrc ]]; then
     sleep 1s
 fi
 
-sed -i "s/111111/$(logname)/g" "${SRCPATH}"/conf/systemd/hotkeys.sh.desktop
+sed -i "s/111111/$(logname)/g" "${SRCPATH}"/conf/home/hotkeys.sh.desktop
 sleep 1s
 
 if [[ `echo $XDG_SESSION_TYPE | grep -iq x11` ]]; then
@@ -170,8 +170,8 @@ if [[ `echo $XDG_SESSION_TYPE | grep -iq x11` ]]; then
     sleep 1s
 fi
 
-if ! [[ -d "${HOME}".config/autostart ]]; then
-    mkdir -p "${HOME}".config/autostart
+if ! [[ -d "${HOME}"/.config/autostart ]]; then
+    mkdir -p "${HOME}"/.config/autostart
 fi
 
 echo
@@ -191,7 +191,7 @@ ln -svf "${APPSPATH}"/archs/.bashrc "${HOME}"/.bashrc
 ln -svf "${APPSPATH}"/archs/.bash_aliases "${HOME}"/.bash_aliases
 ln -svf "${APPSPATH}"/archs/.wezterm.lua "${HOME}"/.wezterm.lua
 ln -svf "${APPSPATH}"/archs/.xinitrc "${HOME}"/.xinitrc
-cp "${APPSPATH}"/archs/hotkeys.sh.desktop "${HOME}".config/autostart/
+cp "${APPSPATH}"/archs/hotkeys.sh.desktop "${HOME}"/.config/autostart/
 sleep 1s
 
 sudo cp -r "${FFPATH}"/Sweet-cursors /usr/share/icons
