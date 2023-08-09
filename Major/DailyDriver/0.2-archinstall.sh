@@ -1,5 +1,21 @@
 #!/bin/bash
 
+if ! [ $EUID -ne 0 ]; then
+    echo
+    echo "Don't run this script as root."
+    echo
+    sleep 1s
+    exit 1
+fi
+
+if ! groups|grep wheel>/dev/null;then
+    echo
+    echo "You need to be a member of the wheel to run me!"
+    echo
+    sleep 1s
+    exit 1
+fi
+
 # To check for available keymaps use the command below
 # localectl list-x11-keymap-layouts
 
@@ -156,22 +172,12 @@ for PKG in "${PKGS[@]}"; do
     sleep 1s
 done
 
-printf "XKB_DEFAULT_LAYOUT=$KBLOCALE\n" | sudo tee -a /etc/environment
-sleep 1s
-#printf "XKB_DEFAULT_OPTIONS=compose:ralt,ctrl:nocaps\n" | sudo tee -a /etc/environment
-#sleep 1s
-
-export XKB_DEFAULT_LAYOUT=$KBLOCALE
-sleep 1s
-#export XKB_DEFAULT_OPTIONS=compose:ralt,ctrl:nocaps
-#sleep 1s
-
 echo
 echo "Config Ranger"
 echo
 ranger --copy-config=all
 export RANGER_LOAD_DEFAULT_RC=false
-printf "RANGER_LOAD_DEFAULT_RC=false\n" | sudo tee -a /etc/environment
+sudo bash -c "printf \"RANGER_LOAD_DEFAULT_RC=false\n\" >> /etc/environment"
 sleep 1s
 
 sed -i 's/set preview_images false/set preview_images true/g' "${HOME}"/.config/ranger/rc.conf
@@ -245,7 +251,7 @@ echo '' >> "${HOME}"/.config/kxkbrc
 sleep 1s
 echo '[Layout]' >> "${HOME}"/.config/kxkbrc
 sleep 1s
-printf "LayoutList=$KBLOCALE" >> "${HOME}"/.config/kxkbrc
+printf "LayoutList=$KBLOCALE\n" >> "${HOME}"/.config/kxkbrc
 sleep 1s
 echo 'Use=true' >> "${HOME}"/.config/kxkbrc
 sleep 1s

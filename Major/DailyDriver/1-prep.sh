@@ -161,18 +161,6 @@ if [[ -f "${HOME}"/.xinitrc ]]; then
     sleep 1s
 fi
 
-sed -i "s/111111/$(logname)/g" "${SRCPATH}"/conf/home/hotkeys.sh.desktop
-sleep 1s
-
-if [[ `echo $XDG_SESSION_TYPE | grep -iq x11` ]]; then
-    sed -i 's/config.enable_wayland = true/config.enable_wayland = false/g' "${SRCPATH}"/conf/home/.wezterm.lua
-    sleep 1s
-fi
-
-if ! [[ -d "${HOME}"/.config/autostart ]]; then
-    mkdir -p "${HOME}"/.config/autostart
-fi
-
 echo
 printf "Copying config files to a permanent place at: "
 printf "\"${APPSPATH}/archs\""
@@ -181,19 +169,31 @@ cp -f "${SRCPATH}"/conf/home/.bashrc "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.bash_aliases "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.wezterm.lua "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.xinitrc "${APPSPATH}"/archs
-cp -f "${SRCPATH}"/conf/home/hotkeys.sh "${APPSPATH}"/archs
-cp -f "${SRCPATH}"/conf/home/hotkeys.sh.desktop "${APPSPATH}"/archs
+cp -f "${SRCPATH}"/conf/home/sxhkd.desktop "${APPSPATH}"/archs
 sleep 1s
 
-printf "Symlinking config files to ${HOME}"
+printf "Copying/Symlinking config files to ${HOME} and ${HOME}/.config/autostart"
 ln -svf "${APPSPATH}"/archs/.bashrc "${HOME}"/.bashrc
 ln -svf "${APPSPATH}"/archs/.bash_aliases "${HOME}"/.bash_aliases
 ln -svf "${APPSPATH}"/archs/.wezterm.lua "${HOME}"/.wezterm.lua
 ln -svf "${APPSPATH}"/archs/.xinitrc "${HOME}"/.xinitrc
-cp "${APPSPATH}"/archs/hotkeys.sh.desktop "${HOME}"/.config/autostart/
+cp -f "${APPSPATH}"/archs/sxhkd.desktop "${HOME}"/.config/autostart/
 sleep 1s
 
-sudo cp -r "${FFPATH}"/Sweet-cursors /usr/share/icons
+#echo
+#echo 'Copying Sweet-cursors to /usr/share/icons'
+#echo
+#sudo cp -r "${FFPATH}"/Sweet-cursors /usr/share/icons
+
+if ! [[ -d "${HOME}"/.icons/default ]]; then
+    mkdir -p "${HOME}"/.icons/default
+fi
+
+echo
+echo 'Making cursor use Sweet-cursors'
+echo
+echo '[Icon THeme]' > "${HOME}"/.icons/default/index.theme
+echo 'Inherits=Sweet-cursors' >> "${HOME}"/.icons/default/index.theme
 sleep 1s
 
 echo

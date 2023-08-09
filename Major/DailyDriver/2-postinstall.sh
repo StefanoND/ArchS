@@ -93,7 +93,7 @@ PKGS=(
     'xdg-desktop-portal-kde'
     'xsettingsd'
     'kwalletmanager'
-#    'sxhkd'
+    'sxhkd'
     'kate'
 #    'garuda-settings-manager-kcm'
 
@@ -117,6 +117,8 @@ PKGS=(
     'gstreamer'                                 # Hardware Acceleration
     'gstreamer-vaapi'                           # Hardware Acceleration
     'lib32-libappindicator-gtk2'                # Tray Icon Support for Steam
+    'libva-vdpau-driver'
+    'lib32-libva-vdpau-driver'
 
     # i3 Depdendencies
     #'sysstat'
@@ -181,7 +183,6 @@ PKGA=(
     'autojump'
     'kwin-polonium'
     'kwin-effect-rounded-corners-git'
-    'swhkd-git'
 #    'i3-gaps-rounded-git'
     'pamac-aur'
     'libpamac-aur'
@@ -353,6 +354,23 @@ for PKG in "${PKGA[@]}"; do
     sleep 1s
 done
 
+# # Nix home-manager
+# for PKG in "${PKGHM[@]}"; do
+#     echo
+#     echo "INSTALLING: ${PKG}"
+#     echo
+#     #sudo pacman -S "$PKG" --noconfirm --needed
+#     sed -i "/^.*home.packages = with pkgs; \[.*/a \    $PKG" "${HOME}"/.config/home-manager/home.nix
+#     echo
+#     sleep 1s
+# done
+#
+# echo
+# echo 'Creating a new generation of home-manager with our config'
+# echo
+# home-manager switch
+# sleep 1s
+
 if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
     echo
     echo "NVidia GPU found"
@@ -381,13 +399,13 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
         sleep 1s
     fi
 
-    printf "LIBVA_DRIVER_NAME=nvidia\n" | sudo tee -a /etc/environment
+    sudo bash -c "printf \"LIBVA_DRIVER_NAME=nvidia\n\" >> /etc/environment"
     sleep 1s
 
-    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json\n" | sudo tee -a /etc/environment
+    sudo bash -c "printf \"VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json\n\" >> /etc/environment"
     sleep 1s
 
-    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n" | sudo tee -a /etc/environment
+    sudo bash -c "printf \"VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n\" >> /etc/environment"
     sleep 1s
 
     export LIBVA_DRIVER_NAME=nvidia
@@ -426,13 +444,13 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq intel; then
     sudo pacman -S vulkan-intel lib32-vulkan-intel opencl-mesa --noconfirm --needed
     sleep 1s
 
-    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json\n" | sudo tee -a /etc/environment
+    sudo bash -c "printf \"VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json\n\" >> /etc/environment"
     sleep 1s
 
-    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nv_vulkan_wrapper.json\n" | sudo tee -a /etc/environment
+    sudo bash -c "printf \"VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nv_vulkan_wrapper.json\n\" >> /etc/environment"
     sleep 1s
 
-    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n" | sudo tee -a /etc/environment
+    sudo bash -c "printf \"VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n\" >> /etc/environment"
     sleep 1s
 
     export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json
@@ -454,13 +472,13 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio; then
     sudo pacman -S vulkan-virtio lib32-vulkan-virtio --noconfirm --needed
     sleep 1s
 
-    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.i686.json\n" | sudo tee -a /etc/environment
+    sudo bash -c "printf \"VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.i686.json\n\" >> /etc/environment"
     sleep 1s
 
-    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.x86_64.json\n" | sudo tee -a /etc/environment
+    sudo bash -c "printf \"VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.x86_64.json\n\" >> /etc/environment"
     sleep 1s
 
-    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n" | sudo tee -a /etc/environment
+    sudo bash -c "printf \"VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n\" >> /etc/environment"
     sleep 1s
 
     export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.i686.json
@@ -479,13 +497,13 @@ if ! pacman -Q | grep -iq vulkan-virtio && ! pacman -Q | grep -iq nvidia && ! pa
     sudo pacman -S vulkan-swrast lib32-vulkan-swrast --noconfirm --needed
     sleep 1s
 
-    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.i686.json\n" | sudo tee -a /etc/environment
+    sudo bash -c "printf \"VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.i686.json\n\" >> /etc/environment"
     sleep 1s
 
-    printf "VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json\n" | sudo tee -a /etc/environment
+    sudo bash -c "printf \"VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json\n\" >> /etc/environment"
     sleep 1s
 
-    printf "VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n" | sudo tee -a /etc/environment
+    sudo bash -c "printf \"VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n\" >> /etc/environment"
     sleep 1s
 
     export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.i686.json
@@ -507,23 +525,6 @@ if lspci | grep -iq renesas; then
     paru -S upd72020x-fw --noconfirm --needed --sudoloop
     sleep 1s
 fi
-
-# # Nix home-manager
-# for PKG in "${PKGHM[@]}"; do
-#     echo
-#     echo "INSTALLING: ${PKG}"
-#     echo
-#     #sudo pacman -S "$PKG" --noconfirm --needed
-#     sed -i "/^.*home.packages = with pkgs; \[.*/a \    $PKG" "${HOME}"/.config/home-manager/home.nix
-#     echo
-#     sleep 1s
-# done
-#
-# echo
-# echo 'Creating a new generation of home-manager with our config'
-# echo
-# home-manager switch
-# sleep 1s
 
 if [[ -f /etc/systemd/zram-generator.conf ]]; then
     sudo mv /etc/systemd/zram-generator.conf /etc/systemd/zram-generator.conf.old
@@ -552,32 +553,13 @@ if ! [[ -d "${HOME}"/Pictures/Wallpapers ]]; then
     mkdir -p "${HOME}"/Pictures/Wallpapers
     sleep 1s
 fi
-if ! [[ -d "${HOME}"/.config/swhkd ]]; then
-    mkdir -p "${HOME}"/.config/swhkd
+
+if ! [[ -d "${HOME}"/.config/sxhkd ]]; then
+    mkdir -p "${HOME}"/.config/sxhkd
 fi
-# if ! [[ -d "${HOME}"/.config/sxhkd ]]; then
-#     mkdir -p "${HOME}"/.config/sxhkd
-# fi
 
-sudo mv /etc/swhkd/swhkdrc /etc/swhkd/swhkdrc.old
+cp -f "${SRCPATH}"/conf/home/sxhkdrc "${HOME}"/.config/sxhkd
 sleep 1s
-
-cp -f "${SRCPATH}"/conf/home/swhkdrc "${HOME}"/.config/swhkd
-sleep 1s
-
-#cp -f "${SRCPATH}"/conf/home/sxhkdrc "${HOME}"/.config/sxhkd
-#sleep 1s
-
-sudo ln -svf "${HOME}"/.config/swhkd/swhkdrc /etc/swhkd
-sleep 1s
-# if ! [[ -d "${HOME}"/.config/i3 ]]; then
-#     mkdir -p "${HOME}"/.config/i3
-#     sleep 1s
-# fi
-# if ! [[ -d "${HOME}"/.config/i3blocks ]]; then
-#     mkdir -p "${HOME}"/.config/i3blocks
-#     sleep 1s
-# fi
 
 cp -f "${SRCPATH}"/conf/home/starship.toml "${APPSPATH}"/archs
 ln -svf "${APPSPATH}"/archs/starship.toml "${HOME}"/.config/starship.toml
@@ -585,7 +567,6 @@ sleep 1s
 
 cp "${SRCPATH}"/wallpapers/* "${HOME}"/Pictures/Wallpapers
 sleep 1s
-
 
 if ! [[ -d "${HOME}"/.config/rofi ]]; then
     mkdir -p "${HOME}"/.config/rofi
@@ -604,19 +585,7 @@ sleep 1s
 ln -svf "${APPSPATH}"/rofi/catppuccin-mocha.rasi "${HOME}"/.local/share/rofi/themes
 sleep 1s
 
-# cp "${SRCPATH}"/i3/config "${HOME}"/.config/i3
-# cp -f "${SRCPATH}"/i3/configblocks "${HOME}"/.config/i3blocks/config
-#
-# if ! [[ -f /usr/share/xsessions/plasma-i3.desktop ]]; then
-#     sudo touch /usr/share/xsessions/plasma-i3.desktop
-#     sleep 1s
-# fi
-#
-# printf "[Desktop Entry]\nType=XSession\nExec=env KDEWM=/usr/bin/i3 /usr/bin/startplasma-x11\nDesktopNames=KDE\nName=Plasma with i3 (X11)\nComment=Plasma with i3 (X11)\n" | sudo tee /usr/share/xsessions/plasma-i3.desktop
-# sleep 1s
-
 cd "${APPSPATH}"
-#mkdir -p "${APPSPATH}"/bleh && cd ${APPSPATH}/bleh
 echo
 echo 'Installing ble'
 echo
@@ -624,7 +593,6 @@ git clone --recursive https://github.com/akinomyoga/ble.sh.git
 sleep 1s
 make -C ble.sh
 sleep 1s
-
 
 echo
 echo 'Installing Bismuth (Tiling Manager)'
@@ -637,13 +605,6 @@ make
 sudo make install
 
 cd "${SRCPATH}"
-
-# # Disable systemd startup
-# echo
-# echo "Disabling systemd startup"
-# echo
-# kwriteconfig5 --file startkderc --group General --key systemdBoot false
-# sleep 1s
 
 echo
 echo "Disabling Show Activity Switcher's Meta+Q shortcut"
@@ -674,7 +635,7 @@ sleep 1s
 echo
 echo "Increasing file watcher count. This prevents a \"too many files\" error in VS Code(ium)"
 echo
-echo 'fs.inotify.max_user_watches=524288' | sudo tee /etc/sysctl.d/40-max-user-watches.conf && sudo sysctl --system
+sudo bash -c "echo 'fs.inotify.max_user_watches=524288' > /etc/sysctl.d/40-max-user-watches.conf" && sudo sysctl --system
 sleep 1s
 
 echo
@@ -687,7 +648,7 @@ sudo bash -c 'echo "vm.swappiness = 10" > /etc/sysctl.d/99-swappiness.conf'
 echo
 echo "Setting up fq_pie queue discipline for TCP congestion control"
 echo
-echo 'net.core.default_qdisc = fq_pie' | sudo tee /etc/sysctl.d/90-override.conf
+sudo bash -c "echo 'net.core.default_qdisc = fq_pie' > /etc/sysctl.d/90-override.conf"
 sleep 1s
 
 echo
@@ -729,96 +690,32 @@ echo
 sudo npm install -g npm@latest
 sleep 1s
 
-#if [[ -f /etc/pulse/daemon.conf ]]; then
-#    echo
-#    echo "Making a backup of \"/etc/pulse/daemon.conf\" to \"/etc/pulse/daemon.conf.old\""
-#    echo
-#    sudo mv /etc/pulse/daemon.conf /etc/pulse/daemon.conf.old
-#    sleep 1s
-#fi
-#
-#echo
-#echo "Improving audio"
-#echo
-#sudo touch /etc/pulse/daemon.conf
-#sleep 1s
-#
-#printf "default-sample-rate = 44100\nalternate-sample-rate = 48000\nresample-method = speex-float-10\nhigh-priority = yes\nnice-level = -11\nrealtime-scheduling = yes\nrealtime-priority = 5\n" | sudo tee /etc/pulse/daemon.conf
-#sleep 1s
-#
-#echo
-#echo "Backing up \"/etc/pulse/default.pa\" to \"/etc/pulse/default.pa.old\""
-#echo
-#sudo cp /etc/pulse/default.pa /etc/pulse/default.pa.old
-#sleep 1s
-#
-#echo
-#echo "Fixing sound delay when starting to play audio"
-#echo
-#sudo sed -i "s|load-module module-suspend-on-idle.*|#load-module module-suspend-on-idle|g" /etc/pulse/default.pa
-#sudo sed -i "s|load-module module-udev-detect.*|load-module module-udev-detect tsched=0|g" /etc/pulse/default.pa
-#sudo sed -i "s|.*load-module module-device-restore.*|#load-module module-device-restore|g" /etc/pulse/default.pa
-#sudo sed -i "s|load-module module-detect.*|load-module module-detect tsched=0|g" /etc/pulse/default.pa
-#sleep 1s
-
-#if test -e /etc/modprobe.d/snd_hda_intel.conf; then
-#    sudo mv /etc/modprobe.d/snd_hda_intel.conf /etc/modprobe.d/snd_hda_intel.conf.old
-#    sleep 1s
-#fi
-#printf "options snd_hda_intel power_save=0\n" | sudo tee /etc/modprobe.d/snd_hda_intel.conf
-#
-#if [[ -f /etc/modprobe.d/sound.conf ]]; then
-#    sudo mv /etc/modprobe.d/sound.conf /etc/modprobe.d/sound.conf.old
-#    sleep 1s
-#fi
-#
-#sudo touch /etc/modprobe.d/sound.conf
-#printf "options snd-hda-intel vid=8086 pid=8ca0 snoop=0" | sudo tee /etc/modprobe.d/sound.conf
-#sleep 1s
-#
-#if [[ -f /etc/modprobe.d/audio_powersave.conf ]]; then
-#    sudo mv /etc/modprobe.d/audio_powersave.conf /etc/modprobe.d/audio_powersave.conf.old
-#    sleep 1s
-#fi
-#
-#sudo touch /etc/modprobe.d/audio_powersave.conf
-#printf "options snd_hda_intel power_save=0\n" | sudo tee /etc/modprobe.d/audio_powersave.conf
-#sudo touch /sys/module/snd_hda_intel/parameters/power_save_controller
-#printf "N" | sudo tee /sys/module/snd_hda_intel/parameters/power_save_controller
-#sleep 1s
-
 if ! [[ -d /etc/X11/xorg.conf.d ]]; then
     sudo mkdir -p /etc/X11/xorg.conf.d
 fi
-if ! [[ -f /etc/X11/xorg.conf.d/50-mouse-acceleration.conf ]]; then
-    sudo touch /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
-fi
-printf "Section \"InputClass\"\n    Identifier \"My Mouse\"\n    Driver \"libinput\"\n    MatchIsPointer \"yes\"\n    Option \"AccelProfile\" \"-1\"\n    Option \"AccelerationScheme\" \"none\"\n    Option \"AccelSpeed\" \"-1\"\nEndSection" | sudo tee /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
+sudo bash -c "printf \"Section \"InputClass\"\n    Identifier \"My Mouse\"\n    Driver \"libinput\"\n    MatchIsPointer \"yes\"\n    Option \"AccelProfile\" \"-1\"\n    Option \"AccelerationScheme\" \"none\"\n    Option \"AccelSpeed\" \"-1\"\nEndSection\" > /etc/X11/xorg.conf.d/50-mouse-acceleration.conf"
 sleep 1s
 
 echo
 echo "Disabling built-in kernel modules of tablet so OpenTablerDriver can work"
 echo
-if ! test -e /etc/modprobe.d/blacklist.conf; then
-    sudo touch /etc/modprobe.d/blacklist.conf
-    printf "blacklist wacom\nblacklist hid_uclogic" | sudo tee /etc/modprobe.d/blacklist.conf
-    sleep 1s
-else
-    printf "\nblacklist wacom\nblacklist hid_uclogic" | sudo tee -a /etc/modprobe.d/blacklist.conf
+sudo bash -c "printf \"blacklist wacom\nblacklist hid_uclogic\n\" >> /etc/modprobe.d"
+
+if lsmod | grep -wq 'wacom'; then
+    echo
+    echo "Stopping Wacom kernel module (if present)"
+    echo
+    sudo rmmod wacom
     sleep 1s
 fi
 
-echo
-echo "Stopping Wacom kernel module (if present)"
-echo
-sudo rmmod wacom
-sleep 1s
-
-echo
-echo "Stopping non-Wacom kernel module (if present)"
-echo
-sudo rmmod hid_uclogic
-sleep 1s
+if lsmod | grep -wq 'hid_uclogic'; then
+    echo
+    echo "Stopping non-Wacom kernel module (if present)"
+    echo
+    sudo rmmod hid_uclogic
+    sleep 1s
+fi
 
 echo
 echo "Improving font rendering"
@@ -831,7 +728,7 @@ fi
 sudo touch /etc/fonts/local.conf
 sleep 1s
 
-curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/local.conf -o - | sudo tee /etc/fonts/local.conf
+sudo bash -c "curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/local.conf -o - >> /etc/fonts/local.conf"
 sleep 1s
 
 if test -e /home/$(logname)/.Xresources; then
@@ -874,7 +771,8 @@ fi
 
 touch /home/$(logname)/.config/fontconfig/fonts.conf
 sleep 1s
-curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/fonts.conf -o - | sudo tee /home/$(logname)/.config/fontconfig/fonts.conf
+
+sudo bash -c "curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/fonts.conf -o - >> /home/$(logname)/.config/fontconfig/fonts.conf"
 sleep 1s
 sudo sed -i "s|#export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|g" /etc/profile.d/freetype2.sh
 sleep 1s
@@ -889,33 +787,18 @@ cd /usr/bin
 ./cupsenable
 sleep 1s
 
-echo
-echo "Creating udev rule for AntiMicroX to avoid problems with wayland"
-echo
-sleep 1s
-if test -e /usr/lib/udev/rules.d/60-antimicrox-uinput.rules; then
-    sudo mv /usr/lib/udev/rules.d/60-antimicrox-uinput.rules /usr/lib/udev/rules.d/60-antimicrox-uinput.rules.old
-    sleep 1s
-fi
-
-sudo touch /usr/lib/udev/rules.d/60-antimicrox-uinput.rules
-sleep 1s
-
-curl https://raw.githubusercontent.com/AntiMicroX/antimicrox/master/other/60-antimicrox-uinput.rules -o - | sudo tee /usr/lib/udev/rules.d/60-antimicrox-uinput.rules
-sleep 1s
-
 if ! grep -iq "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1" /etc/environment; then
     echo
     echo "Enabling Globalization Invariant"
     echo
-    printf "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1\n" | sudo tee -a /etc/environment
+    sudo bash -c "printf \"DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1\n\" >> /etc/environment"
     sleep 1s
 fi
 if ! grep -iq "DOTNET_CLI_TELEMETRY_OPTOUT=1" /etc/environment; then
     echo
     echo "Disabling DotNet telemetry"
     echo
-    printf "DOTNET_CLI_TELEMETRY_OPTOUT=1\n" | sudo tee -a /etc/environment
+    sudo bash -c "printf \"DOTNET_CLI_TELEMETRY_OPTOUT=1\n\" >> /etc/environment"
     sleep 1s
 fi
 

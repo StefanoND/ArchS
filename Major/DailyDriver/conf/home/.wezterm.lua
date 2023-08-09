@@ -37,6 +37,6 @@ config.font = wezterm.font("Fira Code")
 config.font_size = 12.0
 config.window_background_opacity = 0.95
 config.disable_default_key_bindings = false
-config.enable_wayland = true
+config.enable_wayland = false
 
 return config
