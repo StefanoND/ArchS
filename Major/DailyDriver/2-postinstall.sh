@@ -472,10 +472,7 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio; then
     export VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d
     sleep 1s
 fi
-if ! [[ `lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio` ]] &&
-   ! [[ `lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia` ]] &&
-   ! [[ `lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd` ]] &&
-   ! [[ `lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq intel` ]]; then
+if ! [[ `pacman -Q | grep -iq vulkan-virtio` ]] && ! [[ `pacman -Q | grep -iq nvidia` ]] && ! [[ `pacman -Q | grep -iq vulkan-radeon` ]] && ! [[ `pacman -Q | grep -iq vulkan-intel` ]]; then
     echo
     echo "No GPU found"
     echo
