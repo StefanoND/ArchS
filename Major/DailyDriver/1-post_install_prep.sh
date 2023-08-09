@@ -169,6 +169,11 @@ sleep 1s
 # sleep 1s
 
 echo
+echo 'Syncing repo'
+echo
+sudo pacman -Syy
+
+echo
 echo "Installing meson as dependency"
 echo
 sudo pacman -S meson --asdep --noconfirm --needed
