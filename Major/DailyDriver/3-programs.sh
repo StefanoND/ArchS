@@ -27,18 +27,17 @@ sleep 1s
 
 # PACMAN
 PKGX=(
-    'docker'                                        #
-    'docker-buildx'                                 #
-    'skanlite'                                      # Image Scanning App (If you have a scanner or aio printer/scanner)
-    'wine-staging'                                  # Compatibility Layer for running Windows programs (Staging Branch)
-    'winetricks'                                    # Work around problems and install apps under Wine
-    'wine-mono'                                     # Wine's built-in replacement for Microsoft's .NET Framework
-    'wine-gecko'                                    # Wine's built-in replacement for Microsoft's Internet Explorer
-    'dos2unix'                                      # Converting DOS stuff to unix
-    'lutris'                                        # Lutris
-    'steam'                                         # Steam
-    'distrobox'                                     #
-#    ''                                              # 
+    'docker'                                    #
+    'docker-buildx'                             #
+    'wine-staging'                              # Compatibility Layer for running Windows programs (Staging Branch)
+    'winetricks'                                # Work around problems and install apps under Wine
+    'wine-mono'                                 # Wine's built-in replacement for Microsoft's .NET Framework
+    'wine-gecko'                                # Wine's built-in replacement for Microsoft's Internet Explorer
+    'dos2unix'                                  # Converting DOS stuff to unix
+    'lutris'                                    # Lutris
+    'steam'                                     # Steam
+    'distrobox'                                 #
+#    ''                                          #
 )
 
 for PKG in "${PKGX[@]}"; do
@@ -54,23 +53,18 @@ done
 PKGY=(
     'ttf-ms-fonts'
     'qt5-tools'
-    'vscodium-bin'                                  # VS Code without Microsoft's branding/telemetry/licensing
-    'vscodium-bin-marketplace'                      # VS Codium market place
-    'vscodium-bin-features'                         # Unblock some features blocked for non-MS's VSCode
-    'deckboard-appimage'                            # Streamdeck alternative
-    'protonup-qt'                                   # ProtonUp-Qt
-    'eam-git'                                       # Epic Games' Marketplace for Linux
-    'heroic-games-launcher-bin'                     # Epic Games and GOG launcher
-    'bottles'                                       # Bottles
-    'protontricks'                                  # Wrapper to make winetricks work with Proton enabled games
-    'dxvk-bin'                                      # Vulkan-based compatibility layer for Direct3D 9/10/11
-    'vkd3d-proton-mingw'                            # Vulkan-based compatibility layer for Direct3D 12
-    'ventoy-bin'                                    # Multiboot USB Solution
-    'jetbrains-toolbox'                             #
-    'tdrop-git'                                     # Hide/Show terminal emulators
-    'mullvad-vpn'                                   # VPN
-    'davinci-resolve'                               # Video editing software
-#    ''                                              #
+    'deckboard-appimage'                        # Streamdeck alternative
+    'protonup-qt'                               # ProtonUp-Qt
+    'eam-git'                                   # Epic Games' Marketplace for Linux
+    'heroic-games-launcher-bin'                 # Epic Games and GOG launcher
+    'bottles'                                   # Bottles
+    'protontricks'                              # Wrapper to make winetricks work with Proton enabled games
+    'dxvk-bin'                                  # Vulkan-based compatibility layer for Direct3D 9/10/11
+    'vkd3d-proton-mingw'                        # Vulkan-based compatibility layer for Direct3D 12
+    'jetbrains-toolbox'                         #
+    'mullvad-vpn'                               # VPN
+    'davinci-resolve'                           # Video editing software
+#    ''                                          #
 )
 
 for PKG in "${PKGY[@]}"; do

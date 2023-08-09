@@ -95,6 +95,7 @@ PKGS=(
     'kwalletmanager'
     'sxhkd'
     'kate'
+    'skanlite'                                  # Image Scanning App (If you have a scanner or aio printer/scanner)
 #    'garuda-settings-manager-kcm'
 
     # i3
@@ -124,54 +125,11 @@ PKGS=(
     #'sysstat'
     #'acpi'
     #'alsa-utils'
-    'giflib'                                    # Wine Dependency Hell
-    'lib32-giflib'                              # Wine Dependency Hell
-    'libpng'                                    # Wine Dependency Hell
-    'lib32-libpng'                              # Wine Dependency Hell
-    'libldap'                                   # Wine Dependency Hell
-    'lib32-libldap'                             # Wine Dependency Hell
-    'gnutls'                                    # Wine Dependency Hell
-    'lib32-gnutls'                              # Wine Dependency Hell
-    'mpg123'                                    # Wine Dependency Hell
-    'lib32-mpg123'                              # Wine Dependency Hell
-    'openal'                                    # Wine Dependency Hell
-    'lib32-openal'                              # Wine Dependency Hell
-    'v4l-utils'                                 # Wine Dependency Hell
-    'lib32-v4l-utils'                           # Wine Dependency Hell
-    'libpulse'                                  # Wine Dependency Hell
-    'lib32-libpulse'                            # Wine Dependency Hell
-    'alsa-plugins'                              # Wine Dependency Hell
-    'lib32-alsa-plugins'                        # Wine Dependency Hell
-    'alsa-lib'                                  # Wine Dependency Hell
-    'lib32-alsa-lib'                            # Wine Dependency Hell
-    'libjpeg-turbo'                             # Wine Dependency Hell
-    'lib32-libjpeg-turbo'                       # Wine Dependency Hell
-    'libxcomposite'                             # Wine Dependency Hell
-    'lib32-libxcomposite'                       # Wine Dependency Hell
-    'libxinerama'                               # Wine Dependency Hell
-    'lib32-libxinerama'                         # Wine Dependency Hell
-    'ncurses'                                   # Wine Dependency Hell
-    'lib32-ncurses'                             # Wine Dependency Hell
-    'opencl-icd-loader'                         # Wine Dependency Hell
-    'lib32-opencl-icd-loader'                   # Wine Dependency Hell
-    'libxslt'                                   # Wine Dependency Hell
-    'lib32-libxslt'                             # Wine Dependency Hell
-    'libva'                                     # Wine Dependency Hell
-    'lib32-libva'                               # Wine Dependency Hell
-    'gtk3'                                      # Wine Dependency Hell
-    'lib32-gtk3'                                # Wine Dependency Hell
-    'gst-plugins-base-libs'                     # Wine Dependency Hell
-    'lib32-gst-plugins-base-libs'               # Wine Dependency Hell
-    'vulkan-icd-loader'                         # Wine Dependency Hell
-    'lib32-vulkan-icd-loader'                   # Wine Dependency Hell
-    'cups'                                      # Wine Dependency Hell
-    'samba'                                     # Wine Dependency Hell
-    'dosbox'                                    # Wine Dependency Hell
 )
 
 # Paru
 PKGA=(
-    'hplip-plugin'                                  # Plugin for HP Deskjet (All-in-One) printers
+    'hplip-plugin'                              # Plugin for HP Deskjet (All-in-One) printers
     'ibus-autostart-kimpanel'
     'zram-generator'
     'timeshift-bin'
@@ -198,36 +156,40 @@ PKGA=(
     'adobe-base-14-fonts'                       # Adobe base 14 fonts (Courier, Helvetica, Times, Symbol, etc)
     'xboxdrv'                                   # Gamepad driver for Linux (Controller Support)
     'tdrop'
+    'ventoy-bin'                                # Multiboot USB Solution
+    'vscodium-bin'                              # VS Code without Microsoft's branding/telemetry/licensing
+    'vscodium-bin-marketplace'                  # VS Codium market place
+    'vscodium-bin-features'                     # Unblock some features blocked for non-MS's VSCode
 )
 
-# Pacman
+# Flatpak
 PKGFP=(
-    'com.github.tchx84.Flatseal'                    # Flatpak permission manager
-    'org.gnu.emacs'                                 # "Family of text editors"
-    'org.mozilla.firefox'                           # Firefox Browser
-    'net.mullvad.MullvadBrowser'                    # Mullvad Browser
-    'com.github.micahflee.torbrowser-launcher'      # Tor Browser
-    'com.discordapp.Discord'                        # Discord
-    'io.github.mimbrero.WhatsAppDesktop'            # Whatsapp
-    'org.signal.Signal'                             # Signal
-    'network.loki.Session'                          # Session
-    'org.libreoffice.LibreOffice'                   # FLOSS office suite ("replaces" MS Word, PowerPoint and Excel)
-    'md.obsidian.Obsidian'                          # A knowledge base that works on local Markdown files
-    'org.kde.okteta'                                # Hex Editor
-    'org.kde.kleopatra'                             # Certificate Manager and Unified Crypto GUI
-    'org.qbittorrent.qBittorrent'                   # Torrent app
-    'io.mpv.Mpv'                                    # Media player
-    'info.smplayer.SMPlayer'                        # SMPlayer
-    'org.gimp.GIMP'                                 # GNU Image Manipulator
-    'org.kde.krita'                                 # Digital Painting Software
-    'org.inkscape.Inkscape'                         # Vector Graphics Editor
-    'org.blender.Blender'                           # 3D Modelling Software
-    'fr.handbrake.ghb'                              # Transcoder
-    'io.github.Qalculate.qalculate-qt'              # Calculator
-    'com.spotify.Client'                            # Spotify
-    'com.obsproject.Studio'                         # Streaming software
-    'io.github.antimicrox.antimicrox'               # Graphical program used to map gamepad keys to keyboard, mouse, scripts and macros
-    'nl.hjdskes.gcolor3'                            # Color Picker
+    'com.github.tchx84.Flatseal'                # Flatpak permission manager
+    'org.gnu.emacs'                             # "Family of text editors"
+    'org.mozilla.firefox'                       # Firefox Browser
+    'net.mullvad.MullvadBrowser'                # Mullvad Browser
+    'com.github.micahflee.torbrowser-launcher'  # Tor Browser
+    'com.discordapp.Discord'                    # Discord
+    'io.github.mimbrero.WhatsAppDesktop'        # Whatsapp
+    'org.signal.Signal'                         # Signal
+    'network.loki.Session'                      # Session
+    'org.libreoffice.LibreOffice'               # FLOSS office suite ("replaces" MS Word, PowerPoint and Excel)
+    'md.obsidian.Obsidian'                      # A knowledge base that works on local Markdown files
+    'org.kde.okteta'                            # Hex Editor
+    'org.kde.kleopatra'                         # Certificate Manager and Unified Crypto GUI
+    'org.qbittorrent.qBittorrent'               # Torrent app
+    'io.mpv.Mpv'                                # Media player
+    'info.smplayer.SMPlayer'                    # SMPlayer
+    'org.gimp.GIMP'                             # GNU Image Manipulator
+    'org.kde.krita'                             # Digital Painting Software
+    'org.inkscape.Inkscape'                     # Vector Graphics Editor
+    'org.blender.Blender'                       # 3D Modelling Software
+    'fr.handbrake.ghb'                          # Transcoder
+    'io.github.Qalculate.qalculate-qt'          # Calculator
+    'com.spotify.Client'                        # Spotify
+    'com.obsproject.Studio'                     # Streaming software
+    'io.github.antimicrox.antimicrox'           # Graphical program used to map gamepad keys to keyboard, mouse, scripts and macros
+    'nl.hjdskes.gcolor3'                        # Color Picker
 #    ''         #
 )
 
@@ -339,7 +301,7 @@ for PKG in "${PKGFP[@]}"; do
     echo
     echo "INSTALLING: ${PKG}"
     echo
-    flatpak install flathub "$PKG" -y
+    flatpak install --user "$PKG" -y
     echo
     sleep 1s
 done
