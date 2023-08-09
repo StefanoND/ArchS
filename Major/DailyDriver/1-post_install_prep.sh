@@ -78,13 +78,11 @@ while [[ ${VALIDPARTTHREE,,} = n ]]; do
     fi
 done
 
-if ! [[ -d "${APPSPATH}" ]]; then
-    echo
-    printf "Creating ${APPSPATH} path"
-    echo
-    mkdir -p "${APPSPATH}"
-    sleep 1s
-fi
+echo
+echo 'Setting locale'
+echo
+# Set your keyboard layout on X11
+localectl set-x11-keymap $KBLOCALE
 
 sudo pacman -Syy
 
@@ -110,6 +108,14 @@ elif ! pacman -Q | grep -i 'iptables' && ! pacman -Q | grep -i 'iptables-nft'; t
     echo 'Installing iptables-nft'
     echo
     sudo pacman -S iptables-nft --noconfirm --needed
+    sleep 1s
+fi
+
+if ! [[ -d "${APPSPATH}" ]]; then
+    echo
+    printf "Creating ${APPSPATH} path"
+    echo
+    mkdir -p "${APPSPATH}"
     sleep 1s
 fi
 
@@ -311,12 +317,6 @@ sleep 1s
 sudo sed -i "s|#FileManager.*|FileManager = ranger|g" /etc/paru.conf
 sleep 1s
 
-echo
-echo 'Setting locale'
-echo
-# Set your keyboard layout on X11
-localectl set-x11-keymap $KBLOCALE
-
 # Turn on swap
 sudo swapon /swap/swapfile
 sleep 1s
@@ -475,6 +475,12 @@ if [[ -f "${HOME}"/.xinitrc ]]; then
     mv "${HOME}"/.xinitrc "${HOME}"/.xinitrc.old
     sleep 1s
 fi
+if ! [[ -d "${HOME}"/.config/autostart ]]; then
+    echo
+    printf "Creating autostart folder in "${HOME}"/.config"
+    echo
+    mkdir -p "${HOME}"/.config/autostart
+fi
 
 echo
 printf "Copying config files to a permanent place at: "
@@ -530,13 +536,13 @@ sync
 sleep 1s
 
 echo
-printf "Change all your fonts to Fira Code."
+printf "Change all your fonts to Fira Code.\n"
 echo
-printf "Change application style to kvantum-dark"
+printf "Change application style to kvantum-dark\n"
 echo
-printf "Open kvantum manager and choose Orchis-dark in \"Change/Delete Theme\" section"
+printf "Open kvantum manager and choose Orchis-dark in \"Change/Delete Theme\" section\n"
 echo
-printf "in \"Configure Active Theme\" section in \"Sizes & Delays\" change \"Tooltip delay\" to 150 ms and save"
+printf "in \"Configure Active Theme\" section in \"Sizes & Delays\" change \"Tooltip delay\" to 150 ms and save\n"
 echo
 sleep 1s
 
