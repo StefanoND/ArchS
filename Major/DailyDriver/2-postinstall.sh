@@ -487,15 +487,25 @@ done
 # sleep 1s
 
 if [[ -f /etc/systemd/zram-generator.conf ]]; then
-    sudo mv /etc/systemd/zram-generator.conf /etc/systemd/zram-generator.conf.old
+    sudo mv -f /etc/systemd/zram-generator.conf /etc/systemd/zram-generator2.conf.old
     sleep 1s
 fi
 
-sudo touch /etc/systemd/zram-generator.conf
-sleep 1s
-sudo bash -c 'echo "[zram0]" >> /etc/systemd/zram-generator.conf'
+sudo bash -c 'echo "[zram0]" > /etc/systemd/zram-generator.conf'
 sleep 1s
 sudo bash -c 'echo "zram-size = ram / 2" >> /etc/systemd/zram-generator.conf'
+sleep 1s
+
+echo
+echo 'Reloading daemon'
+echo
+sudo systemctl daemon-reload
+sleep 1s
+
+echo
+echo 'Enabling zram'
+echo
+sudo systemctl start /dev/zram0
 sleep 1s
 
 sudo mkdir -p /usr/local/bin/autojump
@@ -599,11 +609,11 @@ sudo bash -c "echo 'fs.inotify.max_user_watches=524288' > /etc/sysctl.d/40-max-u
 sleep 1s
 
 echo
-echo "Decreasing swappiness"
+echo "Setting swappiness to 100"
 echo
-sudo sysctl -w vm.swappiness=10
+sudo sysctl -w vm.swappiness=100
 sleep 1s
-sudo bash -c 'echo "vm.swappiness = 10" > /etc/sysctl.d/99-swappiness.conf'
+sudo bash -c 'echo "vm.swappiness = 100" > /etc/sysctl.d/99-swappiness.conf'
 
 echo
 echo "Setting up fq_pie queue discipline for TCP congestion control"
@@ -636,6 +646,7 @@ echo
 echo "Restricting Kernel Log Access"
 echo
 sudo sysctl -w kernel.dmesg_restrict=1
+sudo bash -c 'echo kernel.dmesg_restrict=1 >> /etc/sysctl.d/10-local.conf'
 sleep 1s
 
 echo
@@ -652,6 +663,7 @@ sleep 1s
 
 if ! [[ -d /etc/X11/xorg.conf.d ]]; then
     sudo mkdir -p /etc/X11/xorg.conf.d
+    sleep 1s
 fi
 sudo bash -c "printf \"Section \"InputClass\"\n    Identifier \"My Mouse\"\n    Driver \"libinput\"\n    MatchIsPointer \"yes\"\n    Option \"AccelProfile\" \"-1\"\n    Option \"AccelerationScheme\" \"none\"\n    Option \"AccelSpeed\" \"-1\"\nEndSection\" > /etc/X11/xorg.conf.d/50-mouse-acceleration.conf"
 sleep 1s
@@ -659,9 +671,10 @@ sleep 1s
 echo
 echo "Disabling built-in kernel modules of tablet so OpenTablerDriver can work"
 echo
-sudo bash -c "printf \"blacklist wacom\nblacklist hid_uclogic\n\" >> /etc/modprobe.d/blacklist.conf"
+sudo bash -c 'echo "blacklist wacom" >> /etc/modprobe.d/blacklist.conf'
+sudo bash -c 'echo "blacklist hid_uclogic" >> /etc/modprobe.d/blacklist.conf'
 
-if lsmod | grep -wq 'wacom'; then
+if lsmod | grep -iq 'wacom'; then
     echo
     echo "Stopping Wacom kernel module (if present)"
     echo
@@ -669,7 +682,7 @@ if lsmod | grep -wq 'wacom'; then
     sleep 1s
 fi
 
-if lsmod | grep -wq 'hid_uclogic'; then
+if lsmod | grep -iq 'hid_uclogic'; then
     echo
     echo "Stopping non-Wacom kernel module (if present)"
     echo
@@ -809,12 +822,6 @@ echo
 echo 'Reloading daemon'
 echo
 sudo systemctl daemon-reload
-sleep 1s
-
-echo
-echo 'Enabling zram'
-echo
-sudo systemctl start /dev/zram0
 sleep 1s
 
 echo
