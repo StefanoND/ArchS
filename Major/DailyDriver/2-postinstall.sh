@@ -94,7 +94,7 @@ PKGS=(
     'xsettingsd'
     'kwalletmanager'
     'sxhkd'
-    'kate'
+#    'kate'
     'skanlite'                                  # Image Scanning App (If you have a scanner or aio printer/scanner)
 #    'garuda-settings-manager-kcm'
 
@@ -191,6 +191,7 @@ PKGFP=(
     'com.obsproject.Studio'                     # Streaming software
     'io.github.antimicrox.antimicrox'           # Graphical program used to map gamepad keys to keyboard, mouse, scripts and macros
     'nl.hjdskes.gcolor3'                        # Color Picker
+    'org.kde.kdenlive'                          # KDe Video Editor
 #    ''         #
 )
 

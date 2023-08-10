@@ -87,6 +87,11 @@ while [[ ${VALIDPARTTHREE,,} = n ]]; do
 done
 
 echo
+echo "Installing Nix Package Manager"
+echo
+sh <(curl -L https://nixos.org/nix/install) --daemon
+
+echo
 echo 'Setting locale'
 echo
 # Set your keyboard layout on X11
@@ -113,6 +118,14 @@ if ! [[ -d "${APPSPATH}" ]]; then
     printf "Creating ${APPSPATH} path"
     echo
     mkdir -p "${APPSPATH}"
+    sleep 1s
+fi
+
+if ! [[ -d "${HOME}"/.local/bin ]]; then
+    echo
+    printf "Creating ${HOME}/.local/bin"
+    echo
+    mkdir -p "${HOME}"/.local/bin
     sleep 1s
 fi
 
@@ -485,6 +498,8 @@ if ! [[ -d "${HOME}"/.config/autostart ]]; then
     mkdir -p "${HOME}"/.config/autostart
 fi
 
+sed -i "s/111111/$(logname)/g" "${SRCPATH}"/conf/home-manager/*
+
 echo
 printf "Copying config files to a permanent place at: "
 printf "\"${APPSPATH}/archs\""
@@ -492,18 +507,21 @@ echo
 cp -f "${SRCPATH}"/conf/home/.bashrc "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.bash_profile "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.bash_aliases "${APPSPATH}"/archs
+cp -f "${SRCPATH}"/conf/home/.profile "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.wezterm.lua "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.xinitrc "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/sxhkd.desktop "${APPSPATH}"/archs
+cp -rf "${SRCPATH}"/conf/home-manager "${APPSPATH}"/archs
 sleep 1s
 
 printf "Copying/Symlinking config files to ${HOME} and ${HOME}/.config/autostart"
-ln -svf "${APPSPATH}"/archs/.bashrc "${HOME}"/.bashrc
-ln -svf "${APPSPATH}"/archs/.bash_profile "${HOME}"/.bash_profile
-ln -svf "${APPSPATH}"/archs/.bash_aliases "${HOME}"/.bash_aliases
-ln -svf "${APPSPATH}"/archs/.wezterm.lua "${HOME}"/.wezterm.lua
-ln -svf "${APPSPATH}"/archs/.xinitrc "${HOME}"/.xinitrc
-cp -f "${APPSPATH}"/archs/sxhkd.desktop "${HOME}"/.config/autostart/
+ln -svf "${APPSPATH}"/archs/.bashrc "${HOME}"
+ln -svf "${APPSPATH}"/archs/.bash_profile "${HOME}"
+ln -svf "${APPSPATH}"/archs/.bash_aliases "${HOME}"
+ln -svf "${APPSPATH}"/archs/.profile "${HOME}"
+ln -svf "${APPSPATH}"/archs/.wezterm.lua "${HOME}"
+ln -svf "${APPSPATH}"/archs/.xinitrc "${HOME}"
+cp -f "${APPSPATH}"/archs/sxhkd.desktop "${HOME}"/.config/autostart
 sleep 1s
 
 #cd ${HOME}
@@ -528,45 +546,7 @@ echo '[Icon THeme]' > "${HOME}"/.icons/default/index.theme
 echo 'Inherits=Sweet-cursors' >> "${HOME}"/.icons/default/index.theme
 sleep 1s
 
-echo
-echo 'Reloading daemon'
-echo
-sudo systemctl daemon-reload
-
-#echo
-#echo "Installinx Nix Package Manager"
-#echo
-#sh <(curl -L https://nixos.org/nix/install) --daemon
-
-#cd "${SRCPATH}"
-
-echo
-echo 'Syncing system'
-echo
-sync
-sleep 1s
-
-echo
-printf "Change all your fonts to Fira Code.\n"
-echo
-printf "Change application style to kvantum-dark\n"
-echo
-printf "Open kvantum manager and choose Orchis-dark in \"Change/Delete Theme\" section\n"
-echo
-printf "in \"Configure Active Theme\" section in \"Sizes & Delays\" change \"Tooltip delay\" to 150 ms and save\n"
-echo
-sleep 1s
-
-echo
-echo "Done..."
-echo
-echo "Press Y to reboot now or N if you plan to manually reboot later."
-echo
-read REBOOT
-if [ ${REBOOT,,} = y ]; then
-    shutdown -r now
-fi
-exit 0
+bash -l "${SRCPATH}"/1.1-post_install_prep.sh
 
 #echo
 #echo "Download themes"

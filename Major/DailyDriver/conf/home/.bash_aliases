@@ -117,10 +117,13 @@ alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
 # NIX
 
 # Alias to rebuild home-manager
-#alias hmswitch='home-manager switch'
+alias hmswitch='home-manager switch --impure'
+
+# Alias to clean home-manager
+alias hmclean='home-manager switch -b backup --impure && nix-store --gc --print-roots | grep -v "/nix/store/" | xargs -r nix-store --delete && nix-store --gc && echo "done"'
 
 # Alias to rebuild home-manager
-#alias hmbuild='home-manager build'
+alias hmbuild='home-manager build'
 
 # Alias to update flake inputs
 #alias flakeupdate='nix flake update $HOME/.config/home-amanager/'

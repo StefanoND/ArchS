@@ -405,8 +405,6 @@ alias lookingglass="~/looking-glass-B5.0.1/client/build/looking-glass-client -F"
 # "Ultimate amazing command prompt" by Chris Titus Tech
 #######################################################
 
-export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin"
-
 # Install Starship - curl -sS https://starship.rs/install.sh | sh
 
 eval "$(starship init bash)"
@@ -463,6 +461,21 @@ killandnotify() {
 
 # Make password prompts show "Root Password:" in bold and red
 export SUDO_PROMPT="$(tput setaf 1 bold)Root Password:$(tput sgr0) "
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:" ]]
+then
+    PATH="$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:$PATH"
+fi
+export PATH
+
+export PATH=$PATH:$HOME/.local/bin
+export PATH=$PATH:$HOME/.nix-profile/bin
+
+export XDG_DATA_DIRS="$HOME/.nix-profile/share:$XDG_DATA_DIRS"
+export XDG_DATA_DIRS="$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"
+
+export LOCALE_ARCHIVE=/usr/lib/locale/locale-archive
 
 #######################################################
 # POST ADDED STUFF

@@ -35,7 +35,7 @@ PKGX=(
     'wine-gecko'                                # Wine's built-in replacement for Microsoft's Internet Explorer
     'dos2unix'                                  # Converting DOS stuff to unix
     'lutris'                                    # Lutris
-    'steam'                                     # Steam
+#    'steam'                                     # Steam
     'distrobox'                                 #
 #    ''                                          #
 )
