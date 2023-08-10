@@ -34,6 +34,14 @@ clear
 sleep 1s
 
 echo
+echo "Removing install blocker"
+echo
+sudo rm -f /var/lib/pacman/db.lck
+sleep 1s
+
+clear
+
+echo
 echo 'Make a change in sddm, you can change to something else and back to the default one'
 echo "Press any key when you're done"
 echo

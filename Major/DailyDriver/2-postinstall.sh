@@ -165,6 +165,7 @@ PKGA=(
 # Flatpak
 PKGFP=(
     'com.github.tchx84.Flatseal'                # Flatpak permission manager
+    'org.kde.KStyle.Kvantum'                    # Theme manager
     'org.gnu.emacs'                             # "Family of text editors"
     'org.mozilla.firefox'                       # Firefox Browser
     'net.mullvad.MullvadBrowser'                # Mullvad Browser
@@ -301,7 +302,7 @@ for PKG in "${PKGFP[@]}"; do
     echo
     echo "INSTALLING: ${PKG}"
     echo
-    flatpak install --user "$PKG" -y
+    flatpak install --user flathub "$PKG" -y
     echo
     sleep 1s
 done
