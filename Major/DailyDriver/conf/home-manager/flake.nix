@@ -18,7 +18,7 @@
       allowUnfree = true;
       allowUnfreePredicate = (_: true);
       linux_home = "/home/${username}";
-      path_to_dotfiles = "/home/${username}/.apps/archs";
+      path_to_dotfiles = "/.apps/archs";
     in {
       homeConfigurations."mjvmdd" = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
@@ -37,11 +37,6 @@
           ./home.nix
           ./dev.nix
           ./gaming.nix
-#          ./shared.nix
-#          ./linux/link.nix
-#          ./linux/dev.nix
-#          ./linux/home.nix
-#          ./linux/gui.nix
         ];
       };
     };
