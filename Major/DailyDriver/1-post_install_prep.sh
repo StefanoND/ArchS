@@ -88,28 +88,17 @@ sudo pacman -Syy
 
 if pacman -Q | grep -i 'iptables' && ! pacman -Q | grep -i 'iptables-nft'; then
     echo
+    echo 'Uninstalling iptables'
     echo
-    echo
-    echo
-    echo
-    echo
-    echo 'Replacing iptables with iptables-nft'
-    echo 'Press Y when it asks to remove iptables'
-    echo
-    echo
-    echo
-    sleep 2s
-    sudo pacman -S iptables-nft --needed
-    sleep 1s
-elif ! pacman -Q | grep -i 'iptables' && ! pacman -Q | grep -i 'iptables-nft'; then
-    echo
-    echo
-    echo
-    echo 'Installing iptables-nft'
-    echo
-    sudo pacman -S iptables-nft --noconfirm --needed
+    sudo pacman -Rdd iptables --noconfirm
     sleep 1s
 fi
+
+echo
+echo 'Installing iptables-nft'
+echo
+sudo pacman -S iptables-nft --noconfirm --needed
+sleep 1s
 
 if ! [[ -d "${APPSPATH}" ]]; then
     echo
