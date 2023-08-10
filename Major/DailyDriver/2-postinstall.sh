@@ -661,7 +661,7 @@ sleep 1s
 echo
 echo "Disabling built-in kernel modules of tablet so OpenTablerDriver can work"
 echo
-sudo bash -c "printf \"blacklist wacom\nblacklist hid_uclogic\n\" >> /etc/modprobe.d"
+sudo bash -c "printf \"blacklist wacom\nblacklist hid_uclogic\n\" >> /etc/modprobe.d/blacklist.conf"
 
 if lsmod | grep -wq 'wacom'; then
     echo
@@ -690,7 +690,7 @@ fi
 sudo touch /etc/fonts/local.conf
 sleep 1s
 
-sudo bash -c "curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/local.conf -o - >> /etc/fonts/local.conf"
+sudo bash -c "curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/local.conf > /etc/fonts/local.conf"
 sleep 1s
 
 if test -e /home/$(logname)/.Xresources; then
@@ -734,9 +734,11 @@ fi
 touch /home/$(logname)/.config/fontconfig/fonts.conf
 sleep 1s
 
-sudo bash -c "curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/fonts.conf -o - >> /home/$(logname)/.config/fontconfig/fonts.conf"
+curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/fonts.conf > "${HOME}"/.config/fontconfig/fonts.conf
 sleep 1s
 sudo sed -i "s|#export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|g" /etc/profile.d/freetype2.sh
+sleep 1s
+fc-cache -fv
 sleep 1s
 sudo fc-cache -fv
 sleep 1s

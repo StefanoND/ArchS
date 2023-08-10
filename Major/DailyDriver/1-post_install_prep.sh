@@ -501,6 +501,12 @@ ln -svf "${APPSPATH}"/archs/.xinitrc "${HOME}"/.xinitrc
 cp -f "${APPSPATH}"/archs/sxhkd.desktop "${HOME}"/.config/autostart/
 sleep 1s
 
+#cd ${HOME}
+#curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash > .git-completion.bash
+#curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh > .git-prompt.sh
+#chmod +x .git-completion.bash
+#chmod +x .git-prompt.sh
+
 #echo
 #echo 'Copying Sweet-cursors to /usr/share/icons'
 #echo
