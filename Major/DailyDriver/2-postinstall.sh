@@ -287,53 +287,6 @@ echo "Grab a coffee, it'll take some time"
 echo
 sleep 2s
 
-# Pacman
-for PKG in "${PKGS[@]}"; do
-    echo
-    echo "INSTALLING: ${PKG}"
-    echo
-    sudo pacman -S "$PKG" --noconfirm --needed
-    echo
-    sleep 1s
-done
-
-# Flatpak
-for PKG in "${PKGFP[@]}"; do
-    echo
-    echo "INSTALLING: ${PKG}"
-    echo
-    flatpak install --user flathub "$PKG" -y
-    echo
-    sleep 1s
-done
-
-# Paru
-for PKG in "${PKGA[@]}"; do
-    echo
-    echo "INSTALLING: ${PKG}"
-    echo
-    paru -S "$PKG" --noconfirm --needed --sudoloop
-    echo
-    sleep 1s
-done
-
-# # Nix home-manager
-# for PKG in "${PKGHM[@]}"; do
-#     echo
-#     echo "INSTALLING: ${PKG}"
-#     echo
-#     #sudo pacman -S "$PKG" --noconfirm --needed
-#     sed -i "/^.*home.packages = with pkgs; \[.*/a \    $PKG" "${HOME}"/.config/home-manager/home.nix
-#     echo
-#     sleep 1s
-# done
-#
-# echo
-# echo 'Creating a new generation of home-manager with our config'
-# echo
-# home-manager switch
-# sleep 1s
-
 if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
     echo
     echo "NVidia GPU found"
@@ -426,7 +379,6 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq intel; then
     sleep 1s
 
 fi
-
 if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio; then
     echo
     echo "VirtIO vGPU found"
@@ -488,6 +440,53 @@ if lspci | grep -iq renesas; then
     paru -S upd72020x-fw --noconfirm --needed --sudoloop
     sleep 1s
 fi
+
+# Pacman
+for PKG in "${PKGS[@]}"; do
+    echo
+    echo "INSTALLING: ${PKG}"
+    echo
+    sudo pacman -S "$PKG" --noconfirm --needed
+    echo
+    sleep 1s
+done
+
+# Paru
+for PKG in "${PKGA[@]}"; do
+    echo
+    echo "INSTALLING: ${PKG}"
+    echo
+    paru -S "$PKG" --noconfirm --needed --sudoloop
+    echo
+    sleep 1s
+done
+
+# Flatpak
+for PKG in "${PKGFP[@]}"; do
+    echo
+    echo "INSTALLING: ${PKG}"
+    echo
+    flatpak install --user flathub "$PKG" -y
+    echo
+    sleep 1s
+done
+
+# # Nix home-manager
+# for PKG in "${PKGHM[@]}"; do
+#     echo
+#     echo "INSTALLING: ${PKG}"
+#     echo
+#     #sudo pacman -S "$PKG" --noconfirm --needed
+#     sed -i "/^.*home.packages = with pkgs; \[.*/a \    $PKG" "${HOME}"/.config/home-manager/home.nix
+#     echo
+#     sleep 1s
+# done
+#
+# echo
+# echo 'Creating a new generation of home-manager with our config'
+# echo
+# home-manager switch
+# sleep 1s
 
 if [[ -f /etc/systemd/zram-generator.conf ]]; then
     sudo mv /etc/systemd/zram-generator.conf /etc/systemd/zram-generator.conf.old
