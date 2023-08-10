@@ -36,7 +36,7 @@ colors() {
 
 # Change the window title of X terminals
 case ${TERM} in
-    xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|interix|konsole*|yakuake*|wezterm*|alacritty*)
+    xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|interix|konsole*|yakuake*|org.wezfurlong.wezterm*|wezterm*|alacritty*)
         PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
         ;;
     screen*)
