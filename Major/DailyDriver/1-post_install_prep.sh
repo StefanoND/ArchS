@@ -117,7 +117,7 @@ sleep 1s
 echo
 echo "Adding flathub"
 echo
-flatpak remote-add --user flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
+flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 sleep 1s
 
 echo
@@ -464,6 +464,13 @@ if [[ -f "${HOME}"/.xinitrc ]]; then
     mv "${HOME}"/.xinitrc "${HOME}"/.xinitrc.old
     sleep 1s
 fi
+if [[ -f "${HOME}"/.bash_profile ]]; then
+    echo
+    echo 'Backing up .bash_profile'
+    echo
+    mv "${HOME}"/.bash_profile "${HOME}"/.bash_profile.old
+    sleep 1s
+fi
 if ! [[ -d "${HOME}"/.config/autostart ]]; then
     echo
     printf "Creating autostart folder in "${HOME}"/.config"
@@ -476,6 +483,7 @@ printf "Copying config files to a permanent place at: "
 printf "\"${APPSPATH}/archs\""
 echo
 cp -f "${SRCPATH}"/conf/home/.bashrc "${APPSPATH}"/archs
+cp -f "${SRCPATH}"/conf/home/.bash_profile "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.bash_aliases "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.wezterm.lua "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.xinitrc "${APPSPATH}"/archs
@@ -484,6 +492,7 @@ sleep 1s
 
 printf "Copying/Symlinking config files to ${HOME} and ${HOME}/.config/autostart"
 ln -svf "${APPSPATH}"/archs/.bashrc "${HOME}"/.bashrc
+ln -svf "${APPSPATH}"/archs/.bash_profile "${HOME}"/.bash_profile
 ln -svf "${APPSPATH}"/archs/.bash_aliases "${HOME}"/.bash_aliases
 ln -svf "${APPSPATH}"/archs/.wezterm.lua "${HOME}"/.wezterm.lua
 ln -svf "${APPSPATH}"/archs/.xinitrc "${HOME}"/.xinitrc
