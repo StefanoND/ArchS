@@ -33,8 +33,8 @@ in
     #pkgs.wineWowPackages.staging
     #pkgs.winetricks
     pkgs.kate
+    (helpers.nixGLVulkanNvidiaWrap pkgs.jdk17)
     #pkgs.steam
-    (helpers.nixGLVulkanNvidiaWrap pkgs.steam)
 
     # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
 
@@ -44,8 +44,6 @@ in
 #      ${nixgl.auto.nixGLNvidia}/bin/nixGLNVidia ${pkgs.steam}/bin/steam "$@"
 #    '')
   ];
-
-  programs.mangohud.enable = true; # Install and enable mangohud
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.

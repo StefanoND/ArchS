@@ -36,6 +36,7 @@
         modules = [
           ./home.nix
           ./dev.nix
+          ./gaming.nix
 #          ./shared.nix
 #          ./linux/link.nix
 #          ./linux/dev.nix
