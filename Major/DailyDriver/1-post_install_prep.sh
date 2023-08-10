@@ -157,7 +157,6 @@ echo
 echo 'Enabling Valve AUR Repo'
 echo
 sudo bash -c "echo '[valveaur]' >> /etc/pacman.conf"
-sudo bash -c "echo 'SigLevel = Optional TrustedOnly' >> /etc/pacman.conf"
 sudo bash -c "echo 'Server = http://repo.steampowered.com/arch/valveaur' >> /etc/pacman.conf"
 sudo bash -c "echo '' >> /etc/pacman.conf"
 sleep 1s

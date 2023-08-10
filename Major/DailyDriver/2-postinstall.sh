@@ -220,8 +220,6 @@ PKGFP=(
 
 APPSPATH="${HOME}/.apps"
 SRCPATH="$(cd $(dirname $0) && pwd)"
-sourcen=0
-linkn=0
 enablevb=n
 
 echo
