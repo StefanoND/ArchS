@@ -32,10 +32,13 @@
       (helpers.nixGLVulkanNvidiaWrap pkgs.retroarchFull)
       (helpers.nixGLVulkanNvidiaWrap pkgs.gamescope)
       (helpers.nixGLVulkanNvidiaWrap nix-gaming.packages.${pkgs.system}.osu-stable)
+      pkgs.gamemode
       pkgs.mangohud
       pkgs.nixgl.auto.nixGLNvidia
       pkgs.nixgl.auto.nixVulkanNvidia
     ];
 
-    programs.home-manager.enable = true;
+    programs = {
+      home-manager.enable = true;
+    };
   }

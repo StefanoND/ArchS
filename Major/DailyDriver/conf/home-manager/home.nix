@@ -93,7 +93,6 @@ in
     enable = true;
     frequency = "weekly";
   };
-
   xdg = {
     enable = true; # Enable xdg
     mime.enable = true; # Rebuild .desktop file database for app launcher menus

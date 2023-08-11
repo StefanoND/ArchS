@@ -61,12 +61,15 @@ systemctl enable reflector.timer
 pacman -Syy
 sleep 1s
 
+# Add btrfs to modules
+sed -i 's/MODULES=()/MODULES=(btrfs)/g' /etc/mkinitcpio.conf
+
 # Add btrfs and setfont to mkinitcpio's binaries
 sed -i 's/BINARIES=()/BINARIES=(btrfs setfont)/g' /etc/mkinitcpio.conf
 
 # Add "btrfs" before "filesystems" and remove "fsck":
-# HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap consolefont block filesystems)
-sed -i 's/HOOKS=(.*/HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap consolefont block filesystems)/g' /etc/mkinitcpio.conf
+# HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap encrypt consolefont block filesystems)
+sed -i 's/HOOKS=(.*/HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap encrypt consolefont block filesystems)/g' /etc/mkinitcpio.conf
 
 # Compress initramfs image
 sed -i 's/#COMPRESSION="zstd"/COMPRESSION="zstd"/g' /etc/mkinitcpio.conf
@@ -174,23 +177,27 @@ printf "default arch.conf\ntimeout 3\nconsole-mode max\neditor no\n" > /boot/loa
 
 printf "title Arch\nlinux /vmlinuz-linux\ninitrd /initramfs-linux.img\n" > /boot/loader/entries/arch.conf
 printf "title Arch (LTS)\nlinux /vmlinuz-linux-lts\ninitrd /initramfs-linux-lts.img\n" > /boot/loader/entries/arch-lts.conf
+printf "title Arch (Xanmod RT)\nlinux /vmlinuz-linux-xanmod-rt\ninitrd /initramfs-linux-xanmod-rt.img\n" > /boot/loader/entries/arch-xanmod-rt.conf
 sleep 1s
 
 if grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
     pacman -S amd-ucode --noconfirm
     printf "initrd /amd-ucode.img\n" >> /boot/loader/entries/arch.conf
     printf "initrd /amd-ucode.img\n" >> /boot/loader/entries/arch-lts.conf
+    printf "initrd /amd-ucode.img\n" >> /boot/loader/entries/arch-xanmod-rt.conf
     sleep 1s
 fi
 if grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
     pacman -S intel-ucode --noconfirm
     printf "initrd /intel-ucode.img\n" >> /boot/loader/entries/arch.conf
     printf "initrd /intel-ucode.img\n" >> /boot/loader/entries/arch-lts.conf
+    printf "initrd /intel-ucode.img\n" >> /boot/loader/entries/arch-xanmod-rt.conf
     sleep 1s
 fi
 
-printf "options root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw\n" >> /boot/loader/entries/arch.conf
-printf "options root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw\n" >> /boot/loader/entries/arch-lts.conf
+printf "options cryptdevice=UUID=$(blkid -s UUID -o value /dev/mapper/luks_root):root root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw\n" >> /boot/loader/entries/arch.conf
+printf "options cryptdevice=UUID=$(blkid -s UUID -o value /dev/mapper/luks_root):root root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw\n" >> /boot/loader/entries/arch-lts.conf
+printf "options cryptdevice=UUID=$(blkid -s UUID -o value /dev/mapper/luks_root):root root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw\n" >> /boot/loader/entries/arch-xanmod-rt.conf
 
 # NVIDIA ONLY
 if [[ -f /hasnvidia.gpu ]]; then
@@ -202,8 +209,9 @@ if [[ -f /hasnvidia.gpu ]]; then
     sleep 1s
 
     # Add nvidia-drm.modeset=1 at the end of options root=PARTUUID....
-    sed -i "s/options root=UUID=.*/options root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw nvidia-drm.modeset=1/g" /boot/loader/entries/arch.conf
-    sed -i "s/options root=UUID=.*/options root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw nvidia-drm.modeset=1/g" /boot/loader/entries/arch-lts.conf
+    sed -i "s/options cryptdevice=UUID=.*/options cryptdevice=UUID=$(blkid -s UUID -o value /dev/mapper/luks_root):root root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw nvidia-drm.modeset=1/g" /boot/loader/entries/arch.conf
+    sed -i "s/options cryptdevice=UUID=.*/options cryptdevice=UUID=$(blkid -s UUID -o value /dev/mapper/luks_root):root root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw nvidia-drm.modeset=1/g" /boot/loader/entries/arch-lts.conf
+    sed -i "s/options cryptdevice=UUID=.*/options cryptdevice=UUID=$(blkid -s UUID -o value /dev/mapper/luks_root):root root=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2) rootflags=subvol=@ rw nvidia-drm.modeset=1/g" /boot/loader/entries/arch-xanmod-rt.conf
 
     # Make a hook for pacman so we can update and build the new drivers or we'll get blank screen on load
     # Create hooks folder
@@ -260,7 +268,7 @@ sleep 1s
 echo
 echo "Enabling autodefrag"
 echo
-sed -i 's/subvol=\/@/autodefrag,subvol=\/@/g' /etc/fstab
+sed -i 's/subvolid=/autodefrag,subvolid=/g' /etc/fstab
 
 # Remove hasnvidia.gpu from /mnt
 rm -f /hasnvidia.gpu
