@@ -16,23 +16,6 @@ if ! groups|grep wheel>/dev/null;then
     exit 1
 fi
 
-clear
-echo
-echo
-echo "      _        _                                     ___                               "
-echo "     / \   ___| |_ ___ _ __ _ __  _   _ _ __ ___    / _ \ _ __ ___   ___  __ _  __ _   "
-echo "    / _ \ / _ \ __/ _ \ '__| '_ \| | | | '_ ' _ \  | | | | '_ ' _ \ / _ \/ _' |/ _' |  "
-echo "   / ___ \  __/ ||  __/ |  | | | | |_| | | | | | | | |_| | | | | | |  __/ (_| | (_| |  "
-echo "  /_/   \_\___|\__\___|_|  |_| |_|\__,_|_| |_| |_|  \___/|_| |_| |_|\___|\__, |\__,_|  "
-echo "                                                                         |___/         "
-echo "                                  Post-Install Script"
-echo
-echo
-sleep 2s
-
-clear
-sleep 1s
-
 APPSPATH="${HOME}/.apps"
 SRCPATH="$(cd $(dirname $0) && pwd)"
 
@@ -58,14 +41,11 @@ echo 'auto-optimise-store = true' >> "${HOME}"/.config/nix/nix.conf
 echo '' >> "${HOME}"/.config/nix/nix.conf
 sleep 1s
 
-if ! [[ "${HOME}"/.local/state/home-manager/profiles ]]; then
-    mkdir -p "${HOME}"/.local/state/home-manager/profiles
-    sleep 1s
-fi
-if ! [[ /nix/var/nix/profiles/per-user/$(logname) ]]; then
-    sudo mkdir -p /nix/var/nix/profiles/per-user/$(logname)
-    sleep 1s
-fi
+mkdir -p "${HOME}"/.local/state/home-manager/profiles
+sleep 1s
+
+sudo mkdir -p /nix/var/nix/profiles/per-user/$(logname)
+sleep 1s
 
 echo
 echo 'Restarting nix-daemon'
@@ -81,15 +61,33 @@ sleep 1s
 
 if ! [[ -d "${HOME}"/.config/home-manager ]]; then
     echo
-    printf "Creating autostart folder in "${HOME}"/.config"
+    printf "Creating home-manager folder in "${HOME}"/.config"
     echo
     mkdir -p "${HOME}"/.config/home-manager
 fi
 
 echo
+echo 'Creating first generation'
+echo
+home-manager switch
+sleep 1s
+
+echo
 echo "Copying ${APPSPATH}/archs/home-manager to ${HOME}/.config/"
 echo
 ln -svf "${APPSPATH}"/archs/home-manager/* "${HOME}"/.config/home-manager
+
+echo
+echo 'Restarting nix-daemon'
+echo
+sudo systemctl restart nix-daemon
+sleep 1s
+
+echo
+echo 'Creating new generation'
+echo
+home-manager switch
+sleep 1s
 
 echo
 printf "Adding $(logname) to Nix's trusted users to perform privileged commands without sudo"
@@ -100,12 +98,6 @@ echo
 echo 'Enabling cachix for nix-gaming'
 echo
 cachix use nix-gaming
-
-echo
-echo 'Creating new generation'
-echo
-home-manager switch
-sleep 1s
 
 echo
 echo 'Syncing system'

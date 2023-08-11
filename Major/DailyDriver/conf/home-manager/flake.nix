@@ -19,7 +19,7 @@
       allowUnfree = true;
       allowUnfreePredicate = (_: true);
       linux_home = "/home/${username}";
-      path_to_dotfiles = "/.apps/archs";
+      path_to_dotfiles = "/.apps/archs/home-manager";
 
     in {
       homeConfigurations."111111" = home-manager.lib.homeManagerConfiguration {

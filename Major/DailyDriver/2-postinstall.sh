@@ -699,9 +699,11 @@ if test -e /etc/fonts/local.conf; then
     sleep 1s
 fi
 
+echo ''
 sudo touch /etc/fonts/local.conf
 sleep 1s
 
+echo ''
 sudo bash -c "curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/local.conf > /etc/fonts/local.conf"
 sleep 1s
 
@@ -710,12 +712,15 @@ if test -e /home/$(logname)/.Xresources; then
     sleep 1s
 fi
 
+echo ''
 touch /home/$(logname)/.Xresources
 sleep 1s
 
+echo ''
 printf "Xft.antialias: 1\nXft.hinting: 1\nXft.rgba: rgb\nXft.hintstyle: hintslight\nXft.lcdfilter: lcddefault" | tee /home/$(logname)/.Xresources
 sleep 1s
 
+echo ''
 xrdb -merge /home/$(logname)/.Xresources
 sleep 1s
 if ! test -e /etc/fonts/conf.d/10-sub-pixel-rgb.conf; then
@@ -743,9 +748,11 @@ if test -e /home/$(logname)/.config/fontconfig/fonts.conf; then
     sleep 1s
 fi
 
+echo ''
 touch /home/$(logname)/.config/fontconfig/fonts.conf
 sleep 1s
 
+echo ''
 curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/fonts.conf > "${HOME}"/.config/fontconfig/fonts.conf
 sleep 1s
 sudo sed -i "s|#export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|g" /etc/profile.d/freetype2.sh

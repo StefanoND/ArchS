@@ -83,27 +83,27 @@ echo
 echo "Opening \"/dev/$nvme0n1p2\" use your encryption password you setup earlier"
 echo
 sleep 1s
-cryptsetup open /dev/$nvme0n1p2 luks_root
+cryptsetup open /dev/$nvme0n1p2 root
 sleep 1s
 
 echo
 echo "Opening \"/dev/$nvme0n1p3\" use your encryption password you setup earlier"
 echo
 sleep 1s
-cryptsetup open /dev/$nvme0n1p3 luks_home
+cryptsetup open /dev/$nvme0n1p3 home
 sleep 1s
 
 # Format partitions
 mkfs.fat -F 32 /dev/$nvme0n1p1
 mkfs.btrfs -f /dev/$nvme0n1p2
-mkfs.btrfs -f /dev/mapper/luks_root
+mkfs.btrfs -f /dev/mapper/root
 mkfs.btrfs -f /dev/$nvme0n1p3
-mkfs.btrfs -f /dev/mapper/luks_home
+mkfs.btrfs -f /dev/mapper/home
 sleep 1s
 
 # Mount the partitions
 #mount /dev/$nvme0n1p2 /mnt
-mount /dev/mapper/luks_root /mnt
+mount /dev/mapper/root /mnt
 btrfs su cr /mnt/@
 btrfs su cr /mnt/@opt
 btrfs su cr /mnt/@swap
@@ -114,7 +114,7 @@ sleep 1s
 umount /mnt
 
 #mount /dev/$nvme0n1p3 /mnt
-mount /dev/mapper/luks_home /mnt
+mount /dev/mapper/home /mnt
 btrfs su cr /mnt/@home
 sleep 1s
 umount /mnt
@@ -131,14 +131,14 @@ umount /mnt
 # mount /dev/$nvme0n1p1 /mnt/boot
 
 # remove "space_cache" if on a VM without disk fully allocated
-mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@ /dev/mapper/luks_root /mnt
+mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@ /dev/mapper/root /mnt
 mkdir -p /mnt/{boot,swap,home,.snapshots,opt,var/{cache,log}}
-mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@opt /dev/mapper/luks_root /mnt/opt
-mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@swap /dev/mapper/luks_root /mnt/swap
-mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@snapshots /dev/mapper/luks_root /mnt/.snapshots
-mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@cache /dev/mapper/luks_root /mnt/var/cache
-mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@log /dev/mapper/luks_root /mnt/var/log
-mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@home /dev/mapper/luks_home /mnt/home
+mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@opt /dev/mapper/root /mnt/opt
+mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@swap /dev/mapper/root /mnt/swap
+mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@snapshots /dev/mapper/root /mnt/.snapshots
+mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@cache /dev/mapper/root /mnt/var/cache
+mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@log /dev/mapper/root /mnt/var/log
+mount -o compress=zstd:3$SPCACHE,noatime,ssd,defaults,x-mount.mkdir,subvol=@home /dev/mapper/home /mnt/home
 mount /dev/$nvme0n1p1 /mnt/boot
 
 # Prep

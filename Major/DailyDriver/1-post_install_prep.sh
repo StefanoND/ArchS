@@ -55,49 +55,26 @@ sleep 1s
 KBLOCALE="pt"
 VALIDPARTTWO=n
 VALIDPARTTHREE=n
-nvme0n1p2=null
-nvme0n1p3=null
 
 APPSPATH="${HOME}/.apps"
 SRCPATH="$(cd $(dirname $0) && pwd)"
 FFPATH="${SRCPATH}/conf/aesthetic/ff"
 
-lsblk
-while [[ ${VALIDPARTTWO,,} = n ]]; do
-    read -p "Enter the name of the ROOT partition (eg. sda2, nvme0n1p2): " PARTTWO
-    nvme0n1p2=$PARTTWO
-    if [[ `lsblk | grep -w $nvme0n1p2` ]]; then
-        VALIDPARTTWO=y
-    else
-        echo
-        printf "Could not find /dev/$nvme0n1p2, try again"
-        echo
-    fi
-done
-while [[ ${VALIDPARTTHREE,,} = n ]]; do
-    read -p "Enter the name of the HOME partition (eg. sda3, nvme0n1p3): " PARTTHREE
-    nvme0n1p3=$PARTTHREE
-    if [[ `lsblk | grep -w $nvme0n1p3` ]]; then
-        VALIDPARTTHREE=y
-    else
-        echo
-        printf "Could not find /dev/$nvme0n1p3, try again"
-        echo
-    fi
-done
-
 echo
 echo "Installing Nix Package Manager"
 echo
 sh <(curl -L https://nixos.org/nix/install) --daemon
+sleep 1s
 
 echo
 echo 'Setting locale'
 echo
 # Set your keyboard layout on X11
 localectl set-x11-keymap $KBLOCALE
+sleep 1s
 
 sudo pacman -Syy
+sleep 1s
 
 if pacman -Q | grep -i 'iptables' && ! pacman -Q | grep -i 'iptables-nft'; then
     echo
@@ -196,6 +173,10 @@ sleep 1s
 
 
 PKGS=(
+    # Kernel
+    'linux-xanmod-rt'
+    'linux-xanmod-rt-headers'
+
     # Tools
     'rustup'                                    # Rust toolchain
     'mingw-w64'                                 # MinGW Cross-compiler pack (binutils, crt, gcc, headers and winpthreads)
@@ -274,6 +255,18 @@ for PKG in "${PKGS[@]}"; do
 done
 
 echo
+echo 'Making xanmod-rt the default kernel to boot'
+echo
+sudo sed -i 's/default arch.conf/default arch-xanmod-rt.conf/g' /boot/loader/loader.conf
+sleep 1s
+
+echo
+echo 'Updatin initramfs'
+echo
+sudo mkinitcpio -P
+sleep 1s
+
+echo
 echo "Config Ranger"
 echo
 ranger --copy-config=all
@@ -327,15 +320,18 @@ sudo sed -i "s|#FileManager.*|FileManager = ranger|g" /etc/paru.conf
 sleep 1s
 
 # Turn on swap
+echo
+echo 'Turning swapfile on'
+echo
 sudo swapon /swap/swapfile
 sleep 1s
 
 echo
 echo "Enabling btrfs's automatic balance at 10% threshold"
 echo
-sudo bash -c "echo 10 > /sys/fs/btrfs/$(blkid -s UUID -o value /dev/$nvme0n1p2)/allocation/data/bg_reclaim_threshold"
+sudo bash -c "echo 10 > /sys/fs/btrfs/$(sudo blkid -s UUID -o value /dev/mapper/root)/allocation/data/bg_reclaim_threshold"
 sleep 1s
-sudo bash -c "echo 10 > /sys/fs/btrfs/$(blkid -s UUID -o value /dev/$nvme0n1p3)/allocation/data/bg_reclaim_threshold"
+sudo bash -c "echo 10 > /sys/fs/btrfs/$(sudo blkid -s UUID -o value /dev/mapper/home)/allocation/data/bg_reclaim_threshold"
 sleep 1s
 
 if ! [[ -f "${HOME}"/.config/kxkbrc ]]; then
