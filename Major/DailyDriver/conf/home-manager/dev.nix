@@ -7,6 +7,8 @@ let
     inherit specialArgs;
   };
 
+  nix-gaming = import (builtins.fetchTarball "https://github.com/fufexan/nix-gaming/archive/master.tar.gz");
+
 in {
   nixpkgs = {
     config = {

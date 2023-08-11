@@ -120,7 +120,10 @@ alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
 alias hmswitch='home-manager switch --impure'
 
 # Alias to clean home-manager
-alias hmclean='home-manager switch -b backup --impure && nix-store --gc --print-roots | grep -v "/nix/store/" | xargs -r nix-store --delete && nix-store --gc && echo "done"'
+alias hmclean='nix store optimise && home-manager switch -b backup --impure && nix-store --gc --print-roots | grep -v "/nix/store/" | xargs -r nix-store --delete && nix-store --gc && sudo systemctl restart nix-daemon && echo "done"'
+
+# Alias to optimise nix store (Replaces identical files in nix store by hard links)
+alias nixoptimise='nix store optimise'
 
 # Alias to rebuild home-manager
 alias hmbuild='home-manager build'

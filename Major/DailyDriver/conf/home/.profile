@@ -22,4 +22,4 @@ if [ -d $HOME/.nix-profile/etc/profile.d ]; then
   done
 fi
 
-export PIPEWIRE_LATENCY="32/48000"
+export PIPEWIRE_LATENCY="64/48000"

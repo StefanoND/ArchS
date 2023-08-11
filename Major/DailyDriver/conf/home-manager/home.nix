@@ -8,6 +8,8 @@ let
     inherit specialArgs;
   };
 
+  nix-gaming = import (builtins.fetchTarball "https://github.com/fufexan/nix-gaming/archive/master.tar.gz");
+
 in
 {
   # Allow Proprietary packages
@@ -33,7 +35,13 @@ in
     #pkgs.wineWowPackages.staging
     #pkgs.winetricks
     pkgs.kate
+    pkgs.cachix
     (helpers.nixGLVulkanNvidiaWrap pkgs.jdk17)
+    pkgs.hexdump
+    pkgs.perl
+    pkgs.python3
+    (helpers.nixGLVulkanNvidiaWrap nix-gaming.packages.${pkgs.system}.wine-ge)
+    #(helpers.nixGLVulkanNvidiaWrap nix-gaming.packages.${pkgs.system}.wine-osu)
     #pkgs.steam
 
     # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
@@ -67,7 +75,7 @@ in
   #
   # or
   #
-  #  /etc/profiles/per-user/mjvmdd/etc/profile.d/hm-session-vars.sh
+  #  /etc/profiles/per-user/111111/etc/profile.d/hm-session-vars.sh
   #
   # if you don't want to manage your shell through Home Manager.
   home.sessionVariables = {

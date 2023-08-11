@@ -92,6 +92,16 @@ echo
 ln -svf "${APPSPATH}"/archs/home-manager/* "${HOME}"/.config/home-manager
 
 echo
+printf "Adding $(logname) to Nix's trusted users to perform privileged commands without sudo"
+echo
+sudo bash -c "echo 'trusted-users = root $(logname)' >> /etc/nix/nix.conf && systemctl restart nix-daemon"
+
+echo
+echo 'Enabling cachix for nix-gaming'
+echo
+cachix use nix-gaming
+
+echo
 echo 'Creating new generation'
 echo
 home-manager switch
