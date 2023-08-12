@@ -34,6 +34,7 @@ in
   home.packages = [
     pkgs.kate
     pkgs.cachix
+    pkgs.dos2unix
     #(helpers.nixGLVulkanNvidiaWrap pkgs.jdk17)
     #(helpers.nixGLVulkanNvidiaWrap nix-gaming.packages.${pkgs.system}.wine-ge)
     #pkgs.winetricks

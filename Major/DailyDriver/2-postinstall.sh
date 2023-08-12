@@ -763,6 +763,22 @@ sudo fc-cache -fv
 sleep 1s
 
 echo
+echo "Running GIMP"
+echo
+org.gimp.GIMP &
+sleep 10s
+killall -9 gimp-2.10
+
+echo
+echo "Installing PhotoGIMP"
+echo
+cd $HOME/Downloads
+wget https://github.com/Diolinux/PhotoGIMP/releases/download/1.1/PhotoGIMP.zip
+unzip PhotoGIMP.zip
+/bin/cp -rf PhotGIMP-master/.var $HOME
+/bin/cp -rf PhotGIMP-master/.local $HOME
+
+echo
 echo "Enabling CUPs service"
 echo
 

@@ -33,8 +33,8 @@ PKGX=(
     'winetricks'                                # Work around problems and install apps under Wine
     'wine-mono'                                 # Wine's built-in replacement for Microsoft's .NET Framework
     'wine-gecko'                                # Wine's built-in replacement for Microsoft's Internet Explorer
-    'dos2unix'                                  # Converting DOS stuff to unix
-    'lutris'                                    # Lutris
+#    'dos2unix'                                  # Converting DOS stuff to unix
+#    'lutris'                                    # Lutris
 #    'steam'                                     # Steam
     'distrobox'                                 #
 #    ''                                          #
@@ -99,21 +99,6 @@ flatpak --user override --env=XCURSOR_PATH=~/.icons
 echo 'flatpak --user override --filesystem=xdg-config/gtk-3.0:ro'
 flatpak --user override --filesystem=xdg-config/gtk-3.0:ro
 sleep 1s
-
-echo
-echo "Running GIMP"
-echo
-org.gimp.GIMP &
-sleep 5s
-killall -9 gimp-2.10
-
-echo
-echo "Installing PhotoGIMP"
-echo
-cd $HOME/Downloads
-wget https://github.com/Diolinux/PhotoGIMP/releases/download/1.1/PhotoGIMP.zip
-cp -rf PhotGIMP-master/.var $HOME
-cp -rf PhotGIMP-master/.local $HOME
 
 echo
 echo " Done!"
