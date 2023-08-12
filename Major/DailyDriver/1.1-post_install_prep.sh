@@ -71,6 +71,10 @@ echo "Copying ${APPSPATH}/archs/home-manager to ${HOME}/.config/"
 echo
 ln -svf "${APPSPATH}"/archs/home-manager/* "${HOME}"/.config/home-manager
 
+#if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+#elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq intel || lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio; then
+#fi
+
 echo
 echo 'Creating new generation'
 echo

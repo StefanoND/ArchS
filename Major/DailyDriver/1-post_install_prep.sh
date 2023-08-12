@@ -496,6 +496,15 @@ fi
 
 sed -i "s/111111/$(logname)/g" "${SRCPATH}"/conf/home-manager/*
 
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+    mv "${SRCPATH}"/conf/home-manager/helpersNVIDIA.nix "${SRCPATH}"/conf/home-manager/helpers.nix
+elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq intel || lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio; then
+    mv "${SRCPATH}"/conf/home-manager/helpersINTEL.nix "${SRCPATH}"/conf/home-manager/helpers.nix
+    sed -i 's/nixGLVulkanNvidiaWrap/nixGLVulkanMesaWrap/g' "${SRCPATH}"/conf/home-manager/*
+    sed -i 's/auto.nixGLNvidia/nixGLIntel/g' "${SRCPATH}"/conf/home-manager/*
+    sed -i 's/auto.nixVulkanNvidia/nixVulkanIntel/g' "${SRCPATH}"/conf/home-manager/*
+fi
+
 echo
 printf "Copying config files to a permanent place at: "
 printf "\"${APPSPATH}/archs\""
@@ -508,6 +517,8 @@ cp -f "${SRCPATH}"/conf/home/.wezterm.lua "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.xinitrc "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/sxhkd.desktop "${APPSPATH}"/archs
 cp -rf "${SRCPATH}"/conf/home-manager "${APPSPATH}"/archs
+rm -f "${APPSPATH}"/archs/home-manager/helpersNVIDIA.nix
+rm -f "${APPSPATH}"/archs/home-manager/helpersINTEL.nix
 sleep 1s
 
 printf "Copying/Symlinking config files to ${HOME} and ${HOME}/.config/autostart"
