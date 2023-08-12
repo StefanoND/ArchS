@@ -35,7 +35,7 @@ in
     pkgs.kate
     pkgs.cachix
     (helpers.nixGLVulkanNvidiaWrap pkgs.jdk17)
-    (helpers.nixGLVulkanNvidiaWrap nix-gaming.packages.${pkgs.system}.wine-ge)
+    #(helpers.nixGLVulkanNvidiaWrap nix-gaming.packages.${pkgs.system}.wine-ge)
     pkgs.winetricks
     #pkgs.wineWowPackages.staging
     #(helpers.nixGLVulkanNvidiaWrap nix-gaming.packages.${pkgs.system}.wine-osu)
