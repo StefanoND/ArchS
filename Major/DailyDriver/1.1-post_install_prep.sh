@@ -41,16 +41,21 @@ echo 'auto-optimise-store = true' >> "${HOME}"/.config/nix/nix.conf
 echo '' >> "${HOME}"/.config/nix/nix.conf
 sleep 1s
 
-mkdir -p "${HOME}"/.local/state/home-manager/profiles
-sleep 1s
-
-sudo mkdir -p /nix/var/nix/profiles/per-user/$(logname)
-sleep 1s
+echo
+printf "Adding $(logname) to Nix's trusted users to perform privileged commands without sudo"
+echo
+sudo bash -c "echo 'trusted-users = root $(logname)' >> /etc/nix/nix.conf"
 
 echo
 echo 'Restarting nix-daemon'
 echo
 sudo systemctl restart nix-daemon
+sleep 1s
+
+mkdir -p "${HOME}"/.local/state/home-manager/profiles
+sleep 1s
+
+sudo mkdir -p /nix/var/nix/profiles/per-user/$(logname)
 sleep 1s
 
 echo
@@ -59,40 +64,16 @@ echo
 nix run home-manager/release-23.05 -- init --switch
 sleep 1s
 
-if ! [[ -d "${HOME}"/.config/home-manager ]]; then
-    echo
-    printf "Creating home-manager folder in "${HOME}"/.config"
-    echo
-    mkdir -p "${HOME}"/.config/home-manager
-fi
-
-echo
-echo 'Creating first generation'
-echo
-home-manager switch
-sleep 1s
-
 echo
 echo "Copying ${APPSPATH}/archs/home-manager to ${HOME}/.config/"
 echo
 ln -svf "${APPSPATH}"/archs/home-manager/* "${HOME}"/.config/home-manager
 
 echo
-echo 'Restarting nix-daemon'
-echo
-sudo systemctl restart nix-daemon
-sleep 1s
-
-echo
 echo 'Creating new generation'
 echo
 home-manager switch
 sleep 1s
-
-echo
-printf "Adding $(logname) to Nix's trusted users to perform privileged commands without sudo"
-echo
-sudo bash -c "echo 'trusted-users = root $(logname)' >> /etc/nix/nix.conf && systemctl restart nix-daemon"
 
 echo
 echo 'Enabling cachix for nix-gaming'
