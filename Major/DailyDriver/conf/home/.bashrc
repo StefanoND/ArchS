@@ -481,6 +481,9 @@ if [[ -f $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh ]]; then
     . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
 fi
 
+# Makes new panels open $HOME instead of folder you're currently in
+wezterm set-working-directory $HOME
+
 #######################################################
 # POST ADDED STUFF
 #######################################################

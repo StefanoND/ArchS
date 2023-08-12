@@ -32,15 +32,12 @@ in
   home.sessionPath = [ "$HOME/.local/bin" ];
 
   home.packages = [
-    #pkgs.wineWowPackages.staging
-    #pkgs.winetricks
     pkgs.kate
     pkgs.cachix
     (helpers.nixGLVulkanNvidiaWrap pkgs.jdk17)
-    pkgs.hexdump
-    pkgs.perl
-    pkgs.python3
     (helpers.nixGLVulkanNvidiaWrap nix-gaming.packages.${pkgs.system}.wine-ge)
+    pkgs.winetricks
+    #pkgs.wineWowPackages.staging
     #(helpers.nixGLVulkanNvidiaWrap nix-gaming.packages.${pkgs.system}.wine-osu)
     #pkgs.steam
 

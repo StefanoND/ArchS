@@ -28,7 +28,8 @@ in {
   home.homeDirectory = pkgs.config.home;
 
   home.packages = [
-    pkgs.vscode
+    pkgs.vscodium
+    pkgs.vscode-extensions.maximedenes.vscoq
     pkgs.jetbrains.rider
   ];
 
