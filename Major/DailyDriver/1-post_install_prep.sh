@@ -503,6 +503,7 @@ elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq intel || lspci -k | grep -A 2
     sed -i 's/nixGLVulkanNvidiaWrap/nixGLVulkanMesaWrap/g' "${SRCPATH}"/conf/home-manager/*
     sed -i 's/auto.nixGLNvidia/nixGLIntel/g' "${SRCPATH}"/conf/home-manager/*
     sed -i 's/auto.nixVulkanNvidia/nixVulkanIntel/g' "${SRCPATH}"/conf/home-manager/*
+    sed -i 's/nixGLNvidia/nixGLIntel/g' "${SRCPATH}"/conf/home-manager/*
 fi
 
 echo
