@@ -35,11 +35,10 @@ if [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
     sleep 1s
 fi
 
-echo 'experimental-features = nix-command flakes' > "${HOME}"/.config/nix/nix.conf
-echo 'sandbox = true' >> "${HOME}"/.config/nix/nix.conf
-echo 'auto-optimise-store = true' >> "${HOME}"/.config/nix/nix.conf
-echo '' >> "${HOME}"/.config/nix/nix.conf
-sleep 1s
+echo
+printf "Creating a symlink of $APPSPATH/archs/nix/nix.conf at $HOME/.config/nix/"
+echo
+ln -svf "${APPSPATH}"/archs/nix/nix.conf "${HOME}"/.config/nix/
 
 echo
 printf "Adding $(logname) to Nix's trusted users to perform privileged commands without sudo"
@@ -52,9 +51,15 @@ echo
 sudo systemctl restart nix-daemon
 sleep 1s
 
+echo
+printf "Creating ${HOME}/.local/state/home-manager/profiles folder"
+echo
 mkdir -p "${HOME}"/.local/state/home-manager/profiles
 sleep 1s
 
+echo
+printf "Creating /nix/var/nix/profiles/per-user/$(logname) folder"
+echo
 sudo mkdir -p /nix/var/nix/profiles/per-user/$(logname)
 sleep 1s
 

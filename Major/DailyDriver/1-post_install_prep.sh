@@ -518,6 +518,7 @@ cp -f "${SRCPATH}"/conf/home/.wezterm.lua "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.xinitrc "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/sxhkd.desktop "${APPSPATH}"/archs
 cp -rf "${SRCPATH}"/conf/home-manager "${APPSPATH}"/archs
+cp -rf "${SRCPATH}"/conf/nix "${APPSPATH}"/archs
 rm -f "${APPSPATH}"/archs/home-manager/helpersNVIDIA.nix
 rm -f "${APPSPATH}"/archs/home-manager/helpersINTEL.nix
 sleep 1s

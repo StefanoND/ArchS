@@ -173,7 +173,7 @@ bootctl --path=/boot install
 sleep 1s
 
 # Configure systemd-boot
-printf "default arch.conf\ntimeout 3\nconsole-mode max\neditor no\n" > /boot/loader/loader.conf
+printf "default arch.conf\ntimeout 2\nconsole-mode max\neditor no\n" > /boot/loader/loader.conf
 
 printf "title Arch\nlinux /vmlinuz-linux\ninitrd /initramfs-linux.img\n" > /boot/loader/entries/arch.conf
 printf "title Arch (LTS)\nlinux /vmlinuz-linux-lts\ninitrd /initramfs-linux-lts.img\n" > /boot/loader/entries/arch-lts.conf
