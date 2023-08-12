@@ -35,8 +35,6 @@ if [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
     sleep 1s
 fi
 
-#cp -rf "${APPSPATH}"/archs/home-manager/nix/nix.conf "${HOME}"/.config/nix
-
 echo 'experimental-features = nix-command flakes' > "${HOME}"/.config/nix/nix.conf
 echo 'sandbox = true' >> "${HOME}"/.config/nix/nix.conf
 echo 'auto-optimise-store = true' >> "${HOME}"/.config/nix/nix.conf
@@ -70,33 +68,6 @@ echo
 echo "Copying ${APPSPATH}/archs/home-manager to ${HOME}/.config/"
 echo
 ln -svf "${APPSPATH}"/archs/home-manager/* "${HOME}"/.config/home-manager
-
-echo
-echo 'Restarting nix-daemon'
-echo
-sudo systemctl restart nix-daemon
-sleep 1s
-
-#if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
-#elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq intel || lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio; then
-#fi
-
-echo
-echo 'Creating new generation'
-echo
-home-manager switch --impure
-sleep 1s
-
-echo 'substituters = ["https://nix-gaming.cachix.org"];' >> "${HOME}"/.config/nix/nix.conf
-echo 'trusted-public-keys = ["nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="];' >> "${HOME}"/.config/nix/nix.conf
-echo '' >> "${HOME}"/.config/nix/nix.conf
-sleep 1s
-
-echo
-echo 'Restarting nix-daemon'
-echo
-sudo systemctl restart nix-daemon
-sleep 1s
 
 echo
 echo 'Creating new generation'

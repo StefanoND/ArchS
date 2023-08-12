@@ -12,7 +12,7 @@
     nix-gaming.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { nixgl, nixpkgs, flake-utils, nix-gaming, home-manager, ... }:
+  outputs = inputs@{ nixgl, nixpkgs, flake-utils, nix-gaming, home-manager, ... }:
     let
       version = "23.05";
       username = "111111";
@@ -47,6 +47,10 @@
         #python3
         #wineWowPackages.stable
       ];
+      nix.settings = {
+        substituters = ["https://nix-gaming.cachix.org"];
+        trusted-public-keys = ["nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4="];
+      };
       programs.gamemode = {
         enable = true;
         settings.general.inhibit_screensaver = 0;
