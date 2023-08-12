@@ -477,6 +477,10 @@ export XDG_DATA_DIRS="$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"
 
 export LOCALE_ARCHIVE=/usr/lib/locale/locale-archive
 
+if [[ -f $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh ]]; then
+    . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+fi
+
 #######################################################
 # POST ADDED STUFF
 #######################################################
