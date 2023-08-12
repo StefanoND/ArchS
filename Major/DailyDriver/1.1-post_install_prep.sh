@@ -86,6 +86,11 @@ echo
 cachix use nix-gaming
 
 echo
+echo 'Enabling home-manager auto upgrade service'
+echo
+systemctl --user start home-manager-auto-upgrade
+
+echo
 echo 'Syncing system'
 echo
 sync

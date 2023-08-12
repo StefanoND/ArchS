@@ -127,6 +127,10 @@ flatpak override --user --filesystem="${HOME}"/.themes
 flatpak override --user --filesystem="${HOME}"/.icons
 flatpak override --user --env=GTK_THEME=Orchis-Purple-Dark
 flatpak override --user --env=ICON_THEME=Tela-circle-dark
+sudo flatpak override --system --filesystem="${HOME}"/.themes
+sudo flatpak override --system --filesystem="${HOME}"/.icons
+sudo flatpak override --system --env=GTK_THEME=Orchis-Purple-Dark
+sudo flatpak override --system --env=ICON_THEME=Tela-circle-dark
 
 echo
 echo 'Enabling Chaotic AUR Repo'
