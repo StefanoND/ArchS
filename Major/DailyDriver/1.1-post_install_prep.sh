@@ -35,11 +35,13 @@ if [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
     sleep 1s
 fi
 
-echo 'experimental-features = nix-command flakes' > "${HOME}"/.config/nix/nix.conf
-echo 'sandbox = true' >> "${HOME}"/.config/nix/nix.conf
-echo 'auto-optimise-store = true' >> "${HOME}"/.config/nix/nix.conf
-echo '' >> "${HOME}"/.config/nix/nix.conf
-sleep 1s
+cp -rf "${APPSPATH}"/archs/home-manager/nix/nix.conf "${HOME}"/.config/nix
+
+# echo 'experimental-features = nix-command flakes' > "${HOME}"/.config/nix/nix.conf
+# echo 'sandbox = true' >> "${HOME}"/.config/nix/nix.conf
+# echo 'auto-optimise-store = true' >> "${HOME}"/.config/nix/nix.conf
+# echo '' >> "${HOME}"/.config/nix/nix.conf
+# sleep 1s
 
 echo
 printf "Adding $(logname) to Nix's trusted users to perform privileged commands without sudo"
@@ -61,7 +63,7 @@ sleep 1s
 echo
 echo 'Installing home-manager'
 echo
-nix run home-manager/release-23.05 -- init --switch
+nix run home-manager/release-23.11 -- init --switch
 sleep 1s
 
 echo
