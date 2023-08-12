@@ -121,7 +121,7 @@ sleep 1s
 echo
 echo 'Applying theme to Flatpak and Flatpacks'
 echo
-cp -rf "${HOME}"/.local/share/icons/Tela-circle-dark "${HOME}"/.icons/
+cp -rf "${HOME}"/.local/share/icons/Tela-circle-purple-dark "${HOME}"/.icons/
 
 flatpak override --user --filesystem="${HOME}"/.themes
 flatpak override --user --filesystem="${HOME}"/.icons
