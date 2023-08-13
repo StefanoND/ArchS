@@ -222,6 +222,35 @@ if [[ -f /hasnvidia.gpu ]]; then
     sleep 1s
 fi
 
+if [[ -f /etc/plymouth/plymouthd.conf ]]; then
+    sed -i 's/Theme=.*/Theme=Text/g' /etc/plymouth/plymouthd.conf
+    sed -i 's/DeviceTimeout=.*/DeviceTimeout=5/g' /etc/plymouth/plymouthd.conf
+elif ! [[ -f /etc/plymouth/plymouthd.conf ]]; then
+    if ! [[ -d /etc/plymouth ]]; then
+        mkdir -p /etc/plymouth
+    fi
+    echo '[Daemon]' > /etc/plymouth/plymouthd.conf
+    echo 'DeviceTimeout=5' >> /etc/plymouth/plymouthd.conf
+    echo 'ShowDelay=0' >> /etc/plymouth/plymouthd.conf
+    echo 'Theme=Text' >> /etc/plymouth/plymouthd.conf
+    echo '' >> /etc/plymouth/plymouthd.conf
+fi
+
+if ! [[ -d /etc/systemd/system/display-manager.service.d ]]; then
+    mkdir -p /etc/systemd/system/display-manager.service.d
+fi
+
+echo '[Unit]' > /etc/systemd/system/display-manager.service.d/plymouth.conf
+echo 'Conflicts=plymouth-quit.service' >> /etc/systemd/system/display-manager.service.d/plymouth.conf
+echo 'After=plymouth-quit.service rc-local.service plymouth-start.service systemd-user-sessions.service' >> /etc/systemd/system/display-manager.service.d/plymouth.conf
+echo 'OnFailure=plymouth-quit.service' >> /etc/systemd/system/display-manager.service.d/plymouth.conf
+echo '' >> /etc/systemd/system/display-manager.service.d/plymouth.conf
+echo '[Service]' >> /etc/systemd/system/display-manager.service.d/plymouth.conf
+echo 'ExecStartPre=-/usr/bin/plymouth deactivate' >> /etc/systemd/system/display-manager.service.d/plymouth.conf
+echo 'ExecStartPost=-/usr/bin/sleep 30' >> /etc/systemd/system/display-manager.service.d/plymouth.conf
+echo 'ExecStartPost=-/usr/bin/plymouth quit --retain-splash' >> /etc/systemd/system/display-manager.service.d/plymouth.conf
+echo '' >> /etc/systemd/system/display-manager.service.d/plymouth.conf
+
 # Update mkinitcpio
 mkinitcpio -P
 sleep 1s
