@@ -517,6 +517,7 @@ echo
 cp -f "${SRCPATH}"/conf/home/.bashrc "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.bash_profile "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.bash_aliases "${APPSPATH}"/archs
+cp -f "${SRCPATH}"/conf/home/.dir_colors "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.profile "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.wezterm.lua "${APPSPATH}"/archs
 cp -f "${SRCPATH}"/conf/home/.xinitrc "${APPSPATH}"/archs
@@ -531,6 +532,7 @@ printf "Copying/Symlinking config files to ${HOME} and ${HOME}/.config/autostart
 ln -svf "${APPSPATH}"/archs/.bashrc "${HOME}"
 ln -svf "${APPSPATH}"/archs/.bash_profile "${HOME}"
 ln -svf "${APPSPATH}"/archs/.bash_aliases "${HOME}"
+ln -svf "${APPSPATH}"/archs/.dir_colors "${HOME}"
 ln -svf "${APPSPATH}"/archs/.profile "${HOME}"
 ln -svf "${APPSPATH}"/archs/.wezterm.lua "${HOME}"
 ln -svf "${APPSPATH}"/archs/.xinitrc "${HOME}"

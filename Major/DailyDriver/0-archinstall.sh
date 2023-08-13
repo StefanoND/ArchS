@@ -143,7 +143,7 @@ mount /dev/$nvme0n1p1 /mnt/boot
 
 # Prep
 # Install base packages (add intel-ucode if you're using an intel CPU or amd-ucode if using amd CPU or none if in a VM w/o passthrough)
-pacstrap -K /mnt base base-devel btrfs-progs efibootmgr linux linux-firmware linux-headers linux-lts linux-lts-headers dkms neovim pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack pipewire-zeroconf gst-plugin-pipewire wireplumber qpwgraph pulsemixer pciutils usbutils
+pacstrap -K /mnt base base-devel btrfs-progs efibootmgr linux linux-firmware linux-headers linux-lts linux-lts-headers dkms neovim pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack pipewire-zeroconf gst-plugin-pipewire wireplumber qpwgraph pulsemixer pciutils usbutils plymouth
 sleep 1s
 
 # Populate fstab
