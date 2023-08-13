@@ -51,19 +51,18 @@ done
 
 # AUR
 PKGY=(
-    'ttf-ms-fonts'
     'qt5-tools'
     'deckboard-appimage'                        # Streamdeck alternative
-    'protonup-qt'                               # ProtonUp-Qt
-    'eam-git'                                   # Epic Games' Marketplace for Linux
-    'heroic-games-launcher-bin'                 # Epic Games and GOG launcher
-    'bottles'                                   # Bottles
-    'protontricks'                              # Wrapper to make winetricks work with Proton enabled games
-    'dxvk-bin'                                  # Vulkan-based compatibility layer for Direct3D 9/10/11
-    'vkd3d-proton-mingw'                        # Vulkan-based compatibility layer for Direct3D 12
-    'jetbrains-toolbox'                         #
+#    'protonup-qt'                               # ProtonUp-Qt
+#    'eam-git'                                   # Epic Games' Marketplace for Linux
+#    'heroic-games-launcher-bin'                 # Epic Games and GOG launcher
+#    'bottles'                                   # Bottles
+#    'protontricks'                              # Wrapper to make winetricks work with Proton enabled games
+#    'dxvk-bin'                                  # Vulkan-based compatibility layer for Direct3D 9/10/11
+#    'vkd3d-proton-mingw'                        # Vulkan-based compatibility layer for Direct3D 12
+#    'jetbrains-toolbox'                         #
     'mullvad-vpn'                               # VPN
-    'davinci-resolve'                           # Video editing software
+#    'davinci-resolve'                           # Video editing software
 #    ''                                          #
 )
 

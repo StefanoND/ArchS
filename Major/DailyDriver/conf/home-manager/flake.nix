@@ -39,6 +39,7 @@
           ./home.nix
           ./dev.nix
           ./gaming.nix
+          ./multimedia.nix
         ];
       };
       nativeBuildInputs = [

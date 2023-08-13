@@ -192,6 +192,7 @@ PKGFP=(
     'io.github.antimicrox.antimicrox'           # Graphical program used to map gamepad keys to keyboard, mouse, scripts and macros
     'nl.hjdskes.gcolor3'                        # Color Picker
     'org.kde.kdenlive'                          # KDe Video Editor
+    'io.github.achetagames.epic_asset_manager'
 #    ''         #
 )
 

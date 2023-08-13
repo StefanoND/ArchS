@@ -29,6 +29,13 @@
     home.packages = [
       pkgs.nixgl.auto.nixGLNvidia
       pkgs.nixgl.auto.nixVulkanNvidia
+      pkgs.dxvk_2
+      pkgs.vkd3d
+      pkgs.vkd3d-proton
+      pkgs.protontricks
+      pkgs.protonup-qt
+      pkgs.heroic
+      pkgs.bottles
       pkgs.gamemode
       pkgs.mangohud
       (helpers.nixGLVulkanNvidiaWrap pkgs.steam)
