@@ -134,39 +134,39 @@ echo
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 sleep 1s
 
-echo
-echo "Installing NixOS Package Manager"
-echo
-sh <(curl -L https://nixos.org/nix/install) --daemon
-sleep 1s
-
-if ! [[ -d "${HOME}"/.config/nix ]]; then
-    mkdir -p "${HOME}"/.config/nix
-fi
-
-if ! [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
-    touch "${HOME}"/.config/nix/nix.conf
-fi
-
-echo
-echo "Nix PM: Enabling nix-command and flakes"
-echo
-echo 'experimental-features = nix-command flakes' > "${HOME}"/.config/nix/nix.conf
-sleep 1s
-
-if ! [[ -d "${HOME}"/.config/nixpkgs ]]; then
-    mkdir -p "${HOME}"/.config/nixpkgs
-fi
-
-if ! [[ -f "${HOME}"/.config/nixpkgs/config.nix ]]; then
-    touch "${HOME}"/.config/nixpkgs/config.nix
-fi
-
-echo
-echo "Nix PM: Allowing \"Unfree\" packages, enabling sandboxing and enabling auto optimise store"
-echo
-printf "{\n  allowUnfree = true;\n  nix.settings.sandbox = true;\n  nix.settings.auto-optimise-store = true;\n}\n" > "${HOME}"/.config/nixpkgs/config.nix
-sleep 1s
+# echo
+# echo "Installing NixOS Package Manager"
+# echo
+# sh <(curl -L https://nixos.org/nix/install) --daemon
+# sleep 1s
+#
+# if ! [[ -d "${HOME}"/.config/nix ]]; then
+#     mkdir -p "${HOME}"/.config/nix
+# fi
+#
+# if ! [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
+#     touch "${HOME}"/.config/nix/nix.conf
+# fi
+#
+# echo
+# echo "Nix PM: Enabling nix-command and flakes"
+# echo
+# echo 'experimental-features = nix-command flakes' > "${HOME}"/.config/nix/nix.conf
+# sleep 1s
+#
+# if ! [[ -d "${HOME}"/.config/nixpkgs ]]; then
+#     mkdir -p "${HOME}"/.config/nixpkgs
+# fi
+#
+# if ! [[ -f "${HOME}"/.config/nixpkgs/config.nix ]]; then
+#     touch "${HOME}"/.config/nixpkgs/config.nix
+# fi
+#
+# echo
+# echo "Nix PM: Allowing \"Unfree\" packages, enabling sandboxing and enabling auto optimise store"
+# echo
+# printf "{\n  allowUnfree = true;\n  nix.settings.sandbox = true;\n  nix.settings.auto-optimise-store = true;\n}\n" > "${HOME}"/.config/nixpkgs/config.nix
+# sleep 1s
 
 echo
 echo "Setting CPU governor to Performance and setting min and max freq"
