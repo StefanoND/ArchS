@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if ! [ $EUID -ne 0 ] ]]; then
+if ! [[ $EUID -ne 0 ]]; then
     echo
     echo "Don't run this script as root."
     echo
@@ -87,7 +87,6 @@ if [[ -d /etc/libvirt/ ]] && ! [[ -d /etc/libvirt/hooks ]]; then
 fi
 if ! [[ -d /usr/share/vgabios ]]; then
     sudo mkdir /usr/share/vgabios
-fi
 fi
 if ! [[ -d "$beginpath" ]]; then
     sudo mkdir -p "$beginpath"
