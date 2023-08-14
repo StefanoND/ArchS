@@ -89,7 +89,7 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
     echo 'alias nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
     echo 'alias lbm-nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
     echo 'options nouveau modeset=0' > /etc/modprobe.d/nouveau-kms.conf
-    grubgpu=" nouveau.modeset=0"
+    grubgpu=" nouveau.modeset=0 nvidia-drm.modeset=1"
     sleep 1s
 fi
 elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd; then
@@ -109,26 +109,26 @@ sed -ie "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|g" /etc/default/grub
 sleep 1s
 
 if ! grep "GRUB_TIMEOUT=" /etc/default/grub; then
-    printf "GRUB_TIMEOUT=3\n" | tee -a /etc/default/grub
+    printf "GRUB_TIMEOUT=2\n" | tee -a /etc/default/grub
     sleep 1s
 else
-    sed -i "s|GRUB_TIMEOUT=.*|GRUB_TIMEOUT=3|g" /etc/default/grub
+    sed -i "s|GRUB_TIMEOUT=.*|GRUB_TIMEOUT=2|g" /etc/default/grub
     sleep 1s
 fi
 
 if ! grep "GRUB_HIDDEN_TIMEOUT=" /etc/default/grub; then
-    printf "GRUB_HIDDEN_TIMEOUT=3\n" | tee -a /etc/default/grub
+    printf "GRUB_HIDDEN_TIMEOUT=2\n" | tee -a /etc/default/grub
     sleep 1s
 else
-    sed -i "s|GRUB_HIDDEN_TIMEOUT=.*|GRUB_HIDDEN_TIMEOUT=3|g" /etc/default/grub
+    sed -i "s|GRUB_HIDDEN_TIMEOUT=.*|GRUB_HIDDEN_TIMEOUT=2|g" /etc/default/grub
     sleep 1s
 fi
 
 if ! grep "GRUB_RECORDFAIL_TIMEOUT=" /etc/default/grub; then
-    printf "GRUB_RECORDFAIL_TIMEOUT=3\n" | tee -a /etc/default/grub
+    printf "GRUB_RECORDFAIL_TIMEOUT=2\n" | tee -a /etc/default/grub
     sleep 1s
 else
-    sed -i "s|GRUB_RECORDFAIL_TIMEOUT=.*|GRUB_RECORDFAIL_TIMEOUT=3|g" /etc/default/grub
+    sed -i "s|GRUB_RECORDFAIL_TIMEOUT=.*|GRUB_RECORDFAIL_TIMEOUT=2|g" /etc/default/grub
     sleep 1s
 fi
 
