@@ -68,7 +68,9 @@ if lspci -nn | egrep -i "3d|display|vga" | grep -iq 'nvidia'; then
     echo
     echo 'Adding controb, non-free and non-free-frimware components to sources.list'
     echo
-    sudo bash -c "echo 'deb http://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware' >> /etc/apt/sources.list"
+    sudo sed -i 's/main non-free-firmware/main non-free non-free-firmware/g' /etc/apt/sources.list
+    sudo sed -i 's/non-free non-free non-free-firmware/non-free non-free-firmware/g' /etc/apt/sources.list
+    #sudo bash -c "echo 'deb http://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware' >> /etc/apt/sources.list"
     sleep 1s
 fi
 
@@ -97,6 +99,8 @@ PKGS=(
     'build-essential'
     "linux-headers-$(uname -r)"
     'dkms'
+    'firmware-linux'
+    'firmware-linux-nonfree'
 
     # QEMU
     'qemu-system-x86'
@@ -115,9 +119,9 @@ PKGS=(
     'ebtables'
     'nftables'
     'swtpm'
+    'dnsmasq'
 
 #    'netctl'
-#    'dnsmasq'
 #    'openbsd-netcat'
 
     # NVidia Driver ()
@@ -227,7 +231,7 @@ sleep 1s
 echo
 echo "usermod -aG kvm,libvirt,video \"$(logname)\""
 echo
-sudo usermod -aG kvm,libvirt,video "$(logname)"
+sudo usermod -aG kvm,libvirt,video,operator "$(logname)"
 sleep 1s
 
 echo
