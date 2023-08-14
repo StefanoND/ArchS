@@ -1,5 +1,7 @@
 # Display SDL
 
+## Do not follow this if using EGL
+
 ### To use SDL acceleration, you must change your Display Spice to be the same as below (Change USERNAME to yours)
 
     <graphics type="sdl">
