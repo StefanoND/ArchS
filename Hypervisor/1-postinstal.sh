@@ -259,7 +259,7 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
 
     sed -i 's/\#    "\/dev\/nvidiactl", "\/dev\/nvidia0", "\/dev\/nvidia-modeset",/\    "\/dev\/nvidiactl", "\/dev\/nvidia0", "\/dev\/nvidia-modeset",/g' "$cpath"/Config/qemu.conf
 
-    grubgpu=" nouveau.modeset=0"
+    grubgpu=" nouveau.modeset=0 nvidia-drm.modeset=1"
     sleep 1s
 fi
 elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd; then
