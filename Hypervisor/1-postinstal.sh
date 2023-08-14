@@ -547,7 +547,7 @@ fi
 echo
 echo "Updating GRUB"
 echo
-sudo update-grub
+sudo grub-mkconfig
 sleep 1s
 
 echo
