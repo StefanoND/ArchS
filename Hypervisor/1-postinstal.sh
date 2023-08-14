@@ -197,9 +197,15 @@ sleep 1s
 #sudo sed -i "s|COMPRESSXZ=.*|COMPRESSXZ=(xz -c -T $(expr $(nproc) \+ 1) -z -)|g" /etc/makepkg.conf
 
 echo
-echo "usermod -aG kvm,libvirt \"$(logname)\""
+echo "usermod -aG video qemu"
 echo
-sudo usermod -aG kvm,libvirt "$(logname)"
+sudo usermod -aG video qemu
+sleep 1s
+
+echo
+echo "usermod -aG kvm,libvirt,video \"$(logname)\""
+echo
+sudo usermod -aG kvm,libvirt,video "$(logname)"
 sleep 1s
 
 echo
@@ -251,12 +257,7 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
     echo 'alias lbm-nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
     echo 'options nouveau modeset=0' > /etc/modprobe.d/nouveau-kms.conf
 
-    sed -i 's/\#cgroup_device_acl = \[/cgroup_device_acl = [/g' "$cpath"/Config/qemu.conf
-    sed -i 's/\#*.*"\/dev\/null", "\/dev\/full", "\/dev\/zero",/\    "\/dev\/null", "\/dev\/full", "\/dev\/zero",/g' "$cpath"/Config/qemu.conf
-    sed -i 's/\#*.*"\/dev\/random", "\/dev\/urandom",/\    "\/dev\/random", "\/dev\/urandom",/g' "$cpath"/Config/qemu.conf
-    sed -i 's/\#*.*"\/dev\/ptmx", "\/dev\/kvm"/\    "\/dev\/ptmx", "\/dev\/kvm",/g' "$cpath"/Config/qemu.conf
-    sed -i '/^.*"\/dev\/ptmx", "\/dev\/kvm",/a \     "\/dev\/nvidiactl", "\/dev/nvidia0", "\/dev\/nvidia-modeset", "\/dev\/dri\/renderD128"' "$cpath"/Config/qemu.conf
-    sed -i '/.*, "\/dev\/dri\/renderD128"/a ]' "$cpath"/Config/qemu.conf
+    sed -i 's/\#    "\/dev\/nvidiactl", "\/dev\/nvidia0", "\/dev\/nvidia-modeset",/\    "\/dev\/nvidiactl", "\/dev\/nvidia0", "\/dev\/nvidia-modeset",/g' "$cpath"/Config/qemu.conf
 
     grubgpu=" nouveau.modeset=0"
     sleep 1s
@@ -446,26 +447,26 @@ sudo sed -ie "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|g" /etc/default/grub
 sleep 1s
 
 if ! grep "GRUB_TIMEOUT=" /etc/default/grub; then
-    printf "GRUB_TIMEOUT=3\n" | sudo tee -a /etc/default/grub
+    printf "GRUB_TIMEOUT=2\n" | sudo tee -a /etc/default/grub
     sleep 1s
 else
-    sudo sed -i "s|GRUB_TIMEOUT=.*|GRUB_TIMEOUT=3|g" /etc/default/grub
+    sudo sed -i "s|GRUB_TIMEOUT=.*|GRUB_TIMEOUT=2|g" /etc/default/grub
     sleep 1s
 fi
 
 if ! grep "GRUB_HIDDEN_TIMEOUT=" /etc/default/grub; then
-    printf "GRUB_HIDDEN_TIMEOUT=3\n" | sudo tee -a /etc/default/grub
+    printf "GRUB_HIDDEN_TIMEOUT=2\n" | sudo tee -a /etc/default/grub
     sleep 1s
 else
-    sudo sed -i "s|GRUB_HIDDEN_TIMEOUT=.*|GRUB_HIDDEN_TIMEOUT=3|g" /etc/default/grub
+    sudo sed -i "s|GRUB_HIDDEN_TIMEOUT=.*|GRUB_HIDDEN_TIMEOUT=2|g" /etc/default/grub
     sleep 1s
 fi
 
 if ! grep "GRUB_RECORDFAIL_TIMEOUT=" /etc/default/grub; then
-    printf "GRUB_RECORDFAIL_TIMEOUT=3\n" | sudo tee -a /etc/default/grub
+    printf "GRUB_RECORDFAIL_TIMEOUT=2\n" | sudo tee -a /etc/default/grub
     sleep 1s
 else
-    sudo sed -i "s|GRUB_RECORDFAIL_TIMEOUT=.*|GRUB_RECORDFAIL_TIMEOUT=3|g" /etc/default/grub
+    sudo sed -i "s|GRUB_RECORDFAIL_TIMEOUT=.*|GRUB_RECORDFAIL_TIMEOUT=2|g" /etc/default/grub
     sleep 1s
 fi
 

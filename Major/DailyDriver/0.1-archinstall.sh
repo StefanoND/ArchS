@@ -62,7 +62,7 @@ pacman -Syy
 sleep 1s
 
 # Add btrfs to modules
-sed -i 's/MODULES=()/MODULES=(btrfs vmd)/g' /etc/mkinitcpio.conf
+sed -i 's/MODULES=()/MODULES=(btrfs vmd qxl virtio-gpu virtio virtio_scsi virtio_blk virtio_pci virtio_net virtio_ring)/g' /etc/mkinitcpio.conf
 
 # Add btrfs and setfont to mkinitcpio's binaries
 sed -i 's/BINARIES=()/BINARIES=(btrfs setfont)/g' /etc/mkinitcpio.conf
@@ -204,13 +204,13 @@ if [[ -f /hasnvidia.gpu ]]; then
     sleep 1s
 
     # Enable NVdia modules, must be in that order
-    sed -i 's/MODULES=(btrfs vmd)/MODULES=(btrfs vmd nvidia nvidia_modeset nvidia_uvm nvidia_drm)/g' /etc/mkinitcpio.conf
+    sed -i 's/MODULES=(btrfs vmd qxl virtio-gpu virtio virtio_scsi virtio_blk virtio_pci virtio_net virtio_ring)/MODULES=(btrfs vmd qxl virtio-gpu virtio virtio_scsi virtio_blk virtio_pci virtio_net virtio_ring nvidia nvidia_modeset nvidia_uvm nvidia_drm)/g' /etc/mkinitcpio.conf
     sleep 1s
 
     # Add nvidia-drm.modeset=1 at the end of options root=PARTUUID....
-    sed -i "s/options cryptdevice=UUID=.*/options cryptdevice=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2):root root=UUID=$(blkid -s UUID -o value /dev/mapper/root) rootflags=subvol=@ rw splash nvidia-drm.modeset=1/g" /boot/loader/entries/arch.conf
-    sed -i "s/options cryptdevice=UUID=.*/options cryptdevice=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2):root root=UUID=$(blkid -s UUID -o value /dev/mapper/root) rootflags=subvol=@ rw splash nvidia-drm.modeset=1/g" /boot/loader/entries/arch-lts.conf
-    sed -i "s/options cryptdevice=UUID=.*/options cryptdevice=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2):root root=UUID=$(blkid -s UUID -o value /dev/mapper/root) rootflags=subvol=@ rw splash nvidia-drm.modeset=1/g" /boot/loader/entries/arch-xanmod-rt.conf
+    sed -i "s/options cryptdevice=UUID=.*/options cryptdevice=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2):root root=UUID=$(blkid -s UUID -o value /dev/mapper/root) rootflags=subvol=@ rw splash nouveau.modeset=0 nvidia-drm.modeset=1/g" /boot/loader/entries/arch.conf
+    sed -i "s/options cryptdevice=UUID=.*/options cryptdevice=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2):root root=UUID=$(blkid -s UUID -o value /dev/mapper/root) rootflags=subvol=@ rw splash nouveau.modeset=0 nvidia-drm.modeset=1/g" /boot/loader/entries/arch-lts.conf
+    sed -i "s/options cryptdevice=UUID=.*/options cryptdevice=UUID=$(blkid -s UUID -o value /dev/$nvme0n1p2):root root=UUID=$(blkid -s UUID -o value /dev/mapper/root) rootflags=subvol=@ rw splash nouveau.modeset=0 nvidia-drm.modeset=1/g" /boot/loader/entries/arch-xanmod-rt.conf
 
     # Make a hook for pacman so we can update and build the new drivers or we'll get blank screen on load
     # Create hooks folder

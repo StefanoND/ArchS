@@ -22,7 +22,6 @@
     <sound model="ich9">
       <codec type="micro"/>
       <audio id="1"/>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x1b" function="0x0"/>
     </sound>
     <audio id="1" type="pulseaudio" serverName="/run/user/1000/pulse/native">
       <input mixingEngine="no"/>

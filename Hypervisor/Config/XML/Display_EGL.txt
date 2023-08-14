@@ -1,0 +1,9 @@
+
+    <graphics type="spice">
+      <listen type="none"/>
+      <image compression="off"/>
+      <gl enable="no"/>
+    </graphics>
+    <graphics type="egl-headless">
+      <gl rendernode="/dev/dri/renderD128"/>
+    </graphics>

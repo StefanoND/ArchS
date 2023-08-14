@@ -264,6 +264,20 @@ echo
 sudo sed -i 's/default arch.conf/default arch-xanmod-rt.conf/g' /boot/loader/loader.conf
 sleep 1s
 
+if ! [[ -d /etc/modprobe.d ]]; then
+    sudo mkdir -p /etc/modprobe.d
+fi
+
+if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+    sudo bash -c "echo 'blacklist nouveau' > /etc/modprobe.d/blacklist-nvidia-nouveau-conf"
+    sudo bash -c "echo 'blacklist lbm-nouveau' >> /etc/modprobe.d/blacklist-nvidia-nouveau-conf"
+    sudo bash -c "echo 'options nouveau modeset=0' >> /etc/modprobe.d/blacklist-nvidia-nouveau-conf"
+    sudo bash -c "echo 'alias nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau-conf"
+    sudo bash -c "echo 'alias lbm-nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau-conf"
+    sudo bash -c "echo '' >> /etc/modprobe.d/blacklist-nvidia-nouveau-conf"
+    sudo bash -c "echo 'options nouveau modeset=0' > /etc/modprobe.d/nouveau-kms.conf"
+fi
+
 echo
 echo 'Updatin initramfs'
 echo
