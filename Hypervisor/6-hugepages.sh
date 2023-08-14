@@ -39,7 +39,7 @@ while [[ ${confirmram,,} = n ]]; do
     ramcalc=$VMRAM
     echo
     echo
-    echo "Is $ramcalc\GB right? Y - Yes | Anything else - no"
+    echo "Is \"$ramcalc\" GB right? Y - Yes | Anything else - no"
     echo
     read RAMCONF
     if [[ ${RAMCONF,,} = y ]]; then
@@ -49,7 +49,7 @@ while [[ ${confirmram,,} = n ]]; do
     fi
 done
 
-if [[ -d /hugepages ]]; then
+if ! [[ -d /hugepages ]]; then
     echo "mkdir -p /hugepages"
     sudo mkdir -p /hugepages
     sleep 1s
@@ -107,6 +107,7 @@ if grep -i "vm.hugetlb_shm_group" /etc/sysctl.d/10-kvm.conf; then
     sleep 1s
 else
     printf "\nvm.hugetlb_shm_group = 36\n" | sudo tee -a /etc/sysctl.d/10-kvm.conf
+    sleep 1s
 fi
 
 if ! grep -i "hugepages=" /etc/default/grub; then

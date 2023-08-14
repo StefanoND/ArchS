@@ -31,6 +31,7 @@ PKGS=(
     'org.mozilla.firefox'                           # Firefox Browser
     'org.qbittorrent.qBittorrent'                   # Torrent app
     'org.kde.okteta'                                # Hex Editor
+    'io.github.shiftey.Desktop'
 )
 
 for PKG in "${PKGS[@]}"; do

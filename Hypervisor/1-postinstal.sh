@@ -28,9 +28,9 @@ if ! groups | grep sudo>/dev/null; then
     echo "visudo"
     echo
     echo "Add these in visudo"
-    echo "Defaults insults" # Replace "Sorry, try again." with humorous insults.
     echo "Defaults rootpw" # Will require root password for sudo command
     echo "Defaults timestamp_type=global" # All terminals "share the same timeout" for sudo password
+    echo "Defaults passwd_timeout=0"
     echo
     echo "# Exit root session"
     echo "exit"
@@ -57,6 +57,20 @@ sleep 2s
 clear
 
 sleep 1s
+
+echo
+echo 'Adding 32-bit support'
+echo
+sudo dpkg --add-architecture i386 && sudo apt update
+sleep 1s
+
+if lspci -nn | egrep -i "3d|display|vga" | grep -iq 'nvidia'; then
+    echo
+    echo 'Adding controb, non-free and non-free-frimware components to sources.list'
+    echo
+    sudo bash -c "echo 'deb http://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware' >> /etc/apt/sources.list"
+    sleep 1s
+fi
 
 echo
 echo "Updating System"
@@ -88,7 +102,6 @@ PKGS=(
     'qemu-system-x86'
     'qemu-system'
     'qemu-utils'
-
     'libvirt-clients'
     'libvirt-daemon-system'
     'libvirt-daemon'
@@ -106,6 +119,15 @@ PKGS=(
 #    'netctl'
 #    'dnsmasq'
 #    'openbsd-netcat'
+
+    # NVidia Driver ()
+    'nvidia-driver'
+    'firmware-misc-nonfree'
+    'nvidia-driver-libs:i386'
+    'nvidia-xconfig'
+    'nvidia-cuda-dev'
+    'nvidia-cuda-toolkit'
+    'libnvoptix1'
 
     # misc
     'gamemode'
@@ -248,21 +270,21 @@ fi
 cpath=`pwd`
 
 grubgpu=""
-if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
+
+if lspci -nn | egrep -i "3d|display|vga" | grep -iq 'nvidia'; then
     touch /etc/modprobe.d/blacklist-nvidia-nouveau.conf
-    echo 'blacklist nouveau' > /etc/modprobe.d/blacklist-nvidia-nouveau.conf
-    echo 'blacklist lbm-nouveau' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
-    echo 'options nouveau modeset=0' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
-    echo 'alias nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
-    echo 'alias lbm-nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf
-    echo 'options nouveau modeset=0' > /etc/modprobe.d/nouveau-kms.conf
+    sudo bash -c "echo 'blacklist nouveau' > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+    sudo bash -c "echo 'blacklist lbm-nouveau' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+    sudo bash -c "echo 'options nouveau modeset=0' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+    sudo bash -c "echo 'alias nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+    sudo bash -c "echo 'alias lbm-nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+    sudo bash -c "echo 'options nouveau modeset=0' > /etc/modprobe.d/nouveau-kms.conf"
 
     sed -i 's/\#    "\/dev\/nvidiactl", "\/dev\/nvidia0", "\/dev\/nvidia-modeset",/\    "\/dev\/nvidiactl", "\/dev\/nvidia0", "\/dev\/nvidia-modeset",/g' "$cpath"/Config/qemu.conf
 
     grubgpu=" nouveau.modeset=0 nvidia-drm.modeset=1"
     sleep 1s
-fi
-elif lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd; then
+elif lspci -nn | egrep -i "3d|display|vga" | grep -iq 'amd'; then
     grubgpu=" amdgpu.aspm=0"
     sleep 1s
 fi
@@ -400,7 +422,8 @@ echo
 echo "Making Gamemode start on boot"
 echo
 systemctl --user enable --now gamemoded.service
-sudo chmod +x /usr/bin/gamemoderun
+sudo chmod +x /bin/gamemoded
+sudo chmod +x /usr/bin/gamemoded
 sleep 1s
 
 # sleep 1s
