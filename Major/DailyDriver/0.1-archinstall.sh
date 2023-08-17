@@ -63,16 +63,24 @@ sleep 1s
 
 # Add btrfs to modules
 sed -i 's/MODULES=()/MODULES=(btrfs vmd qxl virtio-gpu virtio virtio_scsi virtio_blk virtio_pci virtio_net virtio_ring vfio_pci vfio vfio_iommu_type1)/g' /etc/mkinitcpio.conf
+sleep 1s
 
 # Add btrfs and setfont to mkinitcpio's binaries
 sed -i 's/BINARIES=()/BINARIES=(btrfs setfont)/g' /etc/mkinitcpio.conf
+sleep 1s
 
 # Add "btrfs" before "filesystems" and remove "fsck":
 # HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap encrypt consolefont block filesystems)
 sed -i 's/HOOKS=(.*/HOOKS=(base udev autodetect modconf kms keyboard btrfs keymap encrypt consolefont plymouth block filesystems)/g' /etc/mkinitcpio.conf
+sleep 1s
 
 # Compress initramfs image
 sed -i 's/#COMPRESSION="zstd"/COMPRESSION="zstd"/g' /etc/mkinitcpio.conf
+sleep 1s
+
+# Decompress kernel modules during initramfs creation (Speeds up boot process)
+sed -i 's/#MODULES_DECOMPRESS=.*/MODULES_DECOMPRESS="yes"/g' /etc/mkinitcpio.conf
+sleep 1s
 
 # Create swapfile (Change size to your liking)
 # We'll turn it on later
