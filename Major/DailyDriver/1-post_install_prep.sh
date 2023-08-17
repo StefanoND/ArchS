@@ -119,7 +119,12 @@ flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/fl
 sleep 1s
 
 echo
-echo 'Applying theme to Flatpak and Flatpacks'
+printf "Linking /usr/share/fonts to $HOME/.fonts"
+echo
+ln -svf /usr/share/fonts $HOME/.fonts
+
+echo
+echo 'Applying themes and fonts to Flatpak and its apps'
 echo
 cp -rf "${HOME}"/.local/share/icons/Tela-circle-purple-dark "${HOME}"/.icons/
 
@@ -127,10 +132,14 @@ flatpak override --user --filesystem="${HOME}"/.themes
 flatpak override --user --filesystem="${HOME}"/.icons
 flatpak override --user --env=GTK_THEME=Orchis-Purple-Dark
 flatpak override --user --env=ICON_THEME=Tela-circle-dark
+flatpak override --user --filesystem=/usr/share/fonts/:ro
+flatpak override --user --filesystem=$HOME/.fonts/:ro
 sudo flatpak override --system --filesystem="${HOME}"/.themes
 sudo flatpak override --system --filesystem="${HOME}"/.icons
 sudo flatpak override --system --env=GTK_THEME=Orchis-Purple-Dark
 sudo flatpak override --system --env=ICON_THEME=Tela-circle-dark
+sudo flatpak override --system --filesystem=/usr/share/fonts/:ro
+sudo flatpak override --system --filesystem=$HOME/.fonts/:ro
 
 echo
 echo 'Enabling Chaotic AUR Repo'

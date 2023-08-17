@@ -62,7 +62,7 @@ pacman -Syy
 sleep 1s
 
 # Add btrfs to modules
-sed -i 's/MODULES=()/MODULES=(btrfs vmd qxl virtio-gpu virtio virtio_scsi virtio_blk virtio_pci virtio_net virtio_ring)/g' /etc/mkinitcpio.conf
+sed -i 's/MODULES=()/MODULES=(btrfs vmd qxl virtio-gpu virtio virtio_scsi virtio_blk virtio_pci virtio_net virtio_ring vfio_pci vfio vfio_iommu_type1)/g' /etc/mkinitcpio.conf
 
 # Add btrfs and setfont to mkinitcpio's binaries
 sed -i 's/BINARIES=()/BINARIES=(btrfs setfont)/g' /etc/mkinitcpio.conf
@@ -204,7 +204,7 @@ if [[ -f /hasnvidia.gpu ]]; then
     sleep 1s
 
     # Enable NVdia modules, must be in that order
-    sed -i 's/MODULES=(btrfs vmd qxl virtio-gpu virtio virtio_scsi virtio_blk virtio_pci virtio_net virtio_ring)/MODULES=(btrfs vmd qxl virtio-gpu virtio virtio_scsi virtio_blk virtio_pci virtio_net virtio_ring nvidia nvidia_modeset nvidia_uvm nvidia_drm)/g' /etc/mkinitcpio.conf
+    sed -i 's/MODULES=(btrfs vmd qxl virtio-gpu virtio virtio_scsi virtio_blk virtio_pci virtio_net virtio_ring vfio_pci vfio vfio_iommu_type1)/MODULES=(btrfs vmd qxl virtio-gpu virtio virtio_scsi virtio_blk virtio_pci virtio_net virtio_ring vfio_pci vfio vfio_iommu_type1 nvidia nvidia_modeset nvidia_uvm nvidia_drm)/g' /etc/mkinitcpio.conf
     sleep 1s
 
     # Add nvidia-drm.modeset=1 at the end of options root=PARTUUID....

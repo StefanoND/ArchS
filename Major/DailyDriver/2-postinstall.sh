@@ -97,6 +97,9 @@ PKGS=(
 #    'kate'
     'skanlite'                                  # Image Scanning App (If you have a scanner or aio printer/scanner)
 #    'garuda-settings-manager-kcm'
+    'libpamac-nosnap'
+    'pamac-nosnap'
+    'pamac-tray-icon-plasma'
 
     # i3
     #'i3blocks'
@@ -129,6 +132,7 @@ PKGS=(
 
 # Paru
 PKGA=(
+    'tuned'
     'hplip-plugin'                              # Plugin for HP Deskjet (All-in-One) printers
     'ibus-autostart-kimpanel'
     'zram-generator'
@@ -142,15 +146,12 @@ PKGA=(
     'kwin-polonium'
     'kwin-effect-rounded-corners-git'
 #    'i3-gaps-rounded-git'
-    'pamac-aur'
-    'libpamac-aur'
-    'pamac-tray-icon-plasma'
-    'ttf-meslo-nerd-font-powerlevel10k'         # Meslo Nerd font patched for
     'opentabletdriver'                          # Tablet Driver ("-git" version not working)
     'gamemode-git'                              # Optimizations for games
     'lib32-gamemode-git'                        # 32-bit library for gamemode
     'lib32-glslang'                             # OpenGL and OGL ES front end and validator
     'mingw-w64-glslang'                         # OpenGL and OGL ES front end and validator
+    'ttf-meslo-nerd-font-powerlevel10k'         # Meslo Nerd font patched for
     'ttf-ms-fonts'                              # Core TTF fonts from Microsoft
     'ttf-vista-fonts'                           # TTF fonts from vista and office
     'adobe-base-14-fonts'                       # Adobe base 14 fonts (Courier, Helvetica, Times, Symbol, etc)
@@ -193,6 +194,7 @@ PKGFP=(
     'nl.hjdskes.gcolor3'                        # Color Picker
     'org.kde.kdenlive'                          # KDe Video Editor
     'io.github.achetagames.epic_asset_manager'
+    'io.github.shiftey.Desktop'                 # Github Desktop App
 #    ''         #
 )
 
@@ -219,6 +221,10 @@ PKGFP=(
 #     ''
 # #    ''
 # )
+
+PKGPRM=(
+    'discover'
+)
 
 APPSPATH="${HOME}/.apps"
 SRCPATH="$(cd $(dirname $0) && pwd)"
@@ -467,6 +473,16 @@ for PKG in "${PKGFP[@]}"; do
     echo "INSTALLING: ${PKG}"
     echo
     flatpak install --user flathub "$PKG" -y
+    echo
+    sleep 1s
+done
+
+# Uninstall Pacman
+for PKG in "${PKGPRM[@]}"; do
+    echo
+    echo "REMOVING: ${PKG}"
+    echo
+    sudo pacman -Rsn "$PKG" --noconfirm --unneeded
     echo
     sleep 1s
 done

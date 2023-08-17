@@ -463,10 +463,10 @@ sleep 1s
 GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
 
 if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
-    GRUB+=" amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1 kvm_amd.nested=1 kvm_amd.sev=1 kvm.ignore_msrs=1 kvm.report_ignored_msrs=0 video=vesafb:off,efifb:off,simplefb:off$grubgpu pcie_acs_override=downstream,multifunction systemd.unified_cgroup_hierarchy=0\""
+    GRUB+=" amd_iommu=on iommu=pt kvm_amd.npt=1 kvm_amd.avic=1 kvm_amd.nested=1 kvm_amd.sev=1 kvm.ignore_msrs=1 kvm.report_ignored_msrs=0 video=vesafb:off,efifb:off,simplefb:off$grubgpu systemd.unified_cgroup_hierarchy=0\""
     sleep 1s
 elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
-    GRUB+=" intel_iommu=on iommu=pt kvm.ignore_msrs=1 kvm.report_ignored_msrs=0 video=vesafb:off,efifb:off,simplefb:off$grubgpu pcie_acs_override=downstream,multifunction systemd.unified_cgroup_hierarchy=0\""
+    GRUB+=" intel_iommu=on iommu=pt kvm.ignore_msrs=1 kvm.report_ignored_msrs=0 video=vesafb:off,efifb:off,simplefb:off$grubgpu systemd.unified_cgroup_hierarchy=0\""
     sleep 1s
 fi
 
