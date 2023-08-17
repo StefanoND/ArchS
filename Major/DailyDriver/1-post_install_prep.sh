@@ -562,6 +562,18 @@ ln -svf "${APPSPATH}"/archs/.xinitrc "${HOME}"
 cp -f "${APPSPATH}"/archs/sxhkd.desktop "${HOME}"/.config/autostart
 sleep 1s
 
+if ! [[ -d /etc/wireplumber/main.lua.d ]]; then
+    echo
+    echo 'Creating "/etc/wireplumber/main.lua.d" folder'
+    echo
+    sudo mkdir -p /etc/wireplumber/main.lua.d
+fi
+
+echo
+echo 'Disabling sound suspension (Gets rid of starting audio delay)'
+echo
+sudo cp -rf "${SRCPATH}"/conf/pipewire/51-disable-suspension.lua /etc/wireplumber/main.lua.d/
+
 #cd ${HOME}
 #curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash > .git-completion.bash
 #curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh > .git-prompt.sh
