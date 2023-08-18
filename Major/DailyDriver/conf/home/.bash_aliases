@@ -171,6 +171,12 @@ alias protonup='net.davidotek.pupgui2 &'
 # Protontricks
 alias protontricks='com.github.Matoking.protontricks &'
 
+# Lutris
+alias lutris='net.lutris.Lutris &'
+
+# Github Desktop
+alias github-desktop='io.github.shiftey.Desktop &'
+
 #######################################################
 # POST ADDED ALIAS'S
 #######################################################

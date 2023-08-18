@@ -337,19 +337,7 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
     sudo bash -c "printf \"LIBVA_DRIVER_NAME=nvidia\n\" >> /etc/environment"
     sleep 1s
 
-    sudo bash -c "printf \"VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json\n\" >> /etc/environment"
-    sleep 1s
-
-    sudo bash -c "printf \"VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n\" >> /etc/environment"
-    sleep 1s
-
     export LIBVA_DRIVER_NAME=nvidia
-    sleep 1s
-
-    export VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d
-    sleep 1s
-
-    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
     sleep 1s
 fi
 if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq amd; then
@@ -378,25 +366,6 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq intel; then
     echo
     sudo pacman -S vulkan-intel lib32-vulkan-intel opencl-mesa --noconfirm --needed
     sleep 1s
-
-    sudo bash -c "printf \"VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json\n\" >> /etc/environment"
-    sleep 1s
-
-    sudo bash -c "printf \"VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nv_vulkan_wrapper.json\n\" >> /etc/environment"
-    sleep 1s
-
-    sudo bash -c "printf \"VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n\" >> /etc/environment"
-    sleep 1s
-
-    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.x86_64.json
-    sleep 1s
-
-    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nv_vulkan_wrapper.json
-    sleep 1s
-
-    export VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d
-    sleep 1s
-
 fi
 if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio; then
     echo
@@ -405,24 +374,6 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq virtio; then
     sleep 1s
     sudo pacman -S vulkan-virtio lib32-vulkan-virtio --noconfirm --needed
     sleep 1s
-
-    sudo bash -c "printf \"VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.i686.json\n\" >> /etc/environment"
-    sleep 1s
-
-    sudo bash -c "printf \"VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.x86_64.json\n\" >> /etc/environment"
-    sleep 1s
-
-    sudo bash -c "printf \"VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n\" >> /etc/environment"
-    sleep 1s
-
-    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.i686.json
-    sleep 1s
-
-    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/virtio_icd.x86_64.json
-    sleep 1s
-
-    export VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d
-    sleep 1s
 fi
 if ! pacman -Q | grep -iq vulkan-virtio && ! pacman -Q | grep -iq nvidia && ! pacman -Q | grep -iq vulkan-radeon && ! pacman -Q | grep -iq vulkan-intel; then
     echo
@@ -430,25 +381,13 @@ if ! pacman -Q | grep -iq vulkan-virtio && ! pacman -Q | grep -iq nvidia && ! pa
     echo
     sudo pacman -S vulkan-swrast lib32-vulkan-swrast --noconfirm --needed
     sleep 1s
-
-    sudo bash -c "printf \"VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.i686.json\n\" >> /etc/environment"
-    sleep 1s
-
-    sudo bash -c "printf \"VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json\n\" >> /etc/environment"
-    sleep 1s
-
-    sudo bash -c "printf \"VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n\" >> /etc/environment"
-    sleep 1s
-
-    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.i686.json
-    sleep 1s
-
-    export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.x86_64.json
-    sleep 1s
-
-    export VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d
-    sleep 1s
 fi
+
+sudo bash -c "printf \"VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d\n\" >> /etc/environment"
+sleep 1s
+
+export VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d
+sleep 1s
 
 if lspci | grep -iq renesas; then
     echo
