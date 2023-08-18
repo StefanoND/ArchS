@@ -148,11 +148,28 @@ alias restartkwin='kwin_x11 --replace &'
 # Restart kwin and plasma
 alias restartdesktop='restartkwin restartplasma'
 
-# Firefox
-alias firefox='org.mozilla.firefox --ProfileManager'
-
 # Update system instead of manually typing
 alias updatesystem='sudo pacman -Syy && paru -Su && flatpak update -y'
+
+# Flatpak apps
+
+# Flatseal
+alias flatseal='com.github.tchx84.Flatseal &'
+
+# Firefox
+alias firefox='org.mozilla.firefox --ProfileManager &'
+
+# Steam
+alias steam='com.valvesoftware.Steam &'
+
+# Discord
+alias discord='com.discordapp.Discord &'
+
+# ProtonUp Qt
+alias protonup='net.davidotek.pupgui2 &'
+
+# Protontricks
+alias protontricks='com.github.Matoking.protontricks &'
 
 #######################################################
 # POST ADDED ALIAS'S

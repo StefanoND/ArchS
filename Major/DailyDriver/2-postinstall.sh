@@ -94,12 +94,16 @@ PKGS=(
     'xsettingsd'
     'kwalletmanager'
     'sxhkd'
-#    'kate'
+    'kate'
     'skanlite'                                  # Image Scanning App (If you have a scanner or aio printer/scanner)
 #    'garuda-settings-manager-kcm'
     'libpamac-nosnap'
     'pamac-nosnap'
     'pamac-tray-icon-plasma'
+    'dos2unix'
+    'distrobox'
+    'docker'
+    'docker-buildx'
 
     # i3
     #'i3blocks'
@@ -161,6 +165,7 @@ PKGA=(
     'vscodium-bin'                              # VS Code without Microsoft's branding/telemetry/licensing
     'vscodium-bin-marketplace'                  # VS Codium market place
     'vscodium-bin-features'                     # Unblock some features blocked for non-MS's VSCode
+    'rider'                                     # IDE
 )
 
 # Flatpak
@@ -195,6 +200,14 @@ PKGFP=(
     'org.kde.kdenlive'                          # KDe Video Editor
     'io.github.achetagames.epic_asset_manager'
     'io.github.shiftey.Desktop'                 # Github Desktop App
+    'com.valvesoftware.Steam'                   # Steam
+    'net.lutris.Lutris'                         # Lutris
+    'org.libretro.RetroArch'                    # RetroArch
+    'com.heroicgameslauncher.hgl'               # Heroic Games
+    'net.davidotek.pupgui2'                     # Protonup-Qt
+    'com.github.Matoking.protontricks'          # Protontricks
+    'com.usebottles.bottles'                    # Bottles
+    'pm.mirko.Atoms'                            # GUI frontend to create, manage and use chroot environments
 #    ''         #
 )
 
@@ -310,7 +323,7 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
     echo
     echo "Installing NVidia's Proprietary Vulkan Drivers"
     echo
-    sudo pacman -S nvidia-utils lib32-nvidia-utils opencl-nvidia libva-nvidia-driver gwe --noconfirm --needed
+    sudo pacman -S nvidia-utils lib32-nvidia-utils opencl-nvidia libva-nvidia-driver gwe cuda cuda-tools --noconfirm --needed
     sleep 1s
 
     if ! [[ `pacman -Q | grep -i 'nvidia-dkms'` ]]; then
@@ -476,6 +489,12 @@ for PKG in "${PKGFP[@]}"; do
     echo
     sleep 1s
 done
+
+echo
+echo 'Allowing Atoms to talk to Flatpak system/session dbus for Distrobox support'
+echo
+flatpak override --user pm.mirko.Atoms --talk-name=org.freedesktop.Flatpak
+flatpak override --user pm.mirko.Atoms --system-talk-name=org.freedesktop.Flatpak
 
 # Uninstall Pacman
 for PKG in "${PKGPRM[@]}"; do
@@ -796,6 +815,13 @@ unzip PhotoGIMP.zip
 /bin/cp -rf PhotGIMP-master/.local $HOME
 
 echo
+printf "Adding $(logname) to docker group"
+echo
+sudo usermod -aG docker $(logname)
+newgrp docker
+sleep 1s
+
+echo
 echo "Enabling CUPs service"
 echo
 
@@ -899,16 +925,26 @@ echo
 echo 'Enaling sshd service'
 echo
 sudo systemctl enable --now sshd.service
+sleep 1s
+
 # CUPS service
 echo
 echo 'Enabling cups service'
 echo
 sudo systemctl enable --now cups.service
+sleep 1s
+
+echo
+echo 'Enabling docker service'
+echo
+sudo systemctl enable --now docker
+sleep 1s
 
 echo
 echo "Updating initramfs/initrd"
 echo
 sudo mkinitcpio -P
+sleep 1s
 
 echo
 echo 'Syncing system'
