@@ -213,6 +213,11 @@ PKGS=(
     'ranger'
 
     # Dependencies
+    'lib32-acl'
+    'lib32-attr'
+    'lib32-gettext'
+    'lib32-libnl'
+    'lib32-libpcap'
     'giflib'                                    # Wine Dependency Hell
     'lib32-giflib'                              # Wine Dependency Hell
     'libpng'                                    # Wine Dependency Hell
@@ -256,6 +261,10 @@ PKGS=(
     'cups'                                      # Wine Dependency Hell
     'samba'                                     # Wine Dependency Hell
     'dosbox'                                    # Wine Dependency Hell
+    'wine-staging'
+    'wine-mono'
+    'wine-gecko'
+    'winetricks'
 )
 
 for PKG in "${PKGS[@]}"; do
@@ -266,6 +275,12 @@ for PKG in "${PKGS[@]}"; do
     echo
     sleep 1s
 done
+
+echo
+echo 'Initializing wine'
+echo
+wineboot
+sleep 1s
 
 echo
 echo 'Making xanmod-rt the default kernel to boot'

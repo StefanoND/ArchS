@@ -166,6 +166,12 @@ PKGA=(
     'vscodium-bin-marketplace'                  # VS Codium market place
     'vscodium-bin-features'                     # Unblock some features blocked for non-MS's VSCode
     'rider'                                     # IDE
+    'aur/mangohud-git'
+    'aur/goverlay-bin'
+    'ttf-dejavu'
+    'vkbasalt'
+    'lib32-vkbasalt'
+    'reshade-shaders-git'
 )
 
 # Flatpak
@@ -208,6 +214,7 @@ PKGFP=(
     'com.github.Matoking.protontricks'          # Protontricks
     'com.usebottles.bottles'                    # Bottles
     'pm.mirko.Atoms'                            # GUI frontend to create, manage and use chroot environments
+    'org.freedesktop.Platform.VulkanLayer.MangoHud'
 #    ''         #
 )
 
@@ -333,6 +340,12 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
         sudo pacman -S nvidia-dkms --noconfirm --needed
         sleep 1s
     fi
+
+    sudo bash -c "echo '__GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1' >> /etc/environment"
+    sleep 1s
+
+    export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
+    sleep 1s
 
     sudo bash -c "printf \"LIBVA_DRIVER_NAME=nvidia\n\" >> /etc/environment"
     sleep 1s
@@ -581,7 +594,38 @@ sleep 1s
 echo
 echo "Increasing file watcher count. This prevents a \"too many files\" error in VS Code(ium)"
 echo
-sudo bash -c "echo 'fs.inotify.max_user_watches=524288' > /etc/sysctl.d/40-max-user-watches.conf" && sudo sysctl --system
+sudo bash -c "echo 'fs.inotify.max_user_watches=524288' > /etc/sysctl.d/40-max-user-watches.conf"
+sleep 1s
+
+echo
+echo 'Applying some tweaks for gaming'
+echo
+sleep 2s
+
+echo
+echo 'Increasing vm.max_map_count size (for some games compatibility)'
+echo
+sudo bash -c "echo 'vm.max_map_count = 2147483642' > /etc/sysctl.d/80-gamecompatibility.conf"
+sleep 1s
+
+sudo bash -c "echo '#    Path                  Mode UID  GID  Age Argument' > /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /proc/sys/vm/compaction_proactiveness - - - - 1' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /proc/sys/vm/min_free_kbytes - - - - 1048576' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /proc/sys/vm/swappiness - - - - 10' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /sys/kernel/mm/lru_gen/enabled - - - - 5' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /proc/sys/vm/zone_reclaim_mode - - - - 0' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /sys/kernel/mm/transparent_hugepage/enabled - - - - always' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /sys/kernel/mm/transparent_hugepage/shmem_enabled - - - - always' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /sys/kernel/mm/transparent_hugepage/khugepaged/defrag - - - - 1' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /proc/sys/vm/page_lock_unfairness - - - - 1' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /proc/sys/kernel/sched_child_runs_first - - - - 0' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /proc/sys/kernel/sched_autogroup_enabled - - - - 1' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /proc/sys/kernel/sched_cfs_bandwidth_slice_us - - - - 500' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /sys/kernel/debug/sched/latency_ns  - - - - 1000000' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /sys/kernel/debug/sched/migration_cost_ns - - - - 500000' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /sys/kernel/debug/sched/min_granularity_ns - - - - 500000' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /sys/kernel/debug/sched/wakeup_granularity_ns  - - - - 0' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
+sudo bash -c "echo 'w /sys/kernel/debug/sched/nr_migrate - - - - 8' >> /etc/tmpfiles.d/consistent-response-time-for-gaming.conf"
 sleep 1s
 
 echo
@@ -623,6 +667,9 @@ echo "Restricting Kernel Log Access"
 echo
 sudo sysctl -w kernel.dmesg_restrict=1
 sudo bash -c 'echo kernel.dmesg_restrict=1 >> /etc/sysctl.d/10-local.conf'
+sleep 1s
+
+sudo sysctl --system
 sleep 1s
 
 echo

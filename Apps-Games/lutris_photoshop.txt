@@ -4,7 +4,7 @@ System Options->Environment variables
         DXVK_STATE_CACHE_PATH
         WINEPREFIX
     Value (for all)
-        /mnt/SSD_WORK/Photoshop/Adobe-Photoshop
+        /path/to/LutrisOrPhotoshopOrSomethingElse
 
 Runner Options->DLL OVERRIDES
     Keys
