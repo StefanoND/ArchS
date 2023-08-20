@@ -58,6 +58,7 @@ if ! grep -iq "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1" /etc/environment; then
     echo "Enabling Globalization Invariant"
     echo
     printf "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1\n" | sudo tee -a /etc/environment
+    export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
     sleep 1s
 fi
 if ! grep -iq "DOTNET_CLI_TELEMETRY_OPTOUT=1" /etc/environment; then
@@ -65,6 +66,7 @@ if ! grep -iq "DOTNET_CLI_TELEMETRY_OPTOUT=1" /etc/environment; then
     echo "Disabling DotNet telemetry"
     echo
     printf "DOTNET_CLI_TELEMETRY_OPTOUT=1\n" | sudo tee -a /etc/environment
+    export DOTNET_CLI_TELEMETRY_OPTOUT=1
     sleep 1s
 fi
 

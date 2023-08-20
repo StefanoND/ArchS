@@ -104,6 +104,7 @@ PKGS=(
     'distrobox'
     'docker'
     'docker-buildx'
+    'kdevelop'
 
     # i3
     #'i3blocks'
@@ -165,13 +166,13 @@ PKGA=(
     'vscodium-bin'                              # VS Code without Microsoft's branding/telemetry/licensing
     'vscodium-bin-marketplace'                  # VS Codium market place
     'vscodium-bin-features'                     # Unblock some features blocked for non-MS's VSCode
-    'rider'                                     # IDE
     'aur/mangohud-git'
     'aur/goverlay-bin'
     'ttf-dejavu'
     'vkbasalt'
     'lib32-vkbasalt'
     'reshade-shaders-git'
+    'codelite-bin'                              # IDE
 )
 
 # Flatpak
@@ -215,6 +216,10 @@ PKGFP=(
     'com.usebottles.bottles'                    # Bottles
     'pm.mirko.Atoms'                            # GUI frontend to create, manage and use chroot environments
     'org.freedesktop.Platform.VulkanLayer.MangoHud'
+    'org.godotengine.Godot'
+    'com.unity.UnityHub'
+    'org.freedesktop.Sdk.Extension.dotnet7'
+    'com.jetbrains.Rider'
 #    ''         #
 )
 
@@ -446,7 +451,15 @@ echo
 echo 'Allowing Atoms to talk to Flatpak system/session dbus for Distrobox support'
 echo
 flatpak override --user pm.mirko.Atoms --talk-name=org.freedesktop.Flatpak
+sleep 1s
 flatpak override --user pm.mirko.Atoms --system-talk-name=org.freedesktop.Flatpak
+sleep 1s
+
+echo
+echo 'Making Rider use DotNet 7'
+echo
+flatpak override --user --env=FLATPAK_ENABLE_SDK_EXT=dotnet7 com.jetbrains.Rider
+sleep 1s
 
 # Uninstall Pacman
 for PKG in "${PKGPRM[@]}"; do
@@ -586,9 +599,15 @@ sleep 1s
 echo
 echo "Set make to be multi-threaded by default"
 echo
-sudo sed -i "s|\#MAKEFLAGS=.*|MAKEFLAGS=\"-j$(expr $(nproc) \+ 1)\"|g" /etc/makepkg.conf
+sudo sed -i 's|\#MAKEFLAGS=.*|MAKEFLAGS="-j$(expr $(nproc) + 1)"|g' /etc/makepkg.conf
 sleep 1s
-sudo sed -i "s|COMPRESSXZ=.*|COMPRESSXZ=(xz -c -T $(expr $(nproc) \+ 1) -z -)|g" /etc/makepkg.conf
+sudo sed -i 's|COMPRESSXZ=.*|COMPRESSXZ=(xz -c -T $(expr $(nproc) \+ 1) -z -)|g' /etc/makepkg.conf
+sleep 1s
+sudo bash -c "echo '' >> /etc/makepkg.conf"
+sleep 1s
+sudo bash -c "echo '_WithDDC=true' >> /etc/makepkg.conf"
+sleep 1s
+export _WithDDC=true
 sleep 1s
 
 echo

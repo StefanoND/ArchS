@@ -126,7 +126,7 @@ ln -svf /usr/share/fonts $HOME/.fonts
 echo
 echo 'Applying themes and fonts to Flatpak and its apps'
 echo
-cp -rf "${HOME}"/.local/share/icons/Tela-circle-purple-dark "${HOME}"/.icons/
+ln -svf "${HOME}"/.local/share/icons/Tela-circle-purple-dark "${HOME}"/.icons/
 
 flatpak override --user --filesystem="${HOME}"/.themes
 flatpak override --user --filesystem="${HOME}"/.icons
