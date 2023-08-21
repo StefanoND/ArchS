@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Nim updated to version 2.0 and currently Nasher doesn't support it, so this script will install nim 1.6.14
+
 if ! [ $EUID -ne 0 ]; then
     echo
     echo "Don't run this program as root."
@@ -27,7 +29,9 @@ sleep 1s
 echo
 echo "Installing Nim"
 echo
-curl https://nim-lang.org/choosenim/init.sh -sSf | sh
+wget -o - init.sh https://nim-lang.org/choosenim/init.sh
+sed -i 's/CHOOSE_VERSION=.*/CHOOSE_VERSION="1.6.14"/g' init.sh
+./init.sh
 
 echo
 echo "Adding Nimble to PATH"
@@ -37,12 +41,12 @@ printf "\nexport PATH=\$HOME/.nimble/bin:\$PATH\n" | tee -a $HOME/.bashrc
 echo
 echo "Installing \"neverwinter.nim\""
 echo
-nimble install neverwinter
+~/.nimble/bin/nimble install neverwinter
 
 echo
 echo "Installing \"nasher\""
 echo
-nimble install nasher
+~/.nimble/bin/nimble install nasher
 
 confirmrootfolder=n
 confirmhomefolder=n
