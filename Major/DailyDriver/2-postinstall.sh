@@ -64,6 +64,8 @@ PKGS=(
     'starship'
     'htop'
     'npm'                                       # Package manager for Javascript
+    'jre17-openjdk'
+    'jdk17-openjdk'
 
     # QEMU
     'qemu-desktop'
@@ -104,7 +106,6 @@ PKGS=(
     'distrobox'
     'docker'
     'docker-buildx'
-    'kdevelop'
 
     # i3
     #'i3blocks'
@@ -172,7 +173,7 @@ PKGA=(
     'vkbasalt'
     'lib32-vkbasalt'
     'reshade-shaders-git'
-    'codelite-bin'                              # IDE
+    'jetbrains-toolbox'                         # IDE
 )
 
 # Flatpak
@@ -218,8 +219,6 @@ PKGFP=(
     'org.freedesktop.Platform.VulkanLayer.MangoHud'
     'org.godotengine.Godot'
     'com.unity.UnityHub'
-    'org.freedesktop.Sdk.Extension.dotnet7'
-    'com.jetbrains.Rider'
 #    ''         #
 )
 
@@ -453,12 +452,6 @@ echo
 flatpak override --user pm.mirko.Atoms --talk-name=org.freedesktop.Flatpak
 sleep 1s
 flatpak override --user pm.mirko.Atoms --system-talk-name=org.freedesktop.Flatpak
-sleep 1s
-
-echo
-echo 'Making Rider use DotNet 7'
-echo
-flatpak override --user --env=FLATPAK_ENABLE_SDK_EXT=dotnet7 com.jetbrains.Rider
 sleep 1s
 
 # Uninstall Pacman

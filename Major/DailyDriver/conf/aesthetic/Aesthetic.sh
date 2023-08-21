@@ -8,130 +8,25 @@ if ! [ $EUID -ne 0 ]; then
     exit 1
 fi
 
-clear
-echo
-echo
-echo "      _        _                                     ___                               "
-echo "     / \   ___| |_ ___ _ __ _ __  _   _ _ __ ___    / _ \ _ __ ___   ___  __ _  __ _   "
-echo "    / _ \ / _ \ __/ _ \ '__| '_ \| | | | '_ ' _ \  | | | | '_ ' _ \ / _ \/ _' |/ _' |  "
-echo "   / ___ \  __/ ||  __/ |  | | | | |_| | | | | | | | |_| | | | | | |  __/ (_| | (_| |  "
-echo "  /_/   \_\___|\__\___|_|  |_| |_|\__,_|_| |_| |_|  \___/|_| |_| |_|\___|\__, |\__,_|  "
-echo "                                                                         |___/         "
-echo "                                  Post-Install Script"
-echo
-echo
-sleep 2s
-clear
-
-sleep 1s
-
-# PACMAN
-PKGZ=(
-#    ''                                         #
-)
-
-for PKG in "${PKGZ[@]}"; do
-        echo
-        echo "INSTALLING: ${PKG}"
-        echo
-        sudo pacman -Rsn "$PKG" --noconfirm --needed
-        echo
-        sleep 1s
-done
-
-# PACMAN
-PKGS=(
-    'base-devel'
-    'cmake'
-    'extra-cmake-modules'
-    'git'                                       # Git
-    'kvantum'
-    'npm'
-    'zip'
-#    ''                                         #
-)
-
-for PKG in "${PKGS[@]}"; do
-        echo
-        echo "INSTALLING: ${PKG}"
-        echo
-        sudo pacman -S "$PKG" --noconfirm --needed
-        echo
-        sleep 1s
-done
-
-# PARU
-PKGS=(
-    'qt5-tools'
-    #'kwin-bismuth' # Using a up-to-date fork
-#    ''                                          #
-)
-
-for PKG in "${PKGS[@]}"; do
-        echo
-        echo "INSTALLING: ${PKG}"
-        echo
-        paru -S "$PKG" --noconfirm --needed --sudoloop
-        echo
-        sleep 1s
-done
-
-echo
-echo "Downloading Bismuth (Tiling Manager)"
-echo
-cd /opt
-sudo git clone https://github.com/Elfahor/bismuth.git && cd bismuth
-sudo mkdir build && cd build
-sudo npm install typescript
-sudo npm audit fix --force
-sudo cmake ..
-sudo make
-sudo make install
-
-# echo
-# echo "Downloading Polonium (Tiling Manager)"
-# echo
-# cd /opt
-# sudo git clone https://github.com/zeroxoneafour/polonium.git && cd polonium
-# sudo make build
-# sudo make install
-
-echo
-echo "Downloading KDE Rounded Corners"
-echo
-cd /opt
-sudo git clone https://github.com/matinlotfali/KDE-Rounded-Corners.git && cd KDE-Rounded-Corners
-sleep 1s
-echo
-printf "mkdir build && cd build"
-echo
-sudo mkdir build && cd build
-sleep 1s
-echo
-echo "Installing KDE Rounded Corners"
-echo
-sudo make build
-sudo make
-sudo make install
-sleep 1s
 echo
 echo "You can change KDE Rounded Corner's settings in \"System Settings->Workspace Behavior->Desktop Effects->ShapeCorners\""
 echo
 echo "My recommended settings are:"
-echo "Roundness: 10 from left"
-echo "Active Window Outline Color: #9dd9d6"
-echo "Inactive Window Outline Color: #782323"
-echo "Outline thickness; 3,0"
+echo "ACTIVE"
+echo "    Roundness: 9.00"
+echo "    Outline thickness; 3,0"
+echo "    Active Window Outline Color: #745bae"
+echo "    Active Window Shadow Color: #745bae"
+echo "    Active Window Shadow Size: 15.00"
 echo
-echo "Active Window Shadow Color: #9dd9d6"
-echo "Active Window Shadow Size: 14 from left"
-echo "Inactive Window Shadow Color: #782323"
-echo "Active Window Shadow Size: 14 from left"
-echo
-echo "Note: \"X from left\" means, drag the slider all the way to the left then press the right key X times"
+echo "INACTIVE"
+echo "    Roundness: 9.00"
+echo "    Outline thickness; 3,0"
+echo "    Inactive Window Outline Color: #3b3155"
+echo "    Inactive Window Shadow Color: #3b3155"
+echo "    Inctive Window Shadow Size: 15.00"
 echo
 sleep 1s
-
 
 echo
 echo "You may need to change windows decorations and back to change take effects"
@@ -142,8 +37,8 @@ echo "You can enable Bismuth at \"System Settings->Workspace->Window Management-
 echo
 echo "System Settings->Window Management->Window Tiling"
 echo "    Appearance Tab:"
-echo "        All Outer Gaps: 11 px (So you have access to desktop on screen edges)"
-echo "        Inner Gaps: 2x"
+echo "        All Outer Gaps: 8 px"
+echo "        Inner Gaps: 4 px"
 echo "        UNCHECK \"No broders around tiled windows\""
 echo
 echo "Checkout Bismuth-Forge's site for tweaking the Tile Manager"
@@ -174,31 +69,28 @@ echo "    Sub-pixel rendering: RGB"
 echo "    Hinting: Slight"
 echo "    Force font DPI: Disabled"
 echo
-echo "Icons: Tela Circle (Purple) (https://store.kde.org/p/1359276)"
+echo "Icons: Tela Circle Purple dark (https://store.kde.org/p/1359276)"
 echo
 echo "Cursors: Sweet-cursors (https://store.kde.org/p/1393084)"
 echo
-echo "Splash Screen: Simple Tux Splash (https://store.kde.org/p/1258784)"
+echo "Splash Screen: Arch Linux Splash Screen (https://store.kde.org/p/1711647)"
 echo
-echo "Boot Splash Screen: nibar-plymouth-theme (https://store.kde.org/p/1784844)"
+echo "Boot Splash Screen: Default: Breeze (Text Mode)"
 echo
-echo "Login Screen (SDDM): Chili for Plasma (https://store.kde.org/p/1214121)"
+echo "Login Screen (SDDM): Sugar Candy (https://store.kde.org/p/1312658)"
 echo
-echo "Window Management->Task Switcher: Thumbnail Switcher (https://store.kde.org/p/2010367)"
+echo "Window Management->Task Switcher: Thumbnail Grid (default)"
 echo
-
 sleep 1s
 
 echo
 echo "Top dock:"
-echo "    Better Application Dashboard: https://store.kde.org/p/1897990"
-echo "    Margins Separator"
-echo "    Digital Clock"
+echo "    Application Dashboard"
+echo "    Separator"
+echo "    Pager"
 echo "    Spacer"
-echo "    Minimal Desktop Indicator: https://store.kde.org/p/1878511"
+echo "    Digitcal Clock"
 echo "    Spacer"
-echo "    Plasma Active Application: https://store.kde.org/p/1269296"
-echo "    Margins Separator"
 echo "    System-Tray"
 echo
 
@@ -237,7 +129,6 @@ echo "        Blur (Both sliders in the middle)"
 echo "        Mouse Mark"
 echo "        Screen Edge (Disabled)"
 echo "        Translucency (Default)"
-echo "        Dim Inactive (Strength: 5)"
 echo "        Dim Screen for Administrator Mode"
 #echo "        "
 echo
