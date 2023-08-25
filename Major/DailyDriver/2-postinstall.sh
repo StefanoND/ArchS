@@ -106,6 +106,16 @@ PKGS=(
     'distrobox'
     'docker'
     'docker-buildx'
+    'kdevelop'
+    'glad'
+    'vulkan-devel'
+    'glfw-x11'
+    'glfw-wayland'
+    'glm'
+    'glslang'
+    'shaderc'
+    'libxi'
+    'libxxf86vm'
 
     # i3
     #'i3blocks'
@@ -173,7 +183,9 @@ PKGA=(
     'vkbasalt'
     'lib32-vkbasalt'
     'reshade-shaders-git'
-    'jetbrains-toolbox'                         # IDE
+    'jetbrains-toolbox'
+    'codelite-bin'                              # IDE
+    'lldb-mi-git'
 )
 
 # Flatpak
@@ -219,6 +231,8 @@ PKGFP=(
     'org.freedesktop.Platform.VulkanLayer.MangoHud'
     'org.godotengine.Godot'
     'com.unity.UnityHub'
+    'io.missioncenter.MissionCenter'
+    'org.tenacityaudio.Tenacity'
 #    ''         #
 )
 
@@ -781,6 +795,22 @@ if test -e /home/$(logname)/.config/fontconfig/fonts.conf; then
     mv /home/$(logname)/.config/fontconfig/fonts.conf /home/$(logname)/.config/fontconfig/fonts.conf.bak;
     sleep 1s
 fi
+
+echo
+echo 'Enabling Discord rich present on non-flatpak apps'
+echo
+ln -sf $XDG_RUNTIME_DIR/{app/com.discordapp.Discord,}/discord-ipc-0
+sleep 1s
+mkdir -p ~/.config/user-tmpfiles.d
+sleep 1s
+echo 'L %t/discord-ipc-0 - - - - app/com.discordapp.Discord/discord-ipc-0' > ~/.config/user-tmpfiles.d/discord-rpc.conf
+sleep 1s
+systemctl --user enable --now systemd-tmpfiles-setup.service
+sleep 1s
+flatpak override --user --filesystem=$XDG_RUNTIME_DIR/app/com.discordapp.Discord
+sleep 1s
+ln -sf $XDG_RUNTIME_DIR/app/com.discordapp.Discord/discord-ipc-0 $XDG_RUNTIME_DIR/discord-ipc-0
+sleep 1s
 
 echo ''
 touch /home/$(logname)/.config/fontconfig/fonts.conf

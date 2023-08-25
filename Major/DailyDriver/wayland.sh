@@ -73,6 +73,12 @@ if test -e /usr/lib/udev/rules.d/60-antimicrox-uinput.rules; then
     sleep 1s
 fi
 
+sudo touch /usr/lib/udev/rules.d/60-antimicrox-uinput.rules
+sleep 1s
+
+curl https://raw.githubusercontent.com/AntiMicroX/antimicrox/master/other/60-antimicrox-uinput.rules -o - | sudo tee /usr/lib/udev/rules.d/60-antimicrox-uinput.rules
+sleep 1s
+
 printf "XKB_DEFAULT_LAYOUT=$KBLOCALE\n" | sudo tee -a /etc/environment
 sleep 1s
 
@@ -82,10 +88,10 @@ sleep 1s
 sed -i 's/config.enable_wayland = false/config.enable_wayland = true/g' "${SRCPATH}"/conf/home/.wezterm.lua
 sleep 1s
 
-echo 'QT_QPA_PLATFORM="xcb;wayland"' >> /etc/environment
-echo 'GTK_IM_MODULE=ibus' >> /etc/environment
-echo 'QT_IM_MODULE=ibus' >> /etc/environment
-echo 'XMODIFIERS=@im=ibus' >> /etc/environment
+sudo bash -c "echo 'QT_QPA_PLATFORM=\"xcb;wayland\"' >> /etc/environment"
+sudo bash -c "echo 'GTK_IM_MODULE=ibus' >> /etc/environment"
+sudo bash -c "echo 'QT_IM_MODULE=ibus' >> /etc/environment"
+sudo bash -c "echo 'XMODIFIERS=@im=ibus' >> /etc/environment"
 #echo '' >> /etc/environment
 sleep 1s
 
@@ -104,13 +110,10 @@ sleep 1s
 cp "${APPSPATH}"/archs/hotkeys.sh.desktop "${HOME}"/.config/autostart/
 sleep 1s
 
-sudo touch /usr/lib/udev/rules.d/60-antimicrox-uinput.rules
-sleep 1s
-
-curl https://raw.githubusercontent.com/AntiMicroX/antimicrox/master/other/60-antimicrox-uinput.rules -o - | sudo tee /usr/lib/udev/rules.d/60-antimicrox-uinput.rules
-sleep 1s
-
 printf "# Restart swhkd\n" >> ${HOME}/.bash_aliases
 printf "alias restartswhkd='killall -9 swhks && sudo killall -9 swhkd &&  notify \"swhks reloaded\" && notify \"swhkd reloaded\" && swhks & pkexec swhkd &'\n" >> ${HOME}/.bash_aliases
+
+sudo bash -c "echo 'accel-profile=flat' >> /etc/libinput.conf"
+sudo ln -sf ~/.config/swhkd/swhkdrc /etc/swhkd
 
 exit 0
