@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Nim updated to version 2.0 and currently Nasher doesn't support it, so this script will install nim 1.6.14
+
 if ! [ $EUID -ne 0 ]; then
     echo
     echo "Don't run this program as root."
@@ -25,24 +27,45 @@ clear
 sleep 1s
 
 echo
+echo "Downloading Nim"
+echo
+wget -o - init.sh https://nim-lang.org/choosenim/init.sh
+sleep 1s
+echo
+echo "Changing install version to 1.6.14"
+echo
+sed -i 's/CHOOSE_VERSION=.*/CHOOSE_VERSION="1.6.14"/g' init.sh
+sleep 1s
+echo
 echo "Installing Nim"
 echo
-curl https://nim-lang.org/choosenim/init.sh -sSf | sh
+./init.sh
+sleep 1s
+echo
+echo "Removing leftover"
+echo
+rm init.sh
+sleep 1s
 
 echo
 echo "Adding Nimble to PATH"
 echo
-printf "\nexport PATH=\$HOME/.nimble/bin:\$PATH\n" | tee -a $HOME/.bashrc
+if ! grep -i 'PATH=\$HOME/.nimble/bin:\$PATH' "$HOME"/.bashrc; then
+    printf "\nexport PATH=\$HOME/.nimble/bin:\$PATH\n" | tee -a $HOME/.bashrc
+    sleep 1s
+fi
 
 echo
 echo "Installing \"neverwinter.nim\""
 echo
-nimble install neverwinter
+"$HOME"/.nimble/bin/nimble install neverwinter
+sleep 1s
 
 echo
 echo "Installing \"nasher\""
 echo
-nimble install nasher
+"$HOME"/.nimble/bin/nimble install nasher
+sleep 1s
 
 confirmrootfolder=n
 confirmhomefolder=n
@@ -90,32 +113,42 @@ done
 # Sanity check
 if test -e $rootfolder; then
     export NWN_ROOT="$rootfolder"
+    sleep 1s
 fi
 if test -e $homefolder; then
     export NWN_HOME="$homefolder"
+    sleep 1s
 fi
 
 echo
 echo "Downloading \"NWScript Compiler\""
 echo
 wget https://github.com/nwneetools/nwnsc/releases/download/v1.1.5/nwnsc-linux-v1.1.5.zip
+sleep 1s
+
 echo
 echo "Extracting \"nwnsc-linux-v1.1.5.zip\""
 echo
 unzip nwnsc-linux-v1.1.5.zip
+sleep 1s
+
 echo
 echo "Moving \"nwnsc\" to \"$HOME/.nimble/bin\""
 echo
-mv nwnsc $HOME/.nimble/bin
+mv nwnsc "$HOME"/.nimble/bin
+sleep 1s
+
 echo
 echo "Removing leftovers"
 echo
 rm nwnsc-linux-v1.1.5.zip
+sleep 1s
 
 echo
 echo "Making nasher recognizer nwnsc's location"
 echo
 nasher config nssCompiler "$HOME/.nimble/bin/nwnsc"
+sleep 1s
 
 echo
 echo "Your Nasher configuration file is in \"$HOME/.config/nasher/user.cfg\""
@@ -124,6 +157,7 @@ echo
 echo "For further configuration check Squatting Monk's Nasher github repo"
 echo "https://github.com/squattingmonk/nasher"
 echo
+sleep 1s
 
 echo
 echo "Done"
