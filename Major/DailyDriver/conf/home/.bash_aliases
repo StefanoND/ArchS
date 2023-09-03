@@ -177,6 +177,21 @@ alias lutris='net.lutris.Lutris &'
 # Github Desktop
 alias github-desktop='io.github.shiftey.Desktop &'
 
+# Spotify
+alias spotify='com.spotify.Client &'
+
+# Mission Center
+alias mission-center='io.missioncenter.MissionCenter &'
+
+# Tenacity
+alias tenacity='org.tenacityaudio.Tenacity &'
+
+# Wine
+alias wine='flatpak run org.winehq.Wine &'
+
+# Winetricks
+alias winetricks='flatpak run --command=winetricks org.winehq.Wine'
+
 #######################################################
-# POST ADDED ALIAS'S
+# POST ADDED ALIASES
 #######################################################

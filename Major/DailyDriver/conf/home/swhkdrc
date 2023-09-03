@@ -1,11 +1,11 @@
 # Wezterm
 super + Return
-  WAYLAND_DISPLAY=no tdrop -amt -w 1728 -h 944 -y 0 -x 96 wezterm
+    WAYLAND_DISPLAY=no tdrop -amt -w 1728 -h 944 -y 0 -x 96 wezterm
 
 # Restart sxhkd
 super + shift + r
-  bash -ic restartswhkd
+    bash -ic restartswhkd
 
 # Rofi
 super + d
-  rofi -show drun
+    rofi -show drun

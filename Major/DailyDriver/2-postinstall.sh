@@ -208,6 +208,14 @@ PKGFP=(
     'io.mpv.Mpv'                                # Media player
     'info.smplayer.SMPlayer'                    # SMPlayer
     'org.gimp.GIMP'                             # GNU Image Manipulator
+    'org.gimp.GIMP.Plugin.Resynthesizer'
+    'org.gimp.GIMP.Plugin.LiquidRescale'
+    'org.gimp.GIMP.Plugin.Lensfun'
+    'org.gimp.GIMP.Plugin.GMic'
+    'org.gimp.GIMP.Plugin.Fourier'
+    'org.gimp.GIMP.Plugin.FocusBlur'
+    'org.gimp.GIMP.Plugin.BIMP'
+    'org.darktable.Darktable'
     'org.kde.krita'                             # Digital Painting Software
     'org.inkscape.Inkscape'                     # Vector Graphics Editor
     'org.blender.Blender'                       # 3D Modelling Software
@@ -233,6 +241,9 @@ PKGFP=(
     'com.unity.UnityHub'
     'io.missioncenter.MissionCenter'
     'org.tenacityaudio.Tenacity'
+    'org.winehq.Wine'
+    'org.winehq.Wine.gecko'
+    'org.winehq.Wine.mono'
 #    ''         #
 )
 

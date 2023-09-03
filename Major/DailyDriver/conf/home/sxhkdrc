@@ -1,7 +1,11 @@
 # Wezterm
 super + Return
-  tdrop -amt -w 1728 -h 944 -y 0 -x 96 wezterm
+    tdrop -amt -w 1728 -h 944 -y 0 -x 96 wezterm
 
 # Restart sxhkd
 super + shift + r
-  bash -ic restartsxhkd
+    bash -ic restartsxhkd
+
+# Rofi
+super + d
+    rofi -show drun
