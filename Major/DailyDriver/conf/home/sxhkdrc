@@ -1,6 +1,6 @@
 # Wezterm
 super + Return
-    tdrop -amt -w 1728 -h 944 -y 0 -x 96 wezterm
+    tdrop -amt -w 90% -h 86% -y 0 -x 5% wezterm
 
 # Restart sxhkd
 super + shift + r

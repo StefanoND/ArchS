@@ -261,10 +261,14 @@ PKGS=(
     'cups'                                      # Wine Dependency Hell
     'samba'                                     # Wine Dependency Hell
     'dosbox'                                    # Wine Dependency Hell
-    'wine-staging'
-    'wine-mono'
-    'wine-gecko'
-    'winetricks'
+    #'wine-staging'
+    #'wine-mono'
+    #'wine-gecko'
+    #'winetricks'
+    'gst-plugins-base'
+    'gst-plugins-good'
+    'gst-plugins-ugly'
+    'gst-plugins-bad'
 )
 
 for PKG in "${PKGS[@]}"; do

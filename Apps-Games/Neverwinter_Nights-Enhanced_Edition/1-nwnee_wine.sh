@@ -101,7 +101,7 @@ WINEPREFIX=$wnprfpath winecfg -v winxp64
 sleep 1s
 #
 # Install dotNET 2.0 Service Pack 2 (Must run separate)
-WINEPREFIX=$wnprfpath winetricks dotnet20sp2 -qf
+WINEPREFIX=$wnprfpath winetricks dotnet20sp1 -qf
 sleep 10s
 killall -r mscorsvw.exe
 sleep 10s
@@ -161,6 +161,13 @@ sleep 10s
 #
 # Instal DirectX 9
 WINEPREFIX=$wnprfpath winetricks dxdiag -qf
+sleep 10s
+killall -r mscorsvw.exe
+killall -r aspnet_regiis.exe
+sleep 10s
+#
+# Instal Visual Basic Runtime 6
+WINEPREFIX=$wnprfpath winetricks vbrun6 -qf
 sleep 10s
 killall -r mscorsvw.exe
 killall -r aspnet_regiis.exe
@@ -232,7 +239,7 @@ echo
 sleep 1s
 echo
 echo "Before opening NWN Explorer:"
-echo "For nwnexplorer to work with NWN:EE you nneed to copy the \"nwn_base.key\" from the \"data\" folder to the game's root install folder"
+echo "For nwnexplorer to work with NWN:EE you need to copy the \"nwn_base.key\" from the \"data\" folder to the game's root install folder"
 echo "If you downloaded from Steam, it's location is ../Steam/steamapps/common/Neverwinter Nights"
 echo "If you downloaded from the Beamdog client, the name of the root install folder is \"00829\""
 echo

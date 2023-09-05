@@ -192,6 +192,12 @@ alias wine='flatpak run org.winehq.Wine &'
 # Winetricks
 alias winetricks='flatpak run --command=winetricks org.winehq.Wine'
 
+# Winecfg
+alias winecfg='flatpak run --command=winecfg org.winehq.Wine'
+
+# Wineboot
+alias wineboot='flatpak run --command=wineboot org.winehq.Wine'
+
 #######################################################
 # POST ADDED ALIASES
 #######################################################

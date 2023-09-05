@@ -244,6 +244,13 @@ PKGFP=(
     'org.winehq.Wine'
     'org.winehq.Wine.gecko'
     'org.winehq.Wine.mono'
+    'org.freedesktop.Platform.VulkanLayer.vkBasalt'
+    'org.freedesktop.Platform.VulkanLayer.gamescope'
+    'com.vscodium.codium'
+    'org.freedesktop.Sdk.Extension.dotnet7'
+    'org.freedesktop.Sdk.Extension.mono6'
+    'org.freedesktop.Sdk.Extension.golang'
+    'org.freedesktop.Sdk.Extension.node18'
 #    ''         #
 )
 
@@ -822,6 +829,35 @@ flatpak override --user --filesystem=$XDG_RUNTIME_DIR/app/com.discordapp.Discord
 sleep 1s
 ln -sf $XDG_RUNTIME_DIR/app/com.discordapp.Discord/discord-ipc-0 $XDG_RUNTIME_DIR/discord-ipc-0
 sleep 1s
+
+#flatpak override --user --allow=host org.winehq.Wine.DLLs.dxvk
+#flatpak override --user --allow=host org.winehq.Wine.gecko
+#flatpak override --user --allow=host org.winehq.Wine.mono
+#flatpak override --user --allow=host org.winehq.Wine
+#flatpak override --user --allow=devel org.winehq.Wine.DLLs.dxvk
+#flatpak override --user --allow=devel org.winehq.Wine.gecko
+#flatpak override --user --allow=devel org.winehq.Wine.mono
+#flatpak override --user --allow=devel org.winehq.Wine
+flatpak override --user --allow=devel com.usebottles.bottles
+flatpak override --user --env='BOTTLES_USE_SYSTEM_GSTREAMER=1' com.usebottles.bottles
+
+flatpak override --user --env='DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1' com.vscodium.codium
+flatpak override --user --env='FLATPAK_ENABLE_SDK_EXT=*' com.vscodium.codium
+flatpak override --user --env='DOTNET_CLI_TELEMETRY_OPTOUT=1' com.vscodium.codium
+flatpak override --user --env='VSCODE_GALLERY_SERVICE_URL=https://marketplace.visualstudio.com/_apis/public/gallery' com.vscodium.codium
+flatpak override --user --env='VSCODE_GALLERY_ITEM_URL=https://marketplace.visualstudio.com/items' com.vscodium.codium
+
+sed -i "s/111111/$(logname)/g" conf/home/com.vscodium.codium.desktop
+sed -i "s/111111/$(logname)/g" conf/home/vscodium.sh
+
+cp -rf conf/home/com.vscodium.codium.desktop $HOME/.local/share/applications/
+cp -rf conf/home/vscodium.sh $HOME/.apps/archs/
+
+if ! [[ "$PATH" =~ "$HOME/.apps/archs/vscodium.sh:" ]]; then
+    PATH="$HOME/.apps/archs/vscodium.sh:$PATH"
+fi
+
+xdg-settings set default-web-browser org.mozilla.firefox.desktop
 
 echo ''
 touch /home/$(logname)/.config/fontconfig/fonts.conf
