@@ -166,7 +166,7 @@ done
 
 cpath=`pwd`
 touch uepath.txt
-printf "$ueinstallpath/UnrealEngine5_2" | tee uepath.txt
+printf "$ueinstallpath/5.2.1" | tee uepath.txt
 
 cd $ueinstallpath
 gclonelink=null
@@ -200,7 +200,7 @@ sleep 1s
 echo
 echo "Wait for the download, around 18.62 GiB size (As of version 5.2.1)"
 echo
-git clone $gclonelink UnrealEngine5_2 && cd UnrealEngine5_2
+git clone $gclonelink 5.2.1 && cd 5.2.1
 sleep 1s
 echo
 echo "Making .sh scripts runnables"

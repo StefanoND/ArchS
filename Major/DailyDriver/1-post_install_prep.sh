@@ -211,6 +211,9 @@ PKGS=(
     'lib32-libasyncns'
     'patch'
     'ranger'
+    'tree-sitter'
+    'tree-sitter-cli'
+    'luarocks'
 
     # Dependencies
     'lib32-acl'
@@ -269,6 +272,14 @@ PKGS=(
     'gst-plugins-good'
     'gst-plugins-ugly'
     'gst-plugins-bad'
+    'ttf-jetbrains-mono-nerd'                   # Nerdfonts
+    'emacs-nativecomp'
+    'ripgrep'
+    'fd'
+    'tldr'
+    'shfmt'
+    'shellcheck'
+
 )
 
 for PKG in "${PKGS[@]}"; do
@@ -281,10 +292,35 @@ for PKG in "${PKGS[@]}"; do
 done
 
 echo
-echo 'Initializing wine'
+echo 'Installing DOOM Emacs'
 echo
-wineboot
+git clone https://github.com/hlissner/doom-emacs "${HOME}"/.emacs.d
+"${HOME}"/.emacs.d/bin/doom install
+
+emacs
+sleep 5s
+sudo killall -9 emacs
+
+"${HOME}"/.emacs.d/bin/doom sync
 sleep 1s
+
+rm -rf "${HOME}"/.local/share/nvim
+mv "${HOME}"/.config/nvim "${HOME}"/.config/nvim.old
+
+# Interesting https://www.youtube.com/watch?v=w7i4amO_zaE
+# NvChad https://www.youtube.com/watch?v=lsFoZIg-oDs
+# Copilot https://www.youtube.com/watch?v=eMnZBaOs4vM
+
+echo
+echo ''
+echo
+git clone https://github.com/NvChad/NvChad "${HOME}"/.config/nvim --depth 1
+
+#echo
+#echo 'Initializing wine'
+#echo
+#wineboot
+#sleep 1s
 
 echo
 echo 'Making xanmod-rt the default kernel to boot'

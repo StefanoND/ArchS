@@ -106,7 +106,6 @@ PKGS=(
     'distrobox'
     'docker'
     'docker-buildx'
-    'kdevelop'
     'glad'
     'vulkan-devel'
     'glfw-x11'
@@ -184,7 +183,6 @@ PKGA=(
     'lib32-vkbasalt'
     'reshade-shaders-git'
     'jetbrains-toolbox'
-    'codelite-bin'                              # IDE
     'lldb-mi-git'
 )
 
@@ -246,11 +244,6 @@ PKGFP=(
     'org.winehq.Wine.mono'
     'org.freedesktop.Platform.VulkanLayer.vkBasalt'
     'org.freedesktop.Platform.VulkanLayer.gamescope'
-    'com.vscodium.codium'
-    'org.freedesktop.Sdk.Extension.dotnet7'
-    'org.freedesktop.Sdk.Extension.mono6'
-    'org.freedesktop.Sdk.Extension.golang'
-    'org.freedesktop.Sdk.Extension.node18'
 #    ''         #
 )
 
@@ -841,22 +834,6 @@ sleep 1s
 flatpak override --user --allow=devel com.usebottles.bottles
 flatpak override --user --env='BOTTLES_USE_SYSTEM_GSTREAMER=1' com.usebottles.bottles
 
-flatpak override --user --env='DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1' com.vscodium.codium
-flatpak override --user --env='FLATPAK_ENABLE_SDK_EXT=*' com.vscodium.codium
-flatpak override --user --env='DOTNET_CLI_TELEMETRY_OPTOUT=1' com.vscodium.codium
-flatpak override --user --env='VSCODE_GALLERY_SERVICE_URL=https://marketplace.visualstudio.com/_apis/public/gallery' com.vscodium.codium
-flatpak override --user --env='VSCODE_GALLERY_ITEM_URL=https://marketplace.visualstudio.com/items' com.vscodium.codium
-
-sed -i "s/111111/$(logname)/g" conf/home/com.vscodium.codium.desktop
-sed -i "s/111111/$(logname)/g" conf/home/vscodium.sh
-
-cp -rf conf/home/com.vscodium.codium.desktop $HOME/.local/share/applications/
-cp -rf conf/home/vscodium.sh $HOME/.apps/archs/
-
-if ! [[ "$PATH" =~ "$HOME/.apps/archs/vscodium.sh:" ]]; then
-    PATH="$HOME/.apps/archs/vscodium.sh:$PATH"
-fi
-
 xdg-settings set default-web-browser org.mozilla.firefox.desktop
 
 echo ''
@@ -1013,6 +990,12 @@ echo
 echo 'Enabling docker service'
 echo
 sudo systemctl enable --now docker
+sleep 1s
+
+echo
+echo 'Enabling Cronie service'
+echo
+sudo systemctl enable --now cronie
 sleep 1s
 
 echo

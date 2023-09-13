@@ -34,14 +34,17 @@ cd $npath
 echo
 echo "Installing Unreal Engine, this will take a long time, go to sleep, touch grass, come back in a few hours"
 echo
-sudo make
+#sudo make
+Engine/Build/BatchFiles/RunUAT.sh BuildGraph -target="Make Installed Build Linux" -script=Engine/Build/InstalledEngineBuild.xml -set:WithDDC=true -set:HostPlatformOnly=false -set:WithLinux=true -set:WithWin64=true -set:WithMac=false -set:WithAndroid=false -set:WithIOS=false -set:WithTVOS=false
 
 sleep 1s
 
-echo
-echo "Running make again just to make sure, will take less than a minute this time, if everything went right"
-echo
-sudo make
+#echo
+#echo "Running make again just to make sure, will take less than a minute this time, if everything went right"
+#echo
+#sudo make
+
+cp -flr LocalBuilds/Engine/Linux/* ./
 
 # If you're having problems with ShaderCompileWorkers run this command
 #cd $npath/Engine/Build/BatchFiles/Linux

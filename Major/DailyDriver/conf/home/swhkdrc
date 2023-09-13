@@ -1,6 +1,6 @@
 # Wezterm
 super + Return
-    WAYLAND_DISPLAY=no tdrop -amt -w 90% -h 86% -y 0 -x 5% wezterm
+    WAYLAND_DISPLAY=no tdrop -amt -w 1908 -h 1048 -x 6 -y 26 wezterm
 
 # Restart sxhkd
 super + shift + r
