@@ -272,9 +272,11 @@ cprs()
     #
     # --progress Shows progress during transfer
     if [ -d "${1}" ]; then
-        rsync -rlptDvu --progress "${1}/" "${2}"
+#        rsync -rlptDvu --progress "${1}"/ "${2}"
+        rsync -avu --progress "${1}"/ "${2}"
     else
-        rsync -lptDvu --progress "${1}" "${2}"
+#        rsync -lptDvu --progress "${1}" "${2}"
+        rsync -avu --progress "${1}" "${2}"
     fi
 }
 
@@ -384,13 +386,13 @@ trim()
 # GitHub Titus Additions
 gcom() {
     git add .
-    git commit -m "$1"
+    git commit -am "$1"
 }
 
 # Add commit and push
 lazyg() {
     git add .
-    git commit -m "$1"
+    git commit -am "$1"
     git push
 }
 
@@ -463,14 +465,18 @@ killandnotify() {
 export SUDO_PROMPT="$(tput setaf 1 bold)Root Password:$(tput sgr0) "
 
 # User specific environment
-if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:" ]]
-then
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:" ]]; then
     PATH="$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:$PATH"
 fi
-export PATH
+
+if ! [[ "$PATH" =~ "$HOME/.emacs.d/bin:" ]]; then
+  PATH="$HOME/.emacs.d/bin:$PATH"
+fi
 
 export PATH=$PATH:$HOME/.local/bin
 export PATH=$PATH:$HOME/.nix-profile/bin
+
+export PATH
 
 export XDG_DATA_DIRS="$HOME/.nix-profile/share:$XDG_DATA_DIRS"
 export XDG_DATA_DIRS="$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"

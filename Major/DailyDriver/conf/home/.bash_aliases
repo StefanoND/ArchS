@@ -187,7 +187,7 @@ alias mission-center='io.missioncenter.MissionCenter &'
 alias tenacity='org.tenacityaudio.Tenacity &'
 
 # Wine
-alias wine='flatpak run org.winehq.Wine &'
+alias wine='flatpak run org.winehq.Wine'
 
 # Winetricks
 alias winetricks='flatpak run --command=winetricks org.winehq.Wine'
@@ -198,6 +198,14 @@ alias winecfg='flatpak run --command=winecfg org.winehq.Wine'
 # Wineboot
 alias wineboot='flatpak run --command=wineboot org.winehq.Wine'
 
+# Bottles
+alias bottles='flatpak run com.usebottles.bottles &'
+
+alias restartsxhkd='killandnotify "sxhkd" && notify "sxhkd reloaded" && sxhkd &'
+alias restartkwin='kwin_x11 --replace &'
+alias restartdesktop='restartlatte restartkwin restartplasma'
+alias restartswhkd='killall -9 swhks && sudo killall -9 swhkd &&  notify "swhks reloaded" && notify "swhkd reloaded" && swhks & pkexec swhkd &'
+
 #######################################################
-# POST ADDED ALIASES
+# POST ADDED ALIAS'S
 #######################################################
