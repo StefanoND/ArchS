@@ -279,6 +279,7 @@ PKGS=(
     'tldr'
     'shfmt'
     'shellcheck'
+    'lazygit'
 
 )
 
