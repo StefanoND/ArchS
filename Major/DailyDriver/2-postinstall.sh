@@ -236,7 +236,6 @@ PKGFP=(
     'pm.mirko.Atoms'                            # GUI frontend to create, manage and use chroot environments
     'org.freedesktop.Platform.VulkanLayer.MangoHud'
     'org.godotengine.Godot'
-    'com.unity.UnityHub'
     'io.missioncenter.MissionCenter'
     'org.tenacityaudio.Tenacity'
     'org.winehq.Wine'
