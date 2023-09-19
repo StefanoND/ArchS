@@ -184,6 +184,9 @@ PKGA=(
     'reshade-shaders-git'
     'jetbrains-toolbox'
     'lldb-mi-git'
+    'remark-language-server'
+    'netcoredbg'
+    'dockerfile-language-server'
 )
 
 # Flatpak

@@ -280,7 +280,15 @@ PKGS=(
     'shfmt'
     'shellcheck'
     'lazygit'
-
+    'omnisharp-roslyn'
+    'vscode-json-languageserver'
+    'lua-language-server'
+    'rust-analyzer'
+    'yaml-language-server'
+    'bash-language-server'
+    'aspell'
+    'enchant'
+    'hunspell'
 )
 
 for PKG in "${PKGS[@]}"; do

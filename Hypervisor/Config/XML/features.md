@@ -7,15 +7,20 @@
       <acpi/>
       <apic/>
       <hyperv mode="custom">
-        <relaxed state="on"/>
-        <vapic state="on"/>
-        <spinlocks state="on" retries="8191"/>
-        <vpindex state="on"/>
-        <synic state="on"/>
-        <stimer state="on"/>
-        <reset state="on"/>
-        <vendor_id state="on" value="randomid"/>
-        <frequencies state="on"/>
+        <relaxed state='on'/>
+        <vapic state='on'/>
+        <spinlocks state='on' retries='8191'/>
+        <vpindex state='on'/>
+        <runtime state='on'/>
+        <synic state='on'/>
+        <stimer state='on'>
+          <direct state='on'/>
+        </stimer>
+        <reset state='on'/>
+        <vendor_id state='on' value='randomid'/>
+        <frequencies state='on'/>
+        <reenlightenment state='on'/>
+        <tlbflush state='on'/>
       </hyperv>
       <kvm>
         <hidden state="on"/>
@@ -36,7 +41,7 @@
       <hyperv mode='custom'>
         <relaxed state='on'/>
         <vapic state='on'/>
-        <spinlocks state='on' retries='4096'/>
+        <spinlocks state='on' retries='8191'/>
         <vpindex state='on'/>
         <runtime state='on'/>
         <synic state='on'/>
@@ -44,7 +49,7 @@
           <direct state='on'/>
         </stimer>
         <reset state='on'/>
-        <vendor_id state='on' value='KVM Hv'/>
+        <vendor_id state='on' value='randomid'/>
         <frequencies state='on'/>
         <reenlightenment state='on'/>
         <tlbflush state='on'/>
