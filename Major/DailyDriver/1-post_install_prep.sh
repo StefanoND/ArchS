@@ -289,6 +289,16 @@ PKGS=(
     'aspell'
     'enchant'
     'hunspell'
+    'gnuplot'
+    'maim'
+    'hydra'
+    'ispell'
+    'aspell-en'
+    'aspell-pt'
+    'hunspell-en_us'
+    'hunspell-en_gb'
+    'hunspell-pt-br'
+    'btop'
 )
 
 for PKG in "${PKGS[@]}"; do

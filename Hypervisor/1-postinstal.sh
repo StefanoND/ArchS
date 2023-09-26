@@ -66,9 +66,9 @@ sleep 1s
 
 if lspci -nn | egrep -i "3d|display|vga" | grep -iq 'nvidia'; then
     echo
-    echo 'Adding controb, non-free and non-free-frimware components to sources.list'
+    echo 'Enabling non-free and non-free-frimware components to sources.list'
     echo
-    sudo sed -i 's/main non-free-firmware/main non-free non-free-firmware/g' /etc/apt/sources.list
+    sudo sed -i 's/main non-free-firmware/main contrib non-free non-free-firmware/g' /etc/apt/sources.list
     sudo sed -i 's/non-free non-free non-free-firmware/non-free non-free-firmware/g' /etc/apt/sources.list
     #sudo bash -c "echo 'deb http://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware' >> /etc/apt/sources.list"
     sleep 1s
@@ -94,32 +94,36 @@ for PKG in "${PKGZ[@]}"; do
     sleep 1s
 done
 
+sudo apt update
+
 PKGS=(
     # Kernel
-    'build-essential'
     "linux-headers-$(uname -r)"
+    'build-essential'
     'dkms'
     'firmware-linux'
     'firmware-linux-nonfree'
+    'pkg-config'
 
     # QEMU
-    'qemu-system-x86'
-    'qemu-system'
+    #'qemu-system-x86'
+    #'qemu-system'
+    'qemu-kvm'
     'qemu-utils'
-    'libvirt-clients'
     'libvirt-daemon-system'
-    'libvirt-daemon'
-    'virtinst'
-    'virt-manager'
-    'virt-viewer'
+    'libvirt-clients'
     'bridge-utils'
+    'virt-manager'
     'ovmf'
-    'vde2'
-    'iptables'
-    'ebtables'
-    'nftables'
-    'swtpm'
-    'dnsmasq'
+    #'libvirt-daemon'
+    #'virtinst'
+    #'virt-viewer'
+    #'vde2'
+    #'iptables'
+    #'ebtables'
+    #'nftables'
+    #'swtpm'
+    #'dnsmasq'
 
 #    'netctl'
 #    'openbsd-netcat'
@@ -128,10 +132,6 @@ PKGS=(
     'nvidia-driver'
     'firmware-misc-nonfree'
     'nvidia-driver-libs:i386'
-    'nvidia-xconfig'
-    'nvidia-cuda-dev'
-    'nvidia-cuda-toolkit'
-    'libnvoptix1'
 
     # misc
     'gamemode'
@@ -141,8 +141,6 @@ PKGS=(
     'git'
     'curl'
     'wget'
-    'neovim'
-    'yakuake'
     'linux-cpupower'
 )
 
@@ -357,38 +355,6 @@ fi
 
 sleep 1s
 
-if [[ `apt list --installed | grep -i 'yakuake'` ]]; then
-    echo
-    echo "Configuring Yakuake"
-    echo
-    if ! [[ -f "${HOME}"/.config/yakuakerc ]]; then
-        touch "${HOME}"/.config/yakuakerc;
-        printf "[Desktop Entry]\nDefaultProfile=$(logname).profile\n" | tee "${HOME}"/.config/yakuakerc
-    fi
-
-    sleep 1s
-
-    if grep -qF "DefaultProfile=" "${HOME}"/.config/yakuakerc; then
-        sed -i "s|DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "${HOME}"/.config/yakuakerc
-    elif ! grep -qF "DefaultProfile=" "${HOME}"/.config/yakuakerc && ! grep -qF "[Desktop Entry]" "${HOME}"/.config/yakuakerc; then
-        sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "${HOME}"/.config/yakuakerc
-    fi
-
-    sleep 1s
-
-    if ! [[ -d "${HOME}"/.config/autostart ]]; then
-        mkdir "${HOME}"/.config/autostart
-    fi
-
-    if ! [[ -f "${HOME}"/.config/autostart/org.kde.yakuake.desktop ]]; then
-        echo
-        echo "Making Yakuake autostart at log-in"
-        echo
-        ln -s /usr/share/applications/org.kde.yakuake.desktop "${HOME}"/.config/autostart
-        sleep 1s
-    fi
-fi
-
 echo
 echo "Setting up fq_pie queue discipline for TCP congestion control"
 echo
@@ -429,25 +395,6 @@ systemctl --user enable --now gamemoded.service
 sudo chmod +x /bin/gamemoded
 sudo chmod +x /usr/bin/gamemoded
 sleep 1s
-
-# sleep 1s
-#
-# echo
-# echo "Fixing sound delay when starting to play audio"
-# echo
-# sudo sed -i "s|load-module module-suspend-on-idle.*|#load-module module-suspend-on-idle|g" /etc/pulse/default.pa
-# sudo sed -i "s|load-module module-udev-detect.*|load-module module-udev-detect tsched=0|g" /etc/pulse/default.pa
-# sudo sed -i "s|load-module module-detect.*|load-module module-detect tsched=0|g" /etc/pulse/default.pa
-# sudo sed -i "s|.*default-sample-rate.*|default-sample-rate = 44100|g" /etc/pulse/daemon.conf
-# sudo sed -i "s|.*alternate-sample-rate.*|alternate-sample-rate = 48000|g" /etc/pulse/daemon.conf
-# sleep 1s
-#
-# if [[ -f /etc/modprobe.d/snd-hda-intel.conf ]]; then
-#     sudo cp /etc/modprobe.d/snd-hda-intel.conf /etc/modprobe.d/snd-hda-intel.conf.old
-#     printf "options snd-hda-intel power_save=0\n" | sudo tee /etc/modprobe.d/snd-hda-intel.conf
-#     sleep 1s
-# fi
-
 
 if ! [[ -d /etc/X11/xorg.conf.d ]]; then
     sudo mkdir -p /etc/X11/xorg.conf.d
@@ -527,31 +474,42 @@ fi
 
 sleep 1s
 if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
-    if ! [[ -f /etc/modprobe.d/kvm-amd.conf ]]; then
-        sudo touch /etc/modprobe.d/kvm-amd.conf
+    if ! [[ -f /etc/modprobe.d/kvm.conf ]]; then
+        sudo touch /etc/modprobe.d/kvm.conf
         sleep 1s
     fi
 
-    printf "options kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\noptions kvm-amd nested=1\n" | sudo tee /etc/modprobe.d/kvm-amd.conf
+    printf "options kvm-amd nested=1\noptions kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\n" | sudo tee /etc/modprobe.d/kvm.conf
     sudo modprobe -r kvm_amd
-    sudo modprobe -a kvm_amd
+    sudo modprobe kvm_amd
     sleep 1s
 elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
-    if ! [[ -f /etc/modprobe.d/kvm-intel.conf ]]; then
-        sudo touch /etc/modprobe.d/kvm-intel.conf
+    if ! [[ -f /etc/modprobe.d/kvm.conf ]]; then
+        sudo touch /etc/modprobe.d/kvm.conf
         sleep 1s
     fi
 
-    printf "options kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\noptions kvm-intel nested=1\noptions kvm-intel enable_shadow_vmcs=1\noptions kvm-intel enable_apicv=1\noptions kvm-intel ept=1\n" | sudo tee /etc/modprobe.d/kvm-intel.conf
+    printf "options kvm-intel nested=1\noptions kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\noptions kvm-intel enable_shadow_vmcs=1\noptions kvm-intel enable_apicv=1\noptions kvm-intel ept=1\n" | sudo tee /etc/modprobe.d/kvm.conf
     sudo modprobe -r kvm_intel
-    sudo modprobe -a kvm_intel
+    sudo modprobe kvm_intel
     sleep 1s
 fi
+
+sudo modprobe iommufd
+sudo modprobe vfio_iommu_type1
+sudo modprobe vfio_virqfd
+sudo modprobe vfio-pci
+
+echo
+echo "Updating initramfs"
+echo
+sudo update-initramfs -u
+sleep 1s
 
 echo
 echo "Updating GRUB"
 echo
-sudo grub-mkconfig
+sudo grub-mkconfig -o /boot/grub/grub.cfg
 sleep 1s
 
 echo

@@ -7,3 +7,5 @@ user_pref("gfx.webrender.enabled", true);
 user_pref("gfx.webrender.compositor", true);
 user_pref("gfx.webrender.compositor.force-enabled", true);
 user_pref("media.ffmpeg.vaapi.enabled", true);
+user_pref("cookiebanners.service.mode", 1);
+user_pref("cookiebanners.service.mode.privateBrowsing", 1);

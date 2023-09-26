@@ -8,7 +8,7 @@ if ! [ $EUID -ne 0 ]; then
     exit 1
 fi
 
-if ! groups|grep wheel>/dev/null;then
+if ! groups | grep wheel >/dev/null; then
     echo
     echo "You need to be a member of the wheel to run me!"
     echo
@@ -36,17 +36,17 @@ sleep 1s
 # Pacman
 PKGS=(
     # Fonts
-    'ttf-fira-code'                             # My personal favorite font for programming
-    'noto-fonts-extra'                          # Additional variants of noto fonts
-    'noto-fonts-cjk'                            # Chinese Japanese Korean (CJK) characters support
-    'noto-fonts-emoji'                          # Support for emojis
-    'gnu-free-fonts'                            # Free family of scalable outline fonts
-    'powerline-fonts'                           # Patched fonts for powerline Powerlevel10k
-    'ttf-nerd-fonts-symbols'                    #
-    'ttf-nerd-fonts-symbols-common'             #
-    'ttf-nerd-fonts-symbols-mono'               #
-    'ttf-ubuntu-font-family'                    # Ubuntu font
-    'ttf-jetbrains-mono'                        # Jetbrains' monospace
+    'ttf-fira-code'                 # My personal favorite font for programming
+    'noto-fonts-extra'              # Additional variants of noto fonts
+    'noto-fonts-cjk'                # Chinese Japanese Korean (CJK) characters support
+    'noto-fonts-emoji'              # Support for emojis
+    'gnu-free-fonts'                # Free family of scalable outline fonts
+    'powerline-fonts'               # Patched fonts for powerline Powerlevel10k
+    'ttf-nerd-fonts-symbols'        #
+    'ttf-nerd-fonts-symbols-common' #
+    'ttf-nerd-fonts-symbols-mono'   #
+    'ttf-ubuntu-font-family'        # Ubuntu font
+    'ttf-jetbrains-mono'            # Jetbrains' monospace
 
     # Compression utilities
     'tar'
@@ -58,12 +58,12 @@ PKGS=(
     'zip'
 
     # Misc
-    'cpupower'                                  # CPU tuning utility
-    'python-pyqt5'                              #
-    'ntfs-3g'                                   # NTFS support
+    'cpupower'     # CPU tuning utility
+    'python-pyqt5' #
+    'ntfs-3g'      # NTFS support
     'starship'
     'htop'
-    'npm'                                       # Package manager for Javascript
+    'npm' # Package manager for Javascript
     'jre17-openjdk'
     'jdk17-openjdk'
 
@@ -97,8 +97,8 @@ PKGS=(
     'kwalletmanager'
     'sxhkd'
     'kate'
-    'skanlite'                                  # Image Scanning App (If you have a scanner or aio printer/scanner)
-#    'garuda-settings-manager-kcm'
+    'skanlite' # Image Scanning App (If you have a scanner or aio printer/scanner)
+    #    'garuda-settings-manager-kcm'
     'libpamac-nosnap'
     'pamac-nosnap'
     'pamac-tray-icon-plasma'
@@ -124,18 +124,18 @@ PKGS=(
     #'picom'
 
     # 3D/Hardware Acceleration/Gaming related/dependencies
-    'vkd3d'                                     #
-    'lib32-vkd3d'                               #
-    'lib32-sqlite'                              # Lutris Dependency
-    'vulkan-headers'                            # Vulkan Header Files
-    'vulkan-validation-layers'                  # Vulkan Validation Layers
-    'vulkan-tools'                              # Vulkan Utilities and Tools
-    'opencl-headers'                            #
-    'opencl-clhpp'                              #
-    'libvdpau-va-gl'                            # Hardware Acceleration
-    'gstreamer'                                 # Hardware Acceleration
-    'gstreamer-vaapi'                           # Hardware Acceleration
-    'lib32-libappindicator-gtk2'                # Tray Icon Support for Steam
+    'vkd3d'                      #
+    'lib32-vkd3d'                #
+    'lib32-sqlite'               # Lutris Dependency
+    'vulkan-headers'             # Vulkan Header Files
+    'vulkan-validation-layers'   # Vulkan Validation Layers
+    'vulkan-tools'               # Vulkan Utilities and Tools
+    'opencl-headers'             #
+    'opencl-clhpp'               #
+    'libvdpau-va-gl'             # Hardware Acceleration
+    'gstreamer'                  # Hardware Acceleration
+    'gstreamer-vaapi'            # Hardware Acceleration
+    'lib32-libappindicator-gtk2' # Tray Icon Support for Steam
     'libva-vdpau-driver'
     'lib32-libva-vdpau-driver'
 
@@ -148,7 +148,7 @@ PKGS=(
 # Paru
 PKGA=(
     'tuned'
-    'hplip-plugin'                              # Plugin for HP Deskjet (All-in-One) printers
+    'hplip-plugin' # Plugin for HP Deskjet (All-in-One) printers
     'ibus-autostart-kimpanel'
     'zram-generator'
     'timeshift-bin'
@@ -160,22 +160,22 @@ PKGA=(
     'autojump'
     'kwin-polonium'
     'kwin-effect-rounded-corners-git'
-#    'i3-gaps-rounded-git'
-    'opentabletdriver'                          # Tablet Driver ("-git" version not working)
-    'gamemode-git'                              # Optimizations for games
-    'lib32-gamemode-git'                        # 32-bit library for gamemode
-    'lib32-glslang'                             # OpenGL and OGL ES front end and validator
-    'mingw-w64-glslang'                         # OpenGL and OGL ES front end and validator
-    'ttf-meslo-nerd-font-powerlevel10k'         # Meslo Nerd font patched for
-    'ttf-ms-fonts'                              # Core TTF fonts from Microsoft
-    'ttf-vista-fonts'                           # TTF fonts from vista and office
-    'adobe-base-14-fonts'                       # Adobe base 14 fonts (Courier, Helvetica, Times, Symbol, etc)
-    'xboxdrv'                                   # Gamepad driver for Linux (Controller Support)
+    #    'i3-gaps-rounded-git'
+    'opentabletdriver'                  # Tablet Driver ("-git" version not working)
+    'gamemode-git'                      # Optimizations for games
+    'lib32-gamemode-git'                # 32-bit library for gamemode
+    'lib32-glslang'                     # OpenGL and OGL ES front end and validator
+    'mingw-w64-glslang'                 # OpenGL and OGL ES front end and validator
+    'ttf-meslo-nerd-font-powerlevel10k' # Meslo Nerd font patched for
+    'ttf-ms-fonts'                      # Core TTF fonts from Microsoft
+    'ttf-vista-fonts'                   # TTF fonts from vista and office
+    'adobe-base-14-fonts'               # Adobe base 14 fonts (Courier, Helvetica, Times, Symbol, etc)
+    'xboxdrv'                           # Gamepad driver for Linux (Controller Support)
     'tdrop'
-    'ventoy-bin'                                # Multiboot USB Solution
-    'vscodium-bin'                              # VS Code without Microsoft's branding/telemetry/licensing
-    'vscodium-bin-marketplace'                  # VS Codium market place
-    'vscodium-bin-features'                     # Unblock some features blocked for non-MS's VSCode
+    'ventoy-bin'               # Multiboot USB Solution
+    'vscodium-bin'             # VS Code without Microsoft's branding/telemetry/licensing
+    'vscodium-bin-marketplace' # VS Codium market place
+    'vscodium-bin-features'    # Unblock some features blocked for non-MS's VSCode
     'aur/mangohud-git'
     'aur/goverlay-bin'
     'ttf-dejavu'
@@ -187,28 +187,34 @@ PKGA=(
     'remark-language-server'
     'netcoredbg'
     'dockerfile-language-server'
+    'grip'
+
+    # Virtualbox just in case qemu/libvirt doesn't work
+    'virtualbox-bin'
+    'virtualbox-bin-guest-iso'
+    'virtualbox-ext-oracle'
 )
 
 # Flatpak
 PKGFP=(
-    'com.github.tchx84.Flatseal'                # Flatpak permission manager
-    'org.kde.KStyle.Kvantum'                    # Theme manager
-    'org.gnu.emacs'                             # "Family of text editors"
-    'org.mozilla.firefox'                       # Firefox Browser
-    'net.mullvad.MullvadBrowser'                # Mullvad Browser
-    'com.github.micahflee.torbrowser-launcher'  # Tor Browser
-    'com.discordapp.Discord'                    # Discord
-    'io.github.mimbrero.WhatsAppDesktop'        # Whatsapp
-    'org.signal.Signal'                         # Signal
-    'network.loki.Session'                      # Session
-    'org.libreoffice.LibreOffice'               # FLOSS office suite ("replaces" MS Word, PowerPoint and Excel)
-    'md.obsidian.Obsidian'                      # A knowledge base that works on local Markdown files
-    'org.kde.okteta'                            # Hex Editor
-    'org.kde.kleopatra'                         # Certificate Manager and Unified Crypto GUI
-    'org.qbittorrent.qBittorrent'               # Torrent app
-    'io.mpv.Mpv'                                # Media player
-    'info.smplayer.SMPlayer'                    # SMPlayer
-    'org.gimp.GIMP'                             # GNU Image Manipulator
+    'com.github.tchx84.Flatseal'               # Flatpak permission manager
+    'org.kde.KStyle.Kvantum'                   # Theme manager
+    'org.gnu.emacs'                            # "Family of text editors"
+    'org.mozilla.firefox'                      # Firefox Browser
+    'net.mullvad.MullvadBrowser'               # Mullvad Browser
+    'com.github.micahflee.torbrowser-launcher' # Tor Browser
+    'com.discordapp.Discord'                   # Discord
+    'io.github.mimbrero.WhatsAppDesktop'       # Whatsapp
+    'org.signal.Signal'                        # Signal
+    'network.loki.Session'                     # Session
+    'org.libreoffice.LibreOffice'              # FLOSS office suite ("replaces" MS Word, PowerPoint and Excel)
+    'md.obsidian.Obsidian'                     # A knowledge base that works on local Markdown files
+    'org.kde.okteta'                           # Hex Editor
+    'org.kde.kleopatra'                        # Certificate Manager and Unified Crypto GUI
+    'org.qbittorrent.qBittorrent'              # Torrent app
+    'io.mpv.Mpv'                               # Media player
+    'info.smplayer.SMPlayer'                   # SMPlayer
+    'org.gimp.GIMP'                            # GNU Image Manipulator
     'org.gimp.GIMP.Plugin.Resynthesizer'
     'org.gimp.GIMP.Plugin.LiquidRescale'
     'org.gimp.GIMP.Plugin.Lensfun'
@@ -217,26 +223,26 @@ PKGFP=(
     'org.gimp.GIMP.Plugin.FocusBlur'
     'org.gimp.GIMP.Plugin.BIMP'
     'org.darktable.Darktable'
-    'org.kde.krita'                             # Digital Painting Software
-    'org.inkscape.Inkscape'                     # Vector Graphics Editor
-    'org.blender.Blender'                       # 3D Modelling Software
-    'fr.handbrake.ghb'                          # Transcoder
-    'io.github.Qalculate.qalculate-qt'          # Calculator
-    'com.spotify.Client'                        # Spotify
-    'com.obsproject.Studio'                     # Streaming software
-    'io.github.antimicrox.antimicrox'           # Graphical program used to map gamepad keys to keyboard, mouse, scripts and macros
-    'nl.hjdskes.gcolor3'                        # Color Picker
-    'org.kde.kdenlive'                          # KDe Video Editor
+    'org.kde.krita'                    # Digital Painting Software
+    'org.inkscape.Inkscape'            # Vector Graphics Editor
+    'org.blender.Blender'              # 3D Modelling Software
+    'fr.handbrake.ghb'                 # Transcoder
+    'io.github.Qalculate.qalculate-qt' # Calculator
+    'com.spotify.Client'               # Spotify
+    'com.obsproject.Studio'            # Streaming software
+    'io.github.antimicrox.antimicrox'  # Graphical program used to map gamepad keys to keyboard, mouse, scripts and macros
+    'nl.hjdskes.gcolor3'               # Color Picker
+    'org.kde.kdenlive'                 # KDe Video Editor
     'io.github.achetagames.epic_asset_manager'
-    'io.github.shiftey.Desktop'                 # Github Desktop App
-    'com.valvesoftware.Steam'                   # Steam
-    'net.lutris.Lutris'                         # Lutris
-    'org.libretro.RetroArch'                    # RetroArch
-    'com.heroicgameslauncher.hgl'               # Heroic Games
-    'net.davidotek.pupgui2'                     # Protonup-Qt
-    'com.github.Matoking.protontricks'          # Protontricks
-    'com.usebottles.bottles'                    # Bottles
-    'pm.mirko.Atoms'                            # GUI frontend to create, manage and use chroot environments
+    'io.github.shiftey.Desktop'        # Github Desktop App
+    'com.valvesoftware.Steam'          # Steam
+    'net.lutris.Lutris'                # Lutris
+    'org.libretro.RetroArch'           # RetroArch
+    'com.heroicgameslauncher.hgl'      # Heroic Games
+    'net.davidotek.pupgui2'            # Protonup-Qt
+    'com.github.Matoking.protontricks' # Protontricks
+    'com.usebottles.bottles'           # Bottles
+    'pm.mirko.Atoms'                   # GUI frontend to create, manage and use chroot environments
     'org.freedesktop.Platform.VulkanLayer.MangoHud'
     'org.godotengine.Godot'
     'io.missioncenter.MissionCenter'
@@ -246,7 +252,8 @@ PKGFP=(
     'org.winehq.Wine.mono'
     'org.freedesktop.Platform.VulkanLayer.vkBasalt'
     'org.freedesktop.Platform.VulkanLayer.gamescope'
-#    ''         #
+    'uk.org.greenend.chiark.sgtatham.putty'
+    #    ''         #
 )
 
 # Still not ready for daily-use
@@ -282,7 +289,7 @@ SRCPATH="$(cd $(dirname $0) && pwd)"
 enablevb=n
 
 echo
-printf "If you haven't run 1-prep.sh yet, stop this script (CTRL + C) and run it first"
+printf "If you haven't run 1-post_install_prep.sh yet, stop this script (CTRL + C) and run it first"
 echo
 printf "When you're done come back here. And press anykey"
 echo
@@ -364,7 +371,7 @@ if lspci -k | grep -A 2 -E "(VGA|3D)" | grep -iq nvidia; then
     sudo pacman -S nvidia-utils lib32-nvidia-utils opencl-nvidia libva-nvidia-driver gwe cuda cuda-tools --noconfirm --needed
     sleep 1s
 
-    if ! [[ `pacman -Q | grep -i 'nvidia-dkms'` ]]; then
+    if ! [[ $(pacman -Q | grep -i 'nvidia-dkms') ]]; then
         echo
         echo "Installing NVidia dkms"
         echo
@@ -769,7 +776,7 @@ sudo bash -c "curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/l
 sleep 1s
 
 if test -e /home/$(logname)/.Xresources; then
-    sudo mv /home/$(logname)/.Xresources /home/$(logname)/.Xresources.bak;
+    sudo mv /home/$(logname)/.Xresources /home/$(logname)/.Xresources.bak
     sleep 1s
 fi
 
@@ -805,7 +812,7 @@ if ! test -e /home/$(logname)/.config/fontconfig; then
 fi
 
 if test -e /home/$(logname)/.config/fontconfig/fonts.conf; then
-    mv /home/$(logname)/.config/fontconfig/fonts.conf /home/$(logname)/.config/fontconfig/fonts.conf.bak;
+    mv /home/$(logname)/.config/fontconfig/fonts.conf /home/$(logname)/.config/fontconfig/fonts.conf.bak
     sleep 1s
 fi
 
@@ -816,7 +823,7 @@ ln -sf $XDG_RUNTIME_DIR/{app/com.discordapp.Discord,}/discord-ipc-0
 sleep 1s
 mkdir -p ~/.config/user-tmpfiles.d
 sleep 1s
-echo 'L %t/discord-ipc-0 - - - - app/com.discordapp.Discord/discord-ipc-0' > ~/.config/user-tmpfiles.d/discord-rpc.conf
+echo 'L %t/discord-ipc-0 - - - - app/com.discordapp.Discord/discord-ipc-0' >~/.config/user-tmpfiles.d/discord-rpc.conf
 sleep 1s
 systemctl --user enable --now systemd-tmpfiles-setup.service
 sleep 1s
@@ -843,7 +850,7 @@ touch /home/$(logname)/.config/fontconfig/fonts.conf
 sleep 1s
 
 echo ''
-curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/fonts.conf > "${HOME}"/.config/fontconfig/fonts.conf
+curl https://raw.githubusercontent.com/StefanoND/ArchS/main/Misc/fonts.conf >"${HOME}"/.config/fontconfig/fonts.conf
 sleep 1s
 sudo sed -i "s|#export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|export FREETYPE_PROPERTIES=\"truetype:interpreter-version=|g" /etc/profile.d/freetype2.sh
 sleep 1s
@@ -883,6 +890,17 @@ cd /usr/bin
 ./cupsenable
 sleep 1s
 
+echo
+echo "Increasing limit of Core Dump files to unlimited"
+echo
+ulimit -c unlimited
+
+
+echo
+echo "Changing Core Dumps default pattern to './core'"
+echo
+sudo bash -c 'echo "./core" > /proc/sys/kernel/core_pattern'
+
 if ! grep -iq "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1" /etc/environment; then
     echo
     echo "Enabling Globalization Invariant"
@@ -903,7 +921,7 @@ if pacman -Q | grep -i 'virtualbox-host-dkms' && [[ ${enablevb,,} = y ]]; then
         # Virtualbox
         'virtualbox-host-dkms'
         'virtualbox'
-        'virtualbox-ext-vnc'
+        'virtualbox-ext-oracle'
         'virtualbox-guest-iso'
     )
 

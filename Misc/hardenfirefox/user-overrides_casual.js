@@ -11,3 +11,5 @@ user_pref("browser.startup.page", 1);
 user_pref("browser.startup.homepage", "https://www.youtube.com/");
 user_pref("privacy.resistFingerprinting", false);
 user_pref("privacy.resistFingerprinting.letterboxing", false);
+user_pref("cookiebanners.service.mode", 1);
+user_pref("cookiebanners.service.mode.privateBrowsing", 1);

@@ -13,6 +13,10 @@
     Enable Admin/User password
     Enable Secure Boot (Reset Keys even if you've never used it before)
 
+#### If can't boot (or enable) secure boot after installing OS (change /dev/path accordingly)
+
+    efibootmgr -c -d /dev/path -p 1 -L debian-shim -l \\EFI\\debian\\shimx64.efi
+
 ## Installation
 
     Language
@@ -21,3 +25,5 @@
     Software (Proprietary (I have NVidia GPU) + Secure Boot)
     Disk Setup
         LVM with Encryption (16GiB Swap)
+
+[Ventoy and Secure Boot](https://www.ventoy.net/en/doc_secure.html)

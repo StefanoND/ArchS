@@ -10,3 +10,5 @@ user_pref("browser.startup.page", 1);
 user_pref("browser.startup.homepage", "https://site1.com|https://site2.com|https://site3.com");
 user_pref("network.http.sendRefererHeader", 2);
 user_pref("network.http.referer.XOriginPolicy", 0);
+user_pref("cookiebanners.service.mode", 1);
+user_pref("cookiebanners.service.mode.privateBrowsing", 1);
