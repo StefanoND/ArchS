@@ -133,6 +133,11 @@ PKGS=(
     'firmware-misc-nonfree'
     'nvidia-driver-libs:i386'
 
+    # Xanmod
+    'software-properties-common'
+    'apt-transport-https'
+    'ca-certificates'
+
     # misc
     'gamemode'
     'flatpak'
@@ -155,8 +160,27 @@ done
 echo
 echo "Adding flathub repo to flatpak"
 echo
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
 sleep 1s
+
+echo
+echo "Importing xanmod's GPG key"
+echo
+curl -fSsL https://dl.xanmod.org/gpg.key | gpg --dearmor | sudo tee /usr/share/keyrings/xanmod.gpg > /dev/null
+sleep 1s
+
+echo
+echo "Importing xanmod's repository"
+echo
+echo 'deb [signed-by=/usr/share/keyrings/xanmod.gpg] http://deb.xanmod.org releases main' | sudo tee /etc/apt/sources.list.d/xanmod-kernel.list
+sleep 1s
+
+sudo apt update
+
+echo
+echo "Installing xanmod kernel"
+echo
+sudo apt install linux-xanmod-x64v3 -y
 
 # echo
 # echo "Installing NixOS Package Manager"
