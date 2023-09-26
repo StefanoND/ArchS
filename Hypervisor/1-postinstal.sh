@@ -107,8 +107,8 @@ PKGS=(
 
     # QEMU
     #'qemu-system-x86'
-    #'qemu-system'
     'qemu-kvm'
+    'qemu-system'
     'qemu-utils'
     'libvirt-daemon-system'
     'libvirt-clients'
@@ -118,12 +118,12 @@ PKGS=(
     #'libvirt-daemon'
     #'virtinst'
     #'virt-viewer'
-    #'vde2'
+    'vde2'
     #'iptables'
-    #'ebtables'
+    'ebtables'
     #'nftables'
     #'swtpm'
-    #'dnsmasq'
+    'dnsmasq'
 
 #    'netctl'
 #    'openbsd-netcat'
@@ -132,11 +132,6 @@ PKGS=(
     'nvidia-driver'
     'firmware-misc-nonfree'
     'nvidia-driver-libs:i386'
-
-    # Xanmod
-    'software-properties-common'
-    'apt-transport-https'
-    'ca-certificates'
 
     # misc
     'gamemode'
@@ -163,25 +158,6 @@ echo "Adding flathub repo to flatpak"
 echo
 flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
 sleep 1s
-
-echo
-echo "Importing xanmod's GPG key"
-echo
-curl -fSsL https://dl.xanmod.org/gpg.key | gpg --dearmor | sudo tee /usr/share/keyrings/xanmod.gpg > /dev/null
-sleep 1s
-
-echo
-echo "Importing xanmod's repository"
-echo
-echo 'deb [signed-by=/usr/share/keyrings/xanmod.gpg] http://deb.xanmod.org releases main' | sudo tee /etc/apt/sources.list.d/xanmod-kernel.list
-sleep 1s
-
-sudo apt update
-
-echo
-echo "Installing xanmod kernel"
-echo
-sudo apt install linux-xanmod-lts-x64v3 -y
 
 echo
 echo "Setting CPU governor to Performance and setting min and max freq"
@@ -251,43 +227,6 @@ fi
 
 cpath=`pwd`
 
-grubgpu=""
-
-if lspci -nn | egrep -i "3d|display|vga" | grep -iq 'nvidia'; then
-    sudo touch /etc/modprobe.d/blacklist-nvidia-nouveau.conf
-    sudo bash -c "echo 'blacklist nouveau' > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
-    sudo bash -c "echo 'blacklist lbm-nouveau' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
-    sudo bash -c "echo 'blacklist nvidiafb' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
-    sudo bash -c "echo 'options nouveau modeset=0' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
-    sudo bash -c "echo 'alias nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
-    sudo bash -c "echo 'alias lbm-nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
-    sudo bash -c "echo 'options nouveau modeset=0' > /etc/modprobe.d/nouveau-kms.conf"
-
-    sed -i 's/\#    "\/dev\/nvidiactl", "\/dev\/nvidia0", "\/dev\/nvidia-modeset",/\    "\/dev\/nvidiactl", "\/dev\/nvidia0", "\/dev\/nvidia-modeset",/g' "$cpath"/Config/qemu.conf
-
-    grubgpu=" nouveau.modeset=0 nvidia-drm.modeset=1"
-    sleep 1s
-elif lspci -nn | egrep -i "3d|display|vga" | grep -iq 'amd'; then
-    grubgpu=" amdgpu.aspm=0"
-    sleep 1s
-fi
-
-sleep 1s
-if grep -qF "user=\"USERNAME\"" "$cpath"/Config/qemu.conf; then
-    echo
-    echo "Adding \"$(logname)\" to qemu.conf's user"
-    echo
-    sed -i "s|user=\"USERNAME\".*|user=\"$(logname)\"|g" "$cpath"/Config/qemu.conf
-    sleep 1s
-fi
-if grep -qF "group=\"USERNAME\"" "$cpath"/Config/qemu.conf; then
-    echo
-    echo "Adding \"$(logname)\" to qemu.conf's group"
-    echo
-    sed -i "s|group=\"USERNAME\".*|group=\"$(logname)\"|g" "$cpath"/Config/qemu.conf
-    sleep 1s
-fi
-
 echo
 echo "Backing up \"/etc/libvirt/libvirtd.conf\" to \"/etc/libvirt/libvirtd.conf.old\""
 echo
@@ -309,6 +248,33 @@ echo
 sudo cp "$cpath"/Config/qemu.conf /etc/libvirt
 sleep 1s
 
+if grep -qF "user=\"USERNAME\"" /etc/libvirt/qemu.conf; then
+    echo
+    echo "Adding \"$(logname)\" to qemu.conf's user"
+    echo
+    sudo sed -i "s|user=\"USERNAME\".*|user=\"$(logname)\"|g" /etc/libvirt/qemu.conf
+    sleep 1s
+fi
+
+grubgpu=""
+
+if lspci -nn | egrep -i "3d|display|vga" | grep -iq 'nvidia'; then
+    sudo touch /etc/modprobe.d/blacklist.conf
+    sudo bash -c "echo 'blacklist nouveau' > /etc/modprobe.d/blacklist.conf"
+    sudo bash -c "echo 'blacklist lbm-nouveau' >> /etc/modprobe.d/blacklist.conf"
+    sudo bash -c "echo 'options nouveau modeset=0' >> /etc/modprobe.d/blacklist.conf"
+    sudo bash -c "echo 'alias nouveau off' >> /etc/modprobe.d/blacklist.conf"
+    sudo bash -c "echo 'alias lbm-nouveau off' >> /etc/modprobe.d/blacklist.conf"
+
+    sudo sed -i 's/\#    "\/dev\/nvidiactl", "\/dev\/nvidia0", "\/dev\/nvidia-modeset",/\    "\/dev\/nvidiactl", "\/dev\/nvidia0", "\/dev\/nvidia-modeset",/g' /etc/libvirt/qemu.conf
+
+    grubgpu=" nouveau.modeset=0 nvidia-drm.modeset=1"
+    sleep 1s
+elif lspci -nn | egrep -i "3d|display|vga" | grep -iq 'amd'; then
+    grubgpu=" amdgpu.aspm=0"
+    sleep 1s
+fi
+
 echo
 echo "Restarting libvirt"
 echo
@@ -324,17 +290,16 @@ printf "[Appearance]\nColorScheme=Breeze\n\n[General]\nCommand=/bin/bash\nName=$
 
 if ! [[ -f "${HOME}"/.config/konsolerc ]]; then
     touch "${HOME}"/.config/konsolerc;
+    sleep 1s
 fi
-
-sleep 1s
 
 if grep -qF "DefaultProfile=" "${HOME}"/.config/konsolerc; then
     sed -i "s|DefaultProfile=.*|DefaultProfile=$(logname).profile|g" "${HOME}"/.config/konsolerc
+    sleep 1s
 elif ! grep -qF "DefaultProfile=" "${HOME}"/.config/konsolerc && ! grep -qF "[Desktop Entry]" "${HOME}"/.config/konsolerc; then
     sed -i "1 i\[Desktop Entry]\nDefaultProfile=$(logname).profile\n" "${HOME}"/.config/konsolerc
+    sleep 1s
 fi
-
-sleep 1s
 
 echo
 echo "Setting up fq_pie queue discipline for TCP congestion control"
@@ -349,21 +314,6 @@ sudo sed -i "s|#SystemMaxUse=.*|SystemMaxUse=200M|g" /etc/systemd/journald.conf
 sleep 1s
 
 echo
-echo "Disabling Coredump logging"
-echo
-sudo sed -i "s|#Storage=.*|Storage=none|g" /etc/systemd/coredump.conf
-sleep 1s
-
-echo
-echo "Increasing open file limit"
-echo
-sudo sed -i "s|# End of file.*|$(logname)        hard    nofile          2097152\n\n# End of file\n|g" /etc/security/limits.conf
-sudo sed -i "s|# End of file.*|$(logname)        soft    nofile          1048576\n\n# End of file\n|g" /etc/security/limits.conf
-sudo sed -i "s|#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=2097152|g" /etc/systemd/system.conf
-sudo sed -i "s|#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=1048576|g" /etc/systemd/user.conf
-sleep 1s
-
-echo
 echo "Restricting Kernel Log Access"
 echo
 sudo sysctl -w kernel.dmesg_restrict=1
@@ -375,17 +325,6 @@ echo
 systemctl --user enable --now gamemoded.service
 sudo chmod +x /bin/gamemoded
 sudo chmod +x /usr/bin/gamemoded
-sleep 1s
-
-if ! [[ -d /etc/X11/xorg.conf.d ]]; then
-    sudo mkdir -p /etc/X11/xorg.conf.d
-fi
-
-if ! [[ -f /etc/X11/xorg.conf.d/50-mouse-acceleration.conf ]]; then
-    sudo touch /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
-fi
-
-printf "Section \"InputClass\"\n    Identifier \"My Mouse\"\n    Driver \"libinput\"\n    MatchIsPointer \"yes\"\n    Option \"AccelProfile\" \"-1\"\n    Option \"AccelerationScheme\" \"none\"\n    Option \"AccelSpeed\" \"-1\"\nEndSection" | sudo tee /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
 sleep 1s
 
 GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
@@ -476,14 +415,10 @@ elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
     sleep 1s
 fi
 
-sudo modprobe vfio_iommu_type1
-sudo modprobe vfio_virqfd
-sudo modprobe vfio-pci
-
 echo
 echo "Updating initramfs"
 echo
-sudo update-initramfs -u
+sudo update-initramfs -u -k all
 sleep 1s
 
 echo

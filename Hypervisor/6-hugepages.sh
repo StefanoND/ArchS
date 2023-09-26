@@ -72,8 +72,9 @@ if grep -i "$(logname)" /etc/security/limits.conf; then
         sudo sed -i "s|.*$(logname)        hard.*|$(logname)        hard    nofile          $ramkib|g" /etc/security/limits.conf
         sleep 1s
     fi
+
     if grep -i "soft" /etc/security/limits.conf; then
-        sudo sed -i "s|.*$(logname)        soft.*|$(logname)        hard    nofile          $ramkib|g" /etc/security/limits.conf
+        sudo sed -i "s|.*$(logname)        soft.*|$(logname)        soft    nofile          $ramkib|g" /etc/security/limits.conf
         sleep 1s
     fi
 fi
@@ -84,10 +85,15 @@ if ! grep -i "$(logname)" /etc/security/limits.conf; then
         sleep 1s
     fi
     if ! grep -i "soft" /etc/security/limits.conf; then
-        printf "\n$(logname)        hard    nofile          $ramkib\n" | sudo tee -a /etc/security/limits.conf
+        printf "\n$(logname)        soft    nofile          $ramkib\n" | sudo tee -a /etc/security/limits.conf
         sleep 1s
     fi
 fi
+
+sudo sed -i "s|#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=2|g" /etc/systemd/system.conf
+sudo sed -i "s|#DefaultLimitNOFILE=.*|DefaultLimitNOFILE=1|g" /etc/systemd/user.conf
+sudo sed -i "s|DefaultLimitNOFILE=.*|DefaultLimitNOFILE=$ramkib|g" /etc/systemd/system.conf
+sudo sed -i "s|DefaultLimitNOFILE=.*|DefaultLimitNOFILE=$ramkib|g" /etc/systemd/user.conf
 
 if ! [[ -f /etc/sysctl.d/10-kvm.conf ]]; then
     sudo touch /etc/sysctl.d/10-kvm.conf
@@ -110,7 +116,15 @@ else
     sleep 1s
 fi
 
+echo
+echo "Restarting procps service"
+echo
+deb-systemd-invoke restart procps.service
+
 if ! grep -i "hugepages=" /etc/default/grub; then
+    echo
+    echo "Updating /etc/default/grub"
+    echo
     GRUB=`cat /etc/default/grub | grep "GRUB_CMDLINE_LINUX_DEFAULT" | rev | cut -c 2- | rev`
     GRUB+=" hugepages=$ramgib\""
     sudo sed -ie "s|^GRUB_CMDLINE_LINUX_DEFAULT.*|${GRUB}|g" /etc/default/grub
@@ -123,17 +137,26 @@ if ! [[ -f /etc/default/qemu-kvm ]]; then
 fi
 
 if grep -i "KVM_HUGEPAGES"; then
+    echo
+    echo "Enabling KVM_HUGEPAGES for qemu-kvm"
+    echo
     sudo sed -i "s|.*KVM_HUGEPAGES.*|KVM_HUGEPAGES=1|g" /etc/default/qemu-kvm
     sleep 1s
 else
-    printf "\nKVM_HUGEPAGES=1\n" | sudo tee -a /etc/default/qemu-kvm
+    echo 'KVM_HUGEPAGES=1' | sudo tee -a /etc/default/qemu-kvm
     sleep 1s
 fi
 
-sudo update-grub
+echo
+echo "Restarting libvirtd service"
+echo
+sudo systemctl restart libvirtd
 sleep 1s
 
-sudo systemctl restart libvirtd
+echo
+echo "Updating GRUB"
+echo
+sudo grub-mkconfig -o /boot/grub/grub.cfg
 sleep 1s
 
 echo
