@@ -147,6 +147,7 @@ PKGS=(
     'curl'
     'wget'
     'linux-cpupower'
+    'neovim'
 )
 
 for PKG in "${PKGS[@]}"; do
@@ -180,41 +181,7 @@ sudo apt update
 echo
 echo "Installing xanmod kernel"
 echo
-sudo apt install linux-xanmod-x64v3 -y
-
-# echo
-# echo "Installing NixOS Package Manager"
-# echo
-# sh <(curl -L https://nixos.org/nix/install) --daemon
-# sleep 1s
-#
-# if ! [[ -d "${HOME}"/.config/nix ]]; then
-#     mkdir -p "${HOME}"/.config/nix
-# fi
-#
-# if ! [[ -f "${HOME}"/.config/nix/nix.conf ]]; then
-#     touch "${HOME}"/.config/nix/nix.conf
-# fi
-#
-# echo
-# echo "Nix PM: Enabling nix-command and flakes"
-# echo
-# echo 'experimental-features = nix-command flakes' > "${HOME}"/.config/nix/nix.conf
-# sleep 1s
-#
-# if ! [[ -d "${HOME}"/.config/nixpkgs ]]; then
-#     mkdir -p "${HOME}"/.config/nixpkgs
-# fi
-#
-# if ! [[ -f "${HOME}"/.config/nixpkgs/config.nix ]]; then
-#     touch "${HOME}"/.config/nixpkgs/config.nix
-# fi
-#
-# echo
-# echo "Nix PM: Allowing \"Unfree\" packages, enabling sandboxing and enabling auto optimise store"
-# echo
-# printf "{\n  allowUnfree = true;\n  nix.settings.sandbox = true;\n  nix.settings.auto-optimise-store = true;\n}\n" > "${HOME}"/.config/nixpkgs/config.nix
-# sleep 1s
+sudo apt install linux-xanmod-lts-x64v3 -y
 
 echo
 echo "Setting CPU governor to Performance and setting min and max freq"
@@ -223,9 +190,6 @@ sudo cpupower frequency-set -d 3.7GHz
 sudo cpupower frequency-set -u 4.2GHz
 sudo cpupower frequency-set -g performance
 sleep 1s
-#sudo sed -i "s|#governor=.*|governor='performance'|g" /etc/default/cpupower
-#sudo sed -i "s|#min_freq=.*|min_freq=\"3.7GHz\"|g" /etc/default/cpupower
-#sudo sed -i "s|#max_freq=.*|max_freq=\"4.2GHz\"|g" /etc/default/cpupower
 
 echo
 echo "Enabling cpupower service"
@@ -235,14 +199,6 @@ sudo systemctl disable ondemand
 sudo systemctl mask power-profiles-daemon.service
 sudo systemctl enable --now cpupower.service
 sleep 1s
-
-#sleep 1s
-
-#echo
-#echo "Set make to be multi-threaded by default"
-#echo
-#sudo sed -i "s|MAKEFLAGS=.*|MAKEFLAGS=\"-j$(expr $(nproc) \+ 1)\"|g" /etc/makepkg.conf
-#sudo sed -i "s|COMPRESSXZ=.*|COMPRESSXZ=(xz -c -T $(expr $(nproc) \+ 1) -z -)|g" /etc/makepkg.conf
 
 echo
 echo "usermod -aG video qemu"
@@ -298,9 +254,10 @@ cpath=`pwd`
 grubgpu=""
 
 if lspci -nn | egrep -i "3d|display|vga" | grep -iq 'nvidia'; then
-    touch /etc/modprobe.d/blacklist-nvidia-nouveau.conf
+    sudo touch /etc/modprobe.d/blacklist-nvidia-nouveau.conf
     sudo bash -c "echo 'blacklist nouveau' > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
     sudo bash -c "echo 'blacklist lbm-nouveau' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
+    sudo bash -c "echo 'blacklist nvidiafb' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
     sudo bash -c "echo 'options nouveau modeset=0' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
     sudo bash -c "echo 'alias nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
     sudo bash -c "echo 'alias lbm-nouveau off' >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"
@@ -519,7 +476,6 @@ elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
     sleep 1s
 fi
 
-sudo modprobe iommufd
 sudo modprobe vfio_iommu_type1
 sudo modprobe vfio_virqfd
 sudo modprobe vfio-pci

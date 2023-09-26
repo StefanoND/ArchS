@@ -38,7 +38,7 @@ for PKG in "${PKGS[@]}"; do
     echo
     echo "INSTALLING: ${PKG}"
     echo
-    flatpak install flathub "$PKG" -y --or-update
+    flatpak install --user flathub "$PKG" -y --or-update
     echo
     sleep 1s
 done

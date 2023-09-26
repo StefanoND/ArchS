@@ -11,7 +11,8 @@
 
     Enable TPM (Recommended)
     Enable Admin/User password
-    Enable Secure Boot (Reset Keys even if you've never used it before)
+    Enable Secure Boot (Don't even bother if you have NVidia GPU)
+        Reset Keys even if you've never used it before
 
 #### If can't boot (or enable) secure boot after installing OS (change /dev/path accordingly)
 
