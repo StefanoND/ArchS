@@ -54,6 +54,7 @@ alias lc='ls -ltrh --sort time' # sort by change time
 alias lr='ls -lRh' # recursive ls
 alias lt='ls -lrh --date date' # sort by date
 alias ll='ls -FlS' # long listing format
+alias l='ls -CF' #
 alias lff="ls -l --group-dirs=first" # directories first
 alias ldl="ls -l --group-dirs=last" # directories last
 alias lf="ls -l | egrep -v '^d'" # files only

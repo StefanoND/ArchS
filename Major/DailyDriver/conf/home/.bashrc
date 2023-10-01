@@ -36,7 +36,7 @@ colors() {
 
 # Change the window title of X terminals
 case ${TERM} in
-    xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|interix|konsole*|yakuake*|org.wezfurlong.wezterm*|wezterm*|alacritty*)
+    xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|interix|konsole*|yakuake*|org.wezfurlong.wezterm*|wezterm*|wezterm-gui*|alacritty*)
         PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
         ;;
     screen*)
@@ -152,6 +152,8 @@ fi
 
 if [ -f $HOME/.apps/ble.sh/out/ble.sh ]; then
     source $HOME/.apps/ble.sh/out/ble.sh
+elif [ -f /usr/share/blesh/ble.sh ]; then
+    source /usr/share/blesh/ble.sh
 fi
 
 #######################################################
@@ -402,7 +404,7 @@ gpush() {
     git push
 }
 
-alias lookingglass="~/looking-glass-B5.0.1/client/build/looking-glass-client -F"
+# alias lookingglass="~/looking-glass-B5.0.1/client/build/looking-glass-client -F"
 
 #######################################################
 # "Ultimate amazing command prompt" by Chris Titus Tech
@@ -410,7 +412,7 @@ alias lookingglass="~/looking-glass-B5.0.1/client/build/looking-glass-client -F"
 
 # Install Starship - curl -sS https://starship.rs/install.sh | sh
 
-eval "$(starship init bash)"
+[[ -x $(command -v starship) ]]  && eval "$(starship init bash)"
 
 #Autojump
 
@@ -425,6 +427,20 @@ fi
 #######################################################
 # PERSONAL COMMANDS
 #######################################################
+
+if `cat /etc/*-release | grep -q 'Pop'`; then
+    # make less more friendly for non-text input files, see lesspipe(1)
+    [ -x /usr/bin/lesspip ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+    # set variable idenftifying the chroot you work in (used in the prompt below)
+    if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+        debian_chroot=$(cat /etc/debian_chroot)
+    fi
+
+    # Add an "alert" alias for long running commands. Use like so:
+    #   sleep 10; alert
+    alias alert='notify-send --urgency-low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+fi
 
 # Encrypt symmetric
 encrypt_sym() {
@@ -463,7 +479,8 @@ killandnotify() {
 }
 
 # Make password prompts show "Root Password:" in bold and red
-export SUDO_PROMPT="$(tput setaf 1 bold)Root Password:$(tput sgr0) "
+#export SUDO_PROMPT="$(tput setaf 1 bold)Root Password:$(tput sgr0) "
+#export SUDO_PROMPT="$(tput setaf 1 bold)Password for $(logname):$(tput sgr0) "
 
 # User specific environment
 if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:$HOME/.cargo/bin:" ]]; then
@@ -475,18 +492,18 @@ if ! [[ "$PATH" =~ "$HOME/.emacs.d/bin:" ]]; then
 fi
 
 export PATH=$PATH:$HOME/.local/bin
-export PATH=$PATH:$HOME/.nix-profile/bin
+#export PATH=$PATH:$HOME/.nix-profile/bin
 
 export PATH
 
-export XDG_DATA_DIRS="$HOME/.nix-profile/share:$XDG_DATA_DIRS"
+#export XDG_DATA_DIRS="$HOME/.nix-profile/share:$XDG_DATA_DIRS"
 export XDG_DATA_DIRS="$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"
 
 export LOCALE_ARCHIVE=/usr/lib/locale/locale-archive
 
-if [[ -f $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh ]]; then
-    . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
-fi
+#if [[ -f $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh ]]; then
+#    . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+#fi
 
 # Makes new panels open $HOME instead of folder you're currently in
 wezterm set-working-directory $HOME
