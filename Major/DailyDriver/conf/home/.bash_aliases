@@ -139,8 +139,9 @@ alias hmbuild='home-manager build'
 # Restart Plasma, only works for KDE 5.10 or higher
 alias restartplasma='kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell &'
 
-# Restart sxhkd
+# Restart sx/whkd
 alias restartsxhkd='killandnotify "sxhkd" && notify "sxhkd reloaded" && sxhkd &'
+alias restartswhkd='killall -9 swhks && sudo killall -9 swhkd &&  notify "swhks reloaded" && notify "swhkd reloaded" && swhks & pkexec swhkd &'
 
 # Restart kwin
 alias restartkwin='kwin_x11 --replace &'
@@ -149,7 +150,7 @@ alias restartkwin='kwin_x11 --replace &'
 alias restartdesktop='restartkwin restartplasma'
 
 # Update system instead of manually typing
-alias updatesystem='sudo pacman -Syy && paru -Su && flatpak update -y'
+alias updatesystem='sudo pacman -Syy && paru -Su --noconfirm --needed --sudoloop && flatpak update -y && sudo mkinitcpio -P'
 
 # Flatpak apps
 
@@ -201,10 +202,14 @@ alias wineboot='flatpak run --command=wineboot org.winehq.Wine'
 # Bottles
 alias bottles='flatpak run com.usebottles.bottles &'
 
-alias restartsxhkd='killandnotify "sxhkd" && notify "sxhkd reloaded" && sxhkd &'
-alias restartkwin='kwin_x11 --replace &'
-alias restartdesktop='restartlatte restartkwin restartplasma'
-alias restartswhkd='killall -9 swhks && sudo killall -9 swhkd &&  notify "swhks reloaded" && notify "swhkd reloaded" && swhks & pkexec swhkd &'
+# Emacs Client
+alias emacsc='emacsclient -c -a emacs'
+
+# Putty
+alias putty='uk.org.greenend.chiark.sgtatham.putty &'
+
+# Sudo preserving user Envvars
+alias sude='sudo -E'
 
 #######################################################
 # POST ADDED ALIAS'S

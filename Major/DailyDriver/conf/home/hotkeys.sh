@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-killall swhks
-swhks & pkexec swhkd
+killall -9 swhks
+nohup swhks & pkexec swhkd &

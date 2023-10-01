@@ -400,8 +400,8 @@ if sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o amd; then
     fi
 
     printf "options kvm-amd nested=1\noptions kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\n" | sudo tee /etc/modprobe.d/kvm.conf
-    sudo modprobe -r kvm_amd
-    sudo modprobe kvm_amd
+    sudo modprobe -r kvm-amd
+    sudo modprobe kvm-amd
     sleep 1s
 elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
     if ! [[ -f /etc/modprobe.d/kvm.conf ]]; then
@@ -410,10 +410,14 @@ elif sudo grep 'vendor' /proc/cpuinfo | uniq | grep -i -o intel; then
     fi
 
     printf "options kvm-intel nested=1\noptions kvm ignore_msrs=1\noptions kvm report_ignored_msrs=0\noptions kvm-intel enable_shadow_vmcs=1\noptions kvm-intel enable_apicv=1\noptions kvm-intel ept=1\n" | sudo tee /etc/modprobe.d/kvm.conf
-    sudo modprobe -r kvm_intel
-    sudo modprobe kvm_intel
+    sudo modprobe -r kvm-intel
+    sudo modprobe kvm-intel
     sleep 1s
 fi
+
+sudo modprobe vfio-pci
+sudo modprobe vfio-virqfd
+sudo modprobe iommu_v2
 
 echo
 echo "Updating initramfs"

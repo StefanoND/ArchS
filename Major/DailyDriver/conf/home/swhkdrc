@@ -1,11 +1,17 @@
 # Wezterm
 super + Return
-    WAYLAND_DISPLAY=no tdrop -amt -w 1908 -h 1048 -x 6 -y 26 wezterm
+  WAYLAND_DISPLAY=no tdrop -mta wezterm
+#  WAYLAND_DISPLAY=wayland-1 tdrop -mta wezterm
 
-# Restart sxhkd
+# Emacs
+super + shift + Return
+  WAYLAND_DISPLAY=no tdrop -mta emacsclient -c -a emacs
+#  WAYLAND_DISPLAY=wayland-1 tdrop -mta emacsclient -c -a emacs
+
+# Restart swhkd
 super + shift + r
-    bash -ic restartswhkd
+  bash -ic restartswhkd
 
 # Rofi
-super + d
-    rofi -show drun
+#super + d
+#    rofi -show drun

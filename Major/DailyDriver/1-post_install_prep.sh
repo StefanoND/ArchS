@@ -184,6 +184,19 @@ echo
 sudo pacman -S meson --asdep --noconfirm --needed
 sleep 1s
 
+if pacman -Q | grep -i 'rust' && ! pacman -Q | grep -i 'rustup'; then
+    echo
+    echo 'Uninstalling rust'
+    echo
+    sudo pacman -Rdd rust --noconfirm
+    sleep 1s
+fi
+
+echo
+echo "Installing rustup"
+echo
+sudo pacman -S rustup --noconfirm --needed
+sleep 1s
 
 PKGS=(
     # Kernel
@@ -666,7 +679,7 @@ fi
 echo
 echo 'Making cursor use Sweet-cursors'
 echo
-echo '[Icon THeme]' > "${HOME}"/.icons/default/index.theme
+echo '[Icon Theme]' > "${HOME}"/.icons/default/index.theme
 echo 'Inherits=Sweet-cursors' >> "${HOME}"/.icons/default/index.theme
 sleep 1s
 

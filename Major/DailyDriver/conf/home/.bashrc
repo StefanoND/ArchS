@@ -200,6 +200,7 @@ if [[ $iatest -gt 0 ]]; then bind "set completion-ignore-case on"; fi
 if [[ $iatest -gt 0 ]]; then bind "set show-all-if-ambiguous On"; fi
 
 # Set the default editor
+export SUDO_EDITOR=nvim
 export EDITOR=nvim
 export VISUAL=nvim
 
