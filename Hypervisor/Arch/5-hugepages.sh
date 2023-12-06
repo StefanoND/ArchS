@@ -98,13 +98,31 @@ else
     sleep 1s
 fi
 
-BOOTENTRY=`cat /boot/loader/entries/linux-xanmod-lts.conf | grep "options root" | rev | cut -c 1- | rev`
+BOOTENTRY=`cat /boot/loader/entries/linux-xanmod.conf | grep "options root" | rev | cut -c 1- | rev`
+if ! grep -i "hugepages=" /boot/loader/entries/linux-xanmod.conf; then
+    echo
+    echo "Updating /boot/loader/entries/linux-xanmod.conf"
+    echo
+    BOOTENTRY+=" hugepages=$ramgib"
+    sudo sed -ie "s|^options root.*|${BOOTENTRY}|g" /boot/loader/entries/linux-xanmod.conf
+    sleep 1s
+fi
+BOOTENTRYTWO=`cat /boot/loader/entries/linux-xanmod-lts.conf | grep "options root" | rev | cut -c 1- | rev`
 if ! grep -i "hugepages=" /boot/loader/entries/linux-xanmod-lts.conf; then
     echo
     echo "Updating /boot/loader/entries/linux-xanmod-lts.conf"
     echo
-    BOOTENTRY+=" hugepages=$ramgib"
-    sudo sed -ie "s|^options root.*|${BOOTENTRY}|g" /boot/loader/entries/linux-xanmod-lts.conf
+    BOOTENTRYTWO+=" hugepages=$ramgib"
+    sudo sed -ie "s|^options root.*|${BOOTENTRYTWO}|g" /boot/loader/entries/linux-xanmod-lts.conf
+    sleep 1s
+fi
+BOOTENTRYTHREE=`cat /boot/loader/entries/linux-xanmod-rt.conf | grep "options root" | rev | cut -c 1- | rev`
+if ! grep -i "hugepages=" /boot/loader/entries/linux-xanmod-rt.conf; then
+    echo
+    echo "Updating /boot/loader/entries/linux-xanmod-rt.conf"
+    echo
+    BOOTENTRYTHREE+=" hugepages=$ramgib"
+    sudo sed -ie "s|^options root.*|${BOOTENTRYTHREE}|g" /boot/loader/entries/linux-xanmod-rt.conf
     sleep 1s
 fi
 

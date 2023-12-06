@@ -44,7 +44,7 @@
 ### Now click into your "SCSI Disk X" and click "XML" and change the following line
     <driver name="qemu" type="qcow2" cache="none" discard="unmap"/>
 
-### Add io="threads" in the "driver" section"
-    <driver name="qemu" type="qcow2" cache="none" io="threads" discard="unmap"/>
+### Add io="native" in the "driver" section"
+    <driver name="qemu" type="qcow2" cache="none" io="native" discard="unmap"/>
 
 ### Done

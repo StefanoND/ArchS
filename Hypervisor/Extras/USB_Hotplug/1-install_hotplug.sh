@@ -24,6 +24,13 @@ clear
 
 sleep 1s
 
+if ! `pacman -Q | grep -iq usbutils`; then
+    echo
+    echo "Installing USB Utils"
+    echo
+    sudo pacman -Syy usbutils --noconfirm --needed
+fi
+
 echo
 echo "CONFIGURING USB HOTPLUG"
 echo

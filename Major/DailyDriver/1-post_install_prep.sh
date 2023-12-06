@@ -60,11 +60,11 @@ APPSPATH="${HOME}/.apps"
 SRCPATH="$(cd $(dirname $0) && pwd)"
 FFPATH="${SRCPATH}/conf/aesthetic/ff"
 
-echo
-echo "Installing Nix Package Manager"
-echo
-sh <(curl -L https://nixos.org/nix/install) --daemon
-sleep 1s
+# echo
+# echo "Installing Nix Package Manager"
+# echo
+# sh <(curl -L https://nixos.org/nix/install) --daemon
+# sleep 1s
 
 echo
 echo 'Setting locale'
@@ -683,7 +683,35 @@ echo '[Icon Theme]' > "${HOME}"/.icons/default/index.theme
 echo 'Inherits=Sweet-cursors' >> "${HOME}"/.icons/default/index.theme
 sleep 1s
 
-bash -l "${SRCPATH}"/1.1-post_install_prep.sh
+# bash -l "${SRCPATH}"/1.1-post_install_prep.sh
+
+echo
+echo 'Syncing system'
+echo
+sync
+sleep 1s
+
+echo
+printf "Change all your fonts to Fira Code.\n"
+echo
+printf "Change application style to kvantum-dark\n"
+echo
+printf "Open kvantum manager and choose Orchis-dark in \"Change/Delete Theme\" section\n"
+echo
+printf "in \"Configure Active Theme\" section in \"Sizes & Delays\" change \"Tooltip delay\" to 150 ms and save\n"
+echo
+sleep 1s
+
+echo
+echo "Done..."
+echo
+echo "Press Y to reboot now or N if you plan to manually reboot later."
+echo
+read REBOOT
+if [ ${REBOOT,,} = y ]; then
+    shutdown -r now
+fi
+exit 0
 
 #echo
 #echo "Download themes"

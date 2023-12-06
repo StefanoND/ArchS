@@ -90,33 +90,33 @@ echo 'Enabling home-manager auto upgrade service'
 echo
 systemctl --user start home-manager-auto-upgrade
 
-echo
-echo 'Syncing system'
-echo
-sync
-sleep 1s
-
-echo
-printf "Change all your fonts to Fira Code.\n"
-echo
-printf "Change application style to kvantum-dark\n"
-echo
-printf "Open kvantum manager and choose Orchis-dark in \"Change/Delete Theme\" section\n"
-echo
-printf "in \"Configure Active Theme\" section in \"Sizes & Delays\" change \"Tooltip delay\" to 150 ms and save\n"
-echo
-sleep 1s
-
-echo
-echo "Done..."
-echo
-echo "Press Y to reboot now or N if you plan to manually reboot later."
-echo
-read REBOOT
-if [ ${REBOOT,,} = y ]; then
-    shutdown -r now
-fi
-exit 0
+# echo
+# echo 'Syncing system'
+# echo
+# sync
+# sleep 1s
+#
+# echo
+# printf "Change all your fonts to Fira Code.\n"
+# echo
+# printf "Change application style to kvantum-dark\n"
+# echo
+# printf "Open kvantum manager and choose Orchis-dark in \"Change/Delete Theme\" section\n"
+# echo
+# printf "in \"Configure Active Theme\" section in \"Sizes & Delays\" change \"Tooltip delay\" to 150 ms and save\n"
+# echo
+# sleep 1s
+#
+# echo
+# echo "Done..."
+# echo
+# echo "Press Y to reboot now or N if you plan to manually reboot later."
+# echo
+# read REBOOT
+# if [ ${REBOOT,,} = y ]; then
+#     shutdown -r now
+# fi
+# exit 0
 
 #echo
 #echo "Download themes"

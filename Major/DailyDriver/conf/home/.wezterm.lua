@@ -63,8 +63,8 @@ config.freetype_render_target = 'HorizontalLcd'
 config.freetype_load_flags = 'FORCE_AUTOHINT'
 config.window_background_opacity = 0.90
 config.disable_default_key_bindings = false
-config.enable_wayland = false
+config.enable_wayland = true
 config.hide_tab_bar_if_only_one_tab = true
-config.front_end = 'WebGpu'
+config.front_end = 'OpenGL'
 
 return config

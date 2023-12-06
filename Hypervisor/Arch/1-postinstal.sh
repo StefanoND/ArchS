@@ -167,6 +167,7 @@ PKGS=(
     'neovim'
     'ranger'
     'cpupower'
+    'tuned'
 )
 
 for PKG in "${PKGS[@]}"; do
@@ -203,6 +204,14 @@ sudo update-rc.d ondemand disable
 sudo systemctl disable ondemand
 sudo systemctl mask power-profiles-daemon.service
 sudo systemctl enable --now cpupower.service
+sleep 1s
+
+echo
+echo "Enabling tuned"
+echo
+sudo systemctl enable --now tuned.service
+sleep 1s
+sudo tuned-adm profile virtual-host
 sleep 1s
 
 echo
@@ -493,6 +502,11 @@ sudo modprobe vfio
 sudo modprobe vfio-pci
 sudo modprobe vfio-virqfd
 sudo modprobe iommu_v2
+sleep 1s
+
+sudo bash -c "echo 'blacklist iTCO_wdt' > /etc/modprobe.d/nowatchdog.conf"
+sudo bash -c "sudo echo 'net.ipv4.conf.all.arp_filter = 1' > /etc/sysctl.d/30-arpflux.conf"
+sleep 1s
 
 echo
 echo 'Updatin initramfs'
