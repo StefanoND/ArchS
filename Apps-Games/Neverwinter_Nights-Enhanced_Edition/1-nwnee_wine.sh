@@ -91,7 +91,7 @@ sleep 1s
 #-------------------------------------------------------------------------------------------------------------
 #
 # Install required apps for dotNET stuff
-WINEPREFIX=$wnprfpath winetricks msxml3 msxml4 msxml6 -qf
+WINEPREFIX=$wnprfpath winetricks --force --unattended msxml3 msxml4 msxml6
 sleep 10s
 killall -r mscorsvw.exe
 sleep 10s
@@ -101,19 +101,19 @@ WINEPREFIX=$wnprfpath winecfg -v winxp64
 sleep 1s
 #
 # Install dotNET 2.0 Service Pack 2 (Must run separate)
-WINEPREFIX=$wnprfpath winetricks dotnet20sp1 -qf
+WINEPREFIX=$wnprfpath winetricks --force --unattended dotnet20sp1
 sleep 10s
 killall -r mscorsvw.exe
 sleep 10s
 #
 # Install dotNET 3.5 Service Pack 1 and dotNET 4.0 (Must run separate)
-WINEPREFIX=$wnprfpath winetricks dotnet35sp1 -qf
+WINEPREFIX=$wnprfpath winetricks --force --unattended dotnet35sp1
 sleep 10s
 killall -r mscorsvw.exe
 sleep 10s
 #
 # Install dotNET 4.0 (Must run separate)
-WINEPREFIX=$wnprfpath winetricks dotnet40 -qf
+WINEPREFIX=$wnprfpath winetricks --force --unattended dotnet40
 sleep 10s
 killall -r mscorsvw.exe
 sleep 10s
@@ -129,20 +129,20 @@ WINEPREFIX=$wnprfpath winecfg -v win7
 sleep 1s
 #
 # Install dotNET 4.8
-WINEPREFIX=$wnprfpath winetricks dotnet48 xna40 -qf
+WINEPREFIX=$wnprfpath winetricks --force --unattended dotnet48 xna40
 sleep 10s
 killall -r mscorsvw.exe
 sleep 10s
 #
 # Install all fonts
-WINEPREFIX=$wnprfpath winetricks allfonts -q
+WINEPREFIX=$wnprfpath winetricks --force --unattended allfonts
 sleep 10s
 killall -r mscorsvw.exe
 killall -r aspnet_regiis.exe
 sleep 10s
 #
 # Install apps (For vcrun2022 it'll ask you to continue installation on two occasions, press "y" and "enter" for both)
-WINEPREFIX=$wnprfpath winetricks dxvk vkd3d openal vcrun2005 vcrun2010 vcrun2012 vcrun2013 vcrun2022 -qf
+WINEPREFIX=$wnprfpath winetricks --force --unattended dxvk vkd3d openal vcrun2005 vcrun2010 vcrun2012 vcrun2013 vcrun2022
 sleep 10s
 killall -r mscorsvw.exe
 killall -r aspnet_regiis.exe
@@ -153,21 +153,21 @@ WINEPREFIX=$wnprfpath winecfg -v winxp64
 sleep 1s
 #
 # Instal vcrun2008
-WINEPREFIX=$wnprfpath winetricks vcrun2008 -qf
+WINEPREFIX=$wnprfpath winetricks --force --unattended vcrun2008
 sleep 10s
 killall -r mscorsvw.exe
 killall -r aspnet_regiis.exe
 sleep 10s
 #
 # Instal DirectX 9
-WINEPREFIX=$wnprfpath winetricks dxdiag -qf
+WINEPREFIX=$wnprfpath winetricks --force --unattended dxdiag
 sleep 10s
 killall -r mscorsvw.exe
 killall -r aspnet_regiis.exe
 sleep 10s
 #
 # Instal Visual Basic Runtime 6
-WINEPREFIX=$wnprfpath winetricks vbrun6 -qf
+WINEPREFIX=$wnprfpath winetricks --force --unattended vb6run
 sleep 10s
 killall -r mscorsvw.exe
 killall -r aspnet_regiis.exe
