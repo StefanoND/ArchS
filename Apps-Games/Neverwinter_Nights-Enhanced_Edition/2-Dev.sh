@@ -121,33 +121,9 @@ if test -e $homefolder; then
 fi
 
 echo
-echo "Downloading \"NWScript Compiler\""
+echo "Making nasher recognize nwn_script_comp's location"
 echo
-wget https://github.com/nwneetools/nwnsc/releases/download/v1.1.5/nwnsc-linux-v1.1.5.zip
-sleep 1s
-
-echo
-echo "Extracting \"nwnsc-linux-v1.1.5.zip\""
-echo
-unzip nwnsc-linux-v1.1.5.zip
-sleep 1s
-
-echo
-echo "Moving \"nwnsc\" to \"$HOME/.nimble/bin\""
-echo
-mv nwnsc "$HOME"/.nimble/bin
-sleep 1s
-
-echo
-echo "Removing leftovers"
-echo
-rm nwnsc-linux-v1.1.5.zip
-sleep 1s
-
-echo
-echo "Making nasher recognizer nwnsc's location"
-echo
-nasher config nssCompiler "$HOME/.nimble/bin/nwnsc"
+nasher config nssCompiler "$HOME/.nimble/bin/nwn_script_comp"
 sleep 1s
 
 echo
