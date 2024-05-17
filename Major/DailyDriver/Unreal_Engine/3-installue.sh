@@ -25,6 +25,8 @@ clear
 
 sleep 1s
 
+UEVERSION="5.4.1"
+
 cpath=`pwd`
 
 npath=`cat "$cpath"/uepath.txt`
@@ -55,19 +57,19 @@ echo "Setting proper permissions and ownership"
 echo
 
 
-printf "sudo chown root:unrealengine-users -R ../UnrealEngine5_2"
-sudo chown $(logname):$(logname) -R ../UnrealEngine5_2
-printf "sudo chmod 700 -R ../UnrealEngine5_2"
-sudo chmod 700 -R ../UnrealEngine5_2
+printf "sudo chown root:unrealengine-users -R ../UnrealEngine_$UEVERSION"
+sudo chown $(logname):$(logname) -R ../UnrealEngine_$UEVERSION
+printf "sudo chmod 700 -R ../UnrealEngine_$UEVERSION"
+sudo chmod 700 -R ../UnrealEngine_$UEVERSION
 
 #echo "sudo groupadd unrealengine-users"
 #sudo groupadd unrealengine-users
 #echo "sudo usermod -aG unrealengine-users $(logname)"
 #sudo usermod -aG unrealengine-users $(logname)
-#printf "sudo chown root:unrealengine-users -R ../UnrealEngine5_2"
-#sudo chown root:unrealengine-users -R ../UnrealEngine5_2
-#printf "sudo chmod 775 -R ../UnrealEngine5_2"
-#sudo chmod 775 -R ../UnrealEngine5_2
+#printf "sudo chown root:unrealengine-users -R ../UnrealEngine_$UEVERSION"
+#sudo chown root:unrealengine-users -R ../UnrealEngine_$UEVERSION
+#printf "sudo chmod 775 -R ../UnrealEngine_$UEVERSION"
+#sudo chmod 775 -R ../UnrealEngine_$UEVERSION
 
 sleep 1s
 
@@ -84,7 +86,7 @@ if [[ ${SYMLINK,,} = y ]]; then
     echo
     echo "Adding a Symlink of \"UnrealEditor\" to \"$HOME\""
     echo
-    ln -s $HOME/UnrealEngine5_2/Engine/Binaries/Linux/UnrealEditor $HOME
+    ln -s $HOME/UnrealEngine_$UEVERSION/Engine/Binaries/Linux/UnrealEditor $HOME
 fi
 
 rm "$cpath"/uepath.txt
