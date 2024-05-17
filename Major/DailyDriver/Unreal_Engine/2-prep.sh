@@ -25,6 +25,9 @@ clear
 
 sleep 1s
 
+UEVERSION="5.4.1"
+UESIZE="24.7 GiB"
+
 echo
 echo "You need access to Epic Game's Unreal Engine GitHub repository follow the instructions in the link bellow"
 echo "https://www.unrealengine.com/en-US/ue-on-github"
@@ -142,7 +145,7 @@ echo
 while [[ ${ueinstallanswer,,} = n ]]; do
     echo
     echo "Where do you want to install it? It's recommended to install it on an external drive"
-    echo "We'll add \"Unreal_Engine5_2\" folder automatically"
+    echo "We'll add \"UnrealEngine_$UEVERSION\" folder automatically"
     echo
     read INSTALLPATH
     ueinstallpath=$INSTALLPATH
@@ -166,7 +169,7 @@ done
 
 cpath=`pwd`
 touch uepath.txt
-printf "$ueinstallpath/5.2.1" | tee uepath.txt
+printf "$ueinstallpath/$UEVERSION" | tee uepath.txt
 
 cd $ueinstallpath
 gclonelink=null
@@ -198,9 +201,9 @@ echo "It'll ask for the passphrase you used when creating the ssh key"
 echo
 sleep 1s
 echo
-echo "Wait for the download, around 18.62 GiB size (As of version 5.2.1)"
+echo "Wait for the download, around $UESIZE size (As of version $UEVERSION)"
 echo
-git clone $gclonelink 5.2.1 && cd 5.2.1
+git clone $gclonelink $UEVERSION && cd $UEVERSION
 sleep 1s
 echo
 echo "Making .sh scripts runnables"
